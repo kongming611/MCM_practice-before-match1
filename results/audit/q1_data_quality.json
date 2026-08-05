@@ -1,0 +1,47 @@
+{
+  "can_build_features": true,
+  "coverage": {
+    "any_covered_count": 123,
+    "enterprise_count": 123,
+    "input_covered_count": 123,
+    "missing_enterprise_ids_in_info": 0,
+    "output_covered_count": 123,
+    "unmatched_input_ids": [],
+    "unmatched_output_ids": []
+  },
+  "enterprise_count": 123,
+  "errors": [],
+  "input_file": "data/附件1：123家有信贷记录企业的相关数据.xlsx",
+  "input_sha256_after": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600",
+  "input_sha256_before": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600",
+  "processing_rules": {
+    "amount_tolerance_yuan": 0.01,
+    "amount_unit": "yuan_in_source",
+    "exact_duplicate_policy": "keep_first",
+    "status_aliases": {
+      "valid": [
+        "有效",
+        "有效发票"
+      ],
+      "void": [
+        "作废",
+        "作废发票"
+      ]
+    },
+    "unknown_status_policy": "error"
+  },
+  "random_seed": 20260805,
+  "script": "01_data_audit.py",
+  "sheets": {
+    "enterprise": "企业信息",
+    "input_invoice": "进项发票信息",
+    "output_invoice": "销项发票信息"
+  },
+  "status": "WARN",
+  "warnings": [
+    "input存在金额+税额与价税合计超差记录",
+    "output存在金额+税额与价税合计超差记录",
+    "存在完全重复、重复业务键或同号元数据冲突，详见duplicate_check.csv",
+    "金额存在配置分位数外记录；原始记录未删除"
+  ]
+}

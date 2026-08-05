@@ -1,0 +1,3 @@
+﻿workbook,sheet_name,direction,record_count,invalid_date_count,min_date,max_date,month_count
+data/附件1：123家有信贷记录企业的相关数据.xlsx,进项发票信息,input,210947,0,2016-10-04,2020-02-21,41
+data/附件1：123家有信贷记录企业的相关数据.xlsx,销项发票信息,output,162484,0,2016-10-07,2020-02-21,41

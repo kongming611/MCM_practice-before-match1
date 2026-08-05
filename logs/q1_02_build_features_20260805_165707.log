@@ -1,0 +1,7 @@
+2026-08-05 16:57:07,022 INFO log_file=logs\q1_02_build_features_20260805_165707.log
+2026-08-05 16:57:29,982 INFO status_aliases={"valid": ["有效", "有效发票"], "void": ["作废", "作废发票"]} amount_unit=source_yuan_to_feature_10k denominator_rule=zero_to_NA
+2026-08-05 16:57:29,982 INFO missing_counterparty_rule=exclude_from_concentration month_rule=include log_and_standardize=deferred_to_training_pipeline
+2026-08-05 16:57:29,982 INFO business_rule=exact_duplicate_keep_first; invoice_key=enterprise_id+invoice_number+date+counterparty+status
+2026-08-05 16:57:29,982 INFO input_raw=210947 input_atomic=210144 output_raw=162484 output_atomic=158048
+2026-08-05 16:57:29,986 INFO analysis_months=2016-10..2020-02 count=41
+2026-08-05 16:57:31,743 INFO FEATURE_STATUS=PASS enterprise_rows=123 monthly_rows=5043 feature_columns=21

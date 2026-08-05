@@ -1,0 +1,47 @@
+{
+  "scripts": {
+    "01_data_audit": {
+      "code_hash": "9f77a15c6b450a592b94f1f91865d10da8b3f03527546ba108ace3022074d46a",
+      "config_hash": "9a5cb892822d4b83dc9c23f6212fc789aa8b5c935b65305c4657cd074e1fd1b7",
+      "input_hashes": {
+        "attachment1": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600"
+      },
+      "output_hashes": {
+        "results/audit/amount_anomalies.csv": "5e630bb703760339f9c7386996c2c5d19fad4f5112146a408dceba77d1b3eed4",
+        "results/audit/data_quality_report.md": "a4eb76cf33a64843883d8a96abd040aee8ec64b48807e728e4e921dd2ab3db34",
+        "results/audit/date_range.csv": "57ff9de52af296a5101b0b21380940424eabb414364e16b54593b4365249cffd",
+        "results/audit/duplicate_check.csv": "340fd1fcffe7173ed79554cbcd390e2e71da9945a6e64b417223082045c07677",
+        "results/audit/duplicate_key_issues.csv": "340fd1fcffe7173ed79554cbcd390e2e71da9945a6e64b417223082045c07677",
+        "results/audit/enterprise_coverage.csv": "e344df11fc3bfb851ad758751db1d04ae2ad4695bfe2a7d5d6113588212cb396",
+        "results/audit/enterprise_record_counts.csv": "ad76ff43677d92af4e005a0efedc377d1290308a61efa45d70843d4ed778320d",
+        "results/audit/invoice_status_sign_summary.csv": "d9784e1e8f96f3478f50d41342e573e2c78c4ad56a97a24de27f0e2d43110190",
+        "results/audit/invoice_status_summary.csv": "d9784e1e8f96f3478f50d41342e573e2c78c4ad56a97a24de27f0e2d43110190",
+        "results/audit/missing_values.csv": "fd123996b8240106692f6d5c9efd6d6cb98bc9cf62befd3be790cd9f6ed8e0ce",
+        "results/audit/q1_data_quality.json": "cc3a48445d18812f307cce8164bfe02df44c8d09ac82cd3bc5139fac34a5bc5a",
+        "results/audit/table_profile.csv": "d8240a75bde4c1da0ed3a677a4540dcbbf65d6f14bd8532d71a5c47d2568ed5a",
+        "results/audit/table_summary.csv": "d8240a75bde4c1da0ed3a677a4540dcbbf65d6f14bd8532d71a5c47d2568ed5a"
+      },
+      "pandas": "3.0.5",
+      "python": "3.12.10"
+    },
+    "02_build_features": {
+      "code_hash": "3ea9f4f358a29092fe59d77ea47a8dd55cb3a590d84110369c70fcb6c4396402",
+      "config_hash": "9a5cb892822d4b83dc9c23f6212fc789aa8b5c935b65305c4657cd074e1fd1b7",
+      "input_hashes": {
+        "attachment1": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600"
+      },
+      "output_hashes": {
+        "results/audit/q1_feature_quality.json": "cc3707fdb72b44e3329548882498fd984a18f1a9db86d23da8113c9b41b0019f",
+        "results/enterprise_features_123.csv": "1d09406ee7d6e129e41770f2eb236a16298dabcf3a0f5a2d0f00c777419e10fc",
+        "results/features/enterprise_features_123.csv": "1d09406ee7d6e129e41770f2eb236a16298dabcf3a0f5a2d0f00c777419e10fc",
+        "results/features/enterprise_monthly_123.csv": "646a67de53db9f56fbcb36c2cfa4c06f71ec556b1fb66ccf7f679dc31eb54bbd",
+        "results/features/feature_quality_report.md": "5f7c88141a6b04cf97de1ab8523a4a4961617e4e41e3024a1af3db342e565ea6",
+        "results/intermediate/q1_clean_invoice_ledger.parquet": "b26758103bdcba21b5f8a8e510f44e1ceabbff51a6061d945412d865836409b8",
+        "results/intermediate/q1_enterprise_monthly.parquet": "e47ec6f9c9bfd4184392aa040bfd4034096d83c2e38b1e80fc8bf8ba28caf61c",
+        "results/reports/q1_feature_quality_report.md": "5f7c88141a6b04cf97de1ab8523a4a4961617e4e41e3024a1af3db342e565ea6"
+      },
+      "pandas": "3.0.5",
+      "python": "3.12.10"
+    }
+  }
+}
