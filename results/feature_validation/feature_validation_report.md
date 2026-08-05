@@ -1,9 +1,9 @@
 # 问题一企业级特征验收报告
 
-- 状态：**FAIL**
+- 状态：**PASS**
 - 特征表：`results/features/enterprise_features_123.csv`，形状=123行×33列
-- 主特征数：21；抽查企业：E110, E118, E12, E14, E47, E64, E68, E70, E88, E96
-- 本轮仅做数据验收、重算抽查和描述性分析；未训练风险模型、未拟合流失率、未优化信贷。
+- 共构造特征数：21；主模型特征数：15；敏感性模型特征数：20；审计型排除特征数：1
+- 抽查企业：E110, E118, E12, E14, E47, E64, E68, E70, E88, E96；本报告不训练风险模型，只验收特征角色和业务口径。
 
 ## 验收检查
 
@@ -16,22 +16,28 @@
 | no_extra_enterprises | True | blocking | 0 | 0 | [] |
 | default_label_complete | True | blocking | 0 | 0 |  |
 | credit_rating_complete | True | blocking | 0 | 0 |  |
-| dictionary_main_features_present | True | blocking | 0 | 0 | [] |
+| all_constructed_features_present | True | blocking | 0 | 0 | [] |
+| primary_model_features_present | True | blocking | 0 | 0 | [] |
+| sensitivity_model_features_present | True | blocking | 0 | 0 | [] |
+| excluded_features_reported_in_feature_table | True | blocking | 0 | 0 | [] |
 | dictionary_defined_features_present | True | blocking | 0 | 0 | [] |
 | unexplained_extra_columns | True | warning | 0 | 0 | [] |
 | numeric_features_no_nan | True | blocking | 0 | 0 | [] |
 | numeric_features_no_infinity | True | blocking | 0 | 0 | [] |
 | all_numeric_output_columns_no_nan | True | blocking | 0 | 0 | [] |
 | all_numeric_output_columns_no_infinity | True | blocking | 0 | 0 | [] |
-| no_constant_main_feature | False | blocking | ["zero_amount_invoice_rate"] | [] | 全常数特征应在建模前移出候选集 |
+| no_constant_primary_model_feature | True | blocking | [] | [] | 主模型候选集中不得存在全常数特征；审计型排除特征只报告不阻断 |
+| excluded_features_absent_from_model_matrix | True | blocking | [] | [] | excluded_from_model变量不得进入主模型或敏感性模型矩阵 |
+| audit_only_features_reported | True | blocking | ["zero_amount_invoice_rate"] | ["zero_amount_invoice_rate"] | 审计型排除特征必须在特征表保留并报告 |
 | near_constant_feature_reported | True | warning | ["zero_amount_invoice_rate"] | 仅报告，不自动删除 |  |
-| no_duplicate_main_feature_columns | True | blocking | [] | [] | [] |
+| no_duplicate_constructed_feature_columns | True | blocking | [] | [] | [] |
 | ratio_features_in_0_1 | True | blocking | {} | {} | {} |
 | amount_count_features_nonnegative | True | blocking | {} | {} | {} |
 | count_features_integer_valued | True | blocking | {} | {} | {} |
 | amount_units_match_dictionary | True | blocking | True | True | 企业级金额字段统一为万元，变量名带_10k |
-| main_names_match_config | True | blocking | ["business_scale_10k", "sales_scale_10k", "purchase_scale_10k", "net_sales_10k", "operating_net_inflow_proxy_10k", "sales_growth_trend", "sales_monthly_cv", "invoice_activity_per_month", "sales_return_rate", "purchase_return_rate", "void_invoice_rate", "zero_amount_invoice_rate", "customer_count", "supplier_count", "customer_hhi", "supplier_hhi", "max_customer_share", "max_supplier_share", "purchase_sales_ratio", "active_month_ratio", "longest_active_streak_ratio"] | ["business_scale_10k", "sales_scale_10k", "purchase_scale_10k", "net_sales_10k", "operating_net_inflow_proxy_10k", "sales_growth_trend", "sales_monthly_cv", "invoice_activity_per_month", "sales_return_rate", "purchase_return_rate", "void_invoice_rate", "zero_amount_invoice_rate", "customer_count", "supplier_count", "customer_hhi", "supplier_hhi", "max_customer_share", "max_supplier_share", "purchase_sales_ratio", "active_month_ratio", "longest_active_streak_ratio"] | 配置与字典主特征顺序 |
-| no_identity_label_leakage_in_main_features | True | blocking | [] | [] | 评级和标签保留在表中但不进入行为特征矩阵 |
+| constructed_names_match_dictionary | True | blocking | ["business_scale_10k", "sales_scale_10k", "purchase_scale_10k", "net_sales_10k", "operating_net_inflow_proxy_10k", "sales_growth_trend", "sales_monthly_cv", "invoice_activity_per_month", "sales_return_rate", "purchase_return_rate", "void_invoice_rate", "zero_amount_invoice_rate", "customer_count", "supplier_count", "customer_hhi", "supplier_hhi", "max_customer_share", "max_supplier_share", "purchase_sales_ratio", "active_month_ratio", "longest_active_streak_ratio"] | ["business_scale_10k", "sales_scale_10k", "purchase_scale_10k", "net_sales_10k", "operating_net_inflow_proxy_10k", "sales_growth_trend", "sales_monthly_cv", "invoice_activity_per_month", "sales_return_rate", "purchase_return_rate", "void_invoice_rate", "zero_amount_invoice_rate", "customer_count", "supplier_count", "customer_hhi", "supplier_hhi", "max_customer_share", "max_supplier_share", "purchase_sales_ratio", "active_month_ratio", "longest_active_streak_ratio"] | features.names与字典21个构造特征顺序一致 |
+| primary_model_feature_count_15 | True | blocking | 15 | 15 |  |
+| no_identity_label_leakage_in_model_features | True | blocking | [] | [] | 评级和标签保留在表中但不进入行为特征矩阵 |
 | raw_invoice_recalculation | True | blocking | 0 | 0 | deterministic_sample=['E110', 'E118', 'E12', 'E14', 'E47', 'E64', 'E68', 'E70', 'E88', 'E96'] |
 | raw_input_unchanged | True | blocking | 450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600 | 450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600 |  |
 | feature_output_re_readable | True | blocking | (123, 33) | (123, 33) |  |
@@ -40,17 +46,17 @@
 
 ## 阻断项
 
-| check_id | passed | severity | observed | expected | detail |
-|---|---|---|---|---|---|
-| no_constant_main_feature | False | blocking | ["zero_amount_invoice_rate"] | [] | 全常数特征应在建模前移出候选集 |
+_无阻断项_
 
 ## 警告项与口径说明
 
 _无警告项_
 
-- 允许的 `audit_` 辅助列：audit_all_invoice_count, audit_valid_invoice_count, audit_void_invoice_count, audit_positive_invoice_count, audit_negative_invoice_count, audit_zero_invoice_count, audit_negative_amount_10k, audit_missing_counterparty_count；这些列不属于字典主模型特征。
-- 全常数主特征：zero_amount_invoice_rate。
-- 近似常数主特征：zero_amount_invoice_rate。
+- 主模型特征：sales_scale_10k, purchase_scale_10k, operating_net_inflow_proxy_10k, sales_growth_trend, sales_monthly_cv, invoice_activity_per_month, sales_return_rate, purchase_return_rate, void_invoice_rate, customer_count, supplier_count, customer_hhi, supplier_hhi, purchase_sales_ratio, active_month_ratio。
+- 敏感性模型特征：business_scale_10k, sales_scale_10k, purchase_scale_10k, net_sales_10k, operating_net_inflow_proxy_10k, sales_growth_trend, sales_monthly_cv, invoice_activity_per_month, sales_return_rate, purchase_return_rate, void_invoice_rate, customer_count, supplier_count, customer_hhi, supplier_hhi, max_customer_share, max_supplier_share, purchase_sales_ratio, active_month_ratio, longest_active_streak_ratio。
+- 允许的 `audit_` 辅助列：audit_all_invoice_count, audit_valid_invoice_count, audit_void_invoice_count, audit_positive_invoice_count, audit_negative_invoice_count, audit_zero_invoice_count, audit_negative_amount_10k, audit_missing_counterparty_count；这些列不属于模型矩阵。
+- 全常数构造特征：zero_amount_invoice_rate；主模型候选中的全常数特征：无。
+- 近似常数构造特征：zero_amount_invoice_rate；全常数审计事实仍在报告中显示，不造成主模型验收失败。
 - |Spearman|>0.85的组合数：11；本轮不自动删除。
 - VIF未计算：当前环境没有额外统计包，且小样本下VIF仅作辅助判断；Spearman结果已完整输出。
 
@@ -100,8 +106,8 @@ _无警告项_
 | E12 | audit_valid_invoice_count | 2020.0 | 2020.0 | 0.0 | 0.0 | 1e-06 | 1e-05 | True |
 | E12 | void_invoice_rate | 0.02931283037 | 0.029312830370014416 | 1.4415552085367267e-14 | 4.917830145846563e-13 | 1e-06 | 1e-05 | True |
 
-## 后续不能静默决定的事项
+## 零金额业务核验
 
-- `zero_amount_invoice_rate`是否全为0反映真实业务，还是零额作废票应从分母排除，需要建模手确认。
-- 完全重复行、边界月份和3条金额恒等式超差记录的业务含义，需要在模型敏感性分析中明确。
-- 高相关的规模、HHI与最大对手占比变量不自动删除，需由建模手确定变量组策略。
+- 零金额业务核验明细见 `zero_amount_invoice_business_check.csv`，汇总见 `zero_amount_invoice_business_summary.csv`，最终决定见 `docs/q1_zero_amount_invoice_rate_decision.md`。
+- 完全重复行、边界月份和金额恒等式超差记录继续按现有审计口径保留并可追溯。
+- 高相关变量按配置的主模型与敏感性模型列表处理，不从原始特征表删除。

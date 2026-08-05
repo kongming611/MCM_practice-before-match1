@@ -10,9 +10,9 @@
 
 | 输入 | 原始字段 | 模型用途 |
 |---|---|---|
-| 附件1“企业信息” | 企业代号、企业名称、信誉评级、是否违约 | 企业代号为唯一主键；是否违约映射为 \(d_i\in\{0,1\}\)；企业名称仅展示；评级 \(g_i\) 不进入主违约模型，只用于辅助验证、校准敏感性检查、定价和D级规则 |
-| 附件1“进项发票信息” | 企业代号、发票号码、开票日期、销方单位代号、金额、税额、价税合计、发票状态 | 构造采购规模、供应商数量与集中度、退货/作废/零额、月度稳定性等特征 |
-| 附件1“销项发票信息” | 企业代号、发票号码、开票日期、购方单位代号、金额、税额、价税合计、发票状态 | 构造销售规模、客户数量与集中度、增长、波动、退货/作废/零额等特征 |
+| 附件1“企业信息” | 企业代号、企业名称、信誉评级、是否违约 | 企业代号为唯一主键；是否违约映射为 \(d_i\in\{0,1\}\)；企业名称仅展示；评级 \(g_i\) 不进入行为主模型，只用于标记为rating_leakage_sensitivity_only的单独敏感性实验或展示 |
+| 附件1“进项发票信息” | 企业代号、发票号码、开票日期、销方单位代号、金额、税额、价税合计、发票状态 | 构造采购规模、供应商数量与集中度、退货/作废/零额审计、月度稳定性等特征 |
+| 附件1“销项发票信息” | 企业代号、发票号码、开票日期、购方单位代号、金额、税额、价税合计、发票状态 | 构造销售规模、客户数量与集中度、增长、波动、退货/作废/零额审计等特征 |
 | 附件3“Sheet1” | 贷款年利率、信誉评级A/B/C客户流失率 | 分评级拟合利率—流失率单调曲线 \(L_g(r)\) |
 
 附件2只用于保证特征定义可迁移；本轮不对其建模或决策。
@@ -50,7 +50,11 @@ G_i^d=\sum_j q_{ij}^{d,+},\qquad N_i^d=\sum_j q_{ij}^d.
 \[
 HHI_i^C=\sum_c w_{ic}^2,\qquad Top_i^C=\max_c w_{ic};
 \]
-供应商指标同理。完整21项特征及零分母规则见 q1_feature_dictionary.md。
+供应商指标同理。共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。完整特征角色由config/q1.yaml中的features.names、primary_model_features、sensitivity_model_features和excluded_from_model锁定。
+
+zero_amount_invoice_rate的业务核验口径为：去除确认的完全重复行，并按“方向—企业代号—发票号码—开票日期—交易对手—发票状态”聚合为原子发票后，有效且原子发票价税合计为零的发票数除以有效原子发票总数。零值同时按total_yuan==0和abs(total_yuan)<=zero_amount_tolerance_yuan核对；具体程序事实见docs/q1_zero_amount_invoice_rate_decision.md。
+
+主模型固定使用以下15项：sales_scale_10k、purchase_scale_10k、operating_net_inflow_proxy_10k、sales_growth_trend、sales_monthly_cv、invoice_activity_per_month、sales_return_rate、purchase_return_rate、void_invoice_rate、customer_count、supplier_count、customer_hhi、supplier_hhi、purchase_sales_ratio、active_month_ratio。business_scale_10k、net_sales_10k、max_customer_share、max_supplier_share、longest_active_streak_ratio只用于特征集敏感性分析；zero_amount_invoice_rate不进入任何正式模型矩阵，但保留在特征表中。
 
 ### 5.2 弹性网Logistic
 
@@ -99,6 +103,7 @@ D级企业在基准方案中不放贷，因此不外推不存在的D级流失率
 
 - 固定随机种子20260805，采用企业级5折×10次重复分层交叉验证；每次切分保持违约比例，所有方案共用相同折。
 - 全部预处理仅在训练折拟合。交叉验证外预测按企业汇总后再评价，禁止把重叠折当作独立样本。
+- 主模型特征矩阵严格读取配置中的15项primary_model_features；sensitivity_model_features及替代变量组只在明确的特征集敏感性实验中使用；zero_amount_invoice_rate和audit_字段不得进入任何正式模型矩阵。
 - 主指标：PR-AUC、Brier分数、LogLoss；ROC-AUC仅作辅助。绘制PR曲线、ROC曲线和校准曲线。
 - 准确率不得作为唯一或主要证据；阈值指标必须同时说明阈值来源。
 - 文档和论文只填程序真实输出，并保留配置、日志、输入哈希与运行时间；未经运行的数值只能标为假设或占位符。
@@ -117,8 +122,8 @@ D级企业在基准方案中不放贷，因此不外推不存在的D级流失率
 第一问只有在以下条件全部满足时才算闭环完成：
 
 1. 数据审计通过，清洗口径和冲突记录可追溯。
-2. 得到恰好123行、主键唯一、标签完整且与特征字典一致的企业特征表。
-3. 主模型只用附件1、2共有发票特征；无企业泄漏；Pipeline在折内拟合。
+2. 得到恰好123行、主键唯一、标签完整且与特征字典一致的企业特征表；共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。
+3. 主模型只用附件1、2共有发票特征；无企业泄漏；Pipeline在折内拟合；zero_amount_invoice_rate不进入任何正式模型矩阵。
 4. 输出重复交叉验证的主/辅指标和三类曲线，不只报告准确率。
 5. 输出123家可复现的交叉验证外风险值及不确定性，且使用正确解释口径。
 6. A/B/C流失率拟合在4%～15%内单调、取值合法；D级基准不放贷。

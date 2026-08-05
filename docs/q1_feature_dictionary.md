@@ -1,10 +1,10 @@
 # 问题一企业级特征字典
 
-本字典定义21个仅依赖附件1、2共有发票字段的主模型特征。信誉评级、企业名称和是否违约均不属于特征：评级只作辅助验证、风险校准敏感性检查、贷款定价和D级规则；是否违约仅作标签。
+本字典定义21个仅依赖附件1、2共有发票字段的企业级派生特征。根据配置，15个进入主模型，5个作为替代变量用于特征集敏感性分析，zero_amount_invoice_rate仅作审计型派生字段。信誉评级、企业名称和是否违约均不属于行为特征：评级只作单独敏感性实验、辅助验证或展示；是否违约仅作标签。
 
 ## 1. 统一符号与处理码
 
-方向 \(S/P\) 分别为销项/进项；\(q\) 为有效原子发票“价税合计”除以 \(10^4\) 后的万元值，\(q^+=\max(q,0)\)，\(q^-=\max(-q,0)\)；\(G_{it}^d=\sum q^+\)，\(N_{it}^d=\sum q\)，\(G_i^d=\sum_tG_{it}^d\)。月份集合 \(\mathcal T\) 对所有企业一致、缺月补零，\(m\) 为月份数；上标 \(v,nz,void,all\) 分别表示有效、非零、作废和全部已知状态原子发票。客户/供应商份额只按有效正向金额计算。
+方向 \(S/P\) 分别为销项/进项；\(q\) 为有效原子发票“价税合计”除以 \(10^4\) 后的万元值，\(q^+=\max(q,0)\)，\(q^-=\max(-q,0)\)；\(G_{it}^d=\sum q^+\)，\(N_{it}^d=\sum q\)，\(G_i^d=\sum_tG_{it}^d\)。月份集合 \(\mathcal T\) 对所有企业一致、缺月补零，\(m\) 为月份数；上标 \(v,nz,void,all\) 分别表示有效、非零、作废和全部已知状态原子发票。客户/供应商份额只按有效正向金额计算。zero_amount_invoice_rate的正式分子和分母均在去重、原子发票聚合后计算；零值同时按total_yuan==0和abs(total_yuan)<=配置的zero_amount_tolerance_yuan核对。
 
 缺失码：Z=无合格记录时记0；N=零分母或无法定义时保留NA，在训练折用中位数填补。异常码：U=原始值保留并审计，企业级特征在训练折按配置分位数缩尾；B=校验应在 \([0,1]\)，越界即报错、不缩尾。所有特征以原始值写入CSV；“取对数”和“标准化”均在Pipeline的训练折内执行。
 
@@ -23,7 +23,7 @@
 | 销售退货率 | sales_return_rate | 销售退款相对正向销售 | \(\sum q_{ij}^{S,-}/G_i^S\) | 销项 | 企业代号、价税合计、状态 | 原子发票→企业 |
 | 采购退货率 | purchase_return_rate | 采购退款相对正向采购 | \(\sum q_{ij}^{P,-}/G_i^P\) | 进项 | 企业代号、价税合计、状态 | 原子发票→企业 |
 | 作废率 | void_invoice_rate | 取消交易占全部已知状态发票比例 | \(n_i^{void}/n_i^{all}\) | 进项+销项 | 企业代号、发票号码、状态 | 原子发票→企业 |
-| 零金额发票比例 | zero_amount_invoice_rate | 有效零额发票异常程度 | \(n_i^{v,q=0}/n_i^v\) | 进项+销项 | 企业代号、发票号码、价税合计、状态 | 原子发票→企业 |
+| 零金额发票比例 | zero_amount_invoice_rate | 有效原子发票零额审计比例 | \(n_i^{v,q=0}/n_i^v\)；同时报告精确零值与配置容差零值 | 进项+销项 | 企业代号、发票号码、日期、交易对手、价税合计、状态 | 去重明细→原子发票→企业 |
 | 客户数量 | customer_count | 正向销售覆盖的客户数 | \(\operatorname{card}\{c:\sum_jq_{ijc}^{S,+}>0\}\) | 销项 | 企业代号、购方单位代号、价税合计、状态 | 发票→客户→企业 |
 | 供应商数量 | supplier_count | 正向采购覆盖的供应商数 | \(\operatorname{card}\{v:\sum_jq_{ijv}^{P,+}>0\}\) | 进项 | 企业代号、销方单位代号、价税合计、状态 | 发票→供应商→企业 |
 | 客户集中度HHI | customer_hhi | 销售依赖少数客户的程度 | \(\sum_c w_{ic}^2,\ w_{ic}=\sum_jq_{ijc}^{S,+}/G_i^S\) | 销项 | 企业代号、购方单位代号、价税合计、状态 | 发票→客户→企业 |
@@ -49,7 +49,7 @@
 | sales_return_rate | 销售正额为0时N | U | log1p | 是 | 通常正向 | 行业退货惯例不同，相关不等于因果 |
 | purchase_return_rate | 采购正额为0时N | U | log1p | 是 | 通常正向 | 可能反映议价能力而非经营恶化 |
 | void_invoice_rate | 总票数为0时N | B | 否 | 是 | 通常正向 | 系统或开票习惯也会造成作废 |
-| zero_amount_invoice_rate | 有效票数为0时N | B | 否 | 是 | 通常正向 | 零额票可能是正常更正或数据规则 |
+| zero_amount_invoice_rate | 有效原子发票数为0时N | B | 否 | 否（审计型） | 不进入主模型 | 精确零值与容差零值必须实际核对；作废零额票不改写为有效交易 |
 | customer_count | Z | U | log1p | 是 | 通常负向 | 单位代号不一定等同独立客户 |
 | supplier_count | Z | U | log1p | 是 | 通常负向 | 供应链模式和行业差异显著 |
 | customer_hhi | 销售正额为0时N | B | 否 | 是 | 正向 | 大客户长期合同也可能提高稳定性 |
@@ -60,9 +60,21 @@
 | active_month_ratio | Z | B | 否 | 是 | 通常负向 | 观察窗和季节性决定可比性 |
 | longest_active_streak_ratio | Z | B | 否 | 是 | 通常负向 | 短观察窗会虚高连续性 |
 
-## 4. 禁用与辅助变量
+## 4. 模型角色与替代变量组
 
-- credit_rating：不得进入主违约模型特征矩阵；可单独用于评级—违约列联验证、校准敏感性检查、附件3定价和D级拒贷约束。
+| 角色 | 特征 |
+|---|---|
+| 主模型（15项） | sales_scale_10k、purchase_scale_10k、operating_net_inflow_proxy_10k、sales_growth_trend、sales_monthly_cv、invoice_activity_per_month、sales_return_rate、purchase_return_rate、void_invoice_rate、customer_count、supplier_count、customer_hhi、supplier_hhi、purchase_sales_ratio、active_month_ratio |
+| 敏感性分析额外5项 | business_scale_10k、net_sales_10k、max_customer_share、max_supplier_share、longest_active_streak_ratio |
+| 审计型排除 | zero_amount_invoice_rate |
+
+主模型选择规则已锁定：business_scale_10k不与销售、采购规模同时作为主模型变量；sales_scale_10k替代net_sales_10k；customer_hhi替代max_customer_share；supplier_hhi替代max_supplier_share；active_month_ratio替代longest_active_streak_ratio。被替代变量保留在sensitivity_model_features中，不从企业特征表删除。
+
+## 5. 禁用与辅助变量
+
+- credit_rating：不得进入主违约模型特征矩阵；可单独用于评级—违约列联验证和标记为rating_leakage_sensitivity_only的实验，不得替代行为主模型。
 - enterprise_name：仅用于结果展示，不做文本或行业特征。
 - default_label：由“是否违约”映射，是监督标签而非输入特征。
+- zero_amount_invoice_rate：保留在features.names和企业级特征表中，仅作为审计型派生字段；不进入primary_model_features或sensitivity_model_features。
+- audit_开头字段：仅作审计辅助，不进入任何模型矩阵。
 - 任何只存在于附件1、无法在附件2同口径计算的变量，均不得加入主特征集。

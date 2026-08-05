@@ -22,6 +22,7 @@ from q1_common import (
     collapse_invoice_lines,
     load_config,
     longest_consecutive_run,
+    normalize_invoice_frame,
     output_paths,
     read_role_sheet,
     sha256_file,
@@ -100,7 +101,9 @@ def _load_enterprise_info(config: dict[str, Any], input_path: Path) -> pd.DataFr
     return info.drop(columns=["default_label_raw"])
 
 
-def _load_ledgers(config: dict[str, Any], input_path: Path) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any]]:
+def _load_ledgers(
+    config: dict[str, Any], input_path: Path
+) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, Any], dict[str, pd.DataFrame]]:
     """Read raw invoice sheets and apply the documented atomic-invoice collapse."""
 
     input_raw, input_sheet = read_role_sheet(input_path, "input", config)
@@ -113,7 +116,242 @@ def _load_ledgers(config: dict[str, Any], input_path: Path) -> tuple[pd.DataFram
         "input": input_diag,
         "output": output_diag,
     }
-    return input_ledger, output_ledger, diagnostics
+    return input_ledger, output_ledger, diagnostics, {"input": input_raw, "output": output_raw}
+
+
+def _zero_amount_level_frames(
+    raw_frames: dict[str, pd.DataFrame],
+    atomic_frames: dict[str, pd.DataFrame],
+    config: dict[str, Any],
+) -> dict[str, pd.DataFrame]:
+    """Return raw, exact-deduplicated and atomic invoice frames for zero checks."""
+
+    levels: dict[str, pd.DataFrame] = {}
+    tolerance = float(config["processing"].get("zero_amount_tolerance_yuan", 0.0))
+    for direction in ["input", "output"]:
+        normalized = normalize_invoice_frame(raw_frames[direction], direction, config)
+        deduplicated = normalized.loc[~normalized["exact_duplicate"]].copy()
+        raw_level = normalized[["enterprise_id", "status", "total_yuan"]].copy()
+        dedup_level = deduplicated[["enterprise_id", "status", "total_yuan"]].copy()
+        atomic_level = atomic_frames[direction][["enterprise_id", "status", "total_yuan"]].copy()
+        for stage, level in [
+            ("raw_detail", raw_level),
+            ("deduplicated_detail", dedup_level),
+            ("atomic_invoice", atomic_level),
+        ]:
+            level = level.copy()
+            level["direction"] = direction
+            level["exact_zero"] = level["total_yuan"].eq(0)
+            level["tolerance_zero"] = level["total_yuan"].abs().le(tolerance)
+            levels[f"{stage}_{direction}"] = level
+    return levels
+
+
+def _summarize_zero_amount_business(
+    raw_frames: dict[str, pd.DataFrame],
+    atomic_frames: dict[str, pd.DataFrame],
+    config: dict[str, Any],
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Compute zero counts at every requested processing level and enterprise."""
+
+    levels = _zero_amount_level_frames(raw_frames, atomic_frames, config)
+    tolerance = float(config["processing"].get("zero_amount_tolerance_yuan", 0.0))
+    detail_rows: list[dict[str, Any]] = []
+    summary_rows: list[dict[str, Any]] = []
+    stage_order = ["raw_detail", "deduplicated_detail", "atomic_invoice"]
+
+    def append_row(
+        level: pd.DataFrame,
+        stage: str,
+        direction: str,
+        status_scope: str,
+        enterprise_id: str,
+        scope: str,
+    ) -> None:
+        status_value = {"valid": "有效", "void": "作废"}.get(status_scope)
+        subset = level if status_value is None else level.loc[level["status"].eq(status_value)]
+        invoice_count = int(len(subset))
+        exact_count = int(subset["exact_zero"].sum())
+        tolerance_count = int(subset["tolerance_zero"].sum())
+        row = {
+            "stage": stage,
+            "direction": direction,
+            "status_scope": status_scope,
+            "scope": scope,
+            "enterprise_id": enterprise_id,
+            "invoice_count": invoice_count,
+            "exact_zero_count": exact_count,
+            "tolerance_zero_count": tolerance_count,
+            "exact_zero_rate": exact_count / invoice_count if invoice_count else np.nan,
+            "tolerance_zero_rate": tolerance_count / invoice_count if invoice_count else np.nan,
+            "difference_count_tolerance_minus_exact": tolerance_count - exact_count,
+            "exact_equals_tolerance": bool(exact_count == tolerance_count),
+            "zero_amount_tolerance_yuan": tolerance,
+        }
+        detail_rows.append(row)
+        if scope == "overall":
+            summary_rows.append(row.copy())
+
+    for stage in stage_order:
+        direction_frames = [levels[f"{stage}_{direction}"] for direction in ["input", "output"]]
+        direction_frames.append(pd.concat(direction_frames, ignore_index=True))
+        for direction, level in zip(["input", "output", "all"], direction_frames):
+            append_row(level, stage, direction, "all", "__ALL__", "overall")
+            for status_scope, status_value in [("valid", "有效"), ("void", "作废")]:
+                append_row(
+                    level.loc[level["status"].eq(status_value)],
+                    stage,
+                    direction,
+                    status_scope,
+                    "__ALL__",
+                    "overall",
+                )
+            for enterprise_id in sorted(level["enterprise_id"].astype(str).unique()):
+                enterprise_level = level.loc[level["enterprise_id"].astype(str).eq(enterprise_id)]
+                append_row(enterprise_level, stage, direction, "all", enterprise_id, "enterprise")
+                for status_scope, status_value in [("valid", "有效"), ("void", "作废")]:
+                    append_row(
+                        enterprise_level.loc[enterprise_level["status"].eq(status_value)],
+                        stage,
+                        direction,
+                        status_scope,
+                        enterprise_id,
+                        "enterprise",
+                    )
+
+    return pd.DataFrame(detail_rows), pd.DataFrame(summary_rows)
+
+
+def _zero_row(
+    summary: pd.DataFrame,
+    stage: str,
+    direction: str,
+    status_scope: str,
+) -> pd.Series:
+    """Select one overall zero-business summary row."""
+
+    rows = summary.loc[
+        summary["stage"].eq(stage)
+        & summary["direction"].eq(direction)
+        & summary["status_scope"].eq(status_scope)
+    ]
+    if len(rows) != 1:
+        raise DataQualityError(f"zero business summary row is not unique: {stage}/{direction}/{status_scope}")
+    return rows.iloc[0]
+
+
+def _write_zero_amount_decision(
+    detail: pd.DataFrame,
+    summary: pd.DataFrame,
+    config: dict[str, Any],
+    output_path: Path,
+) -> None:
+    """Write a data-derived business decision for zero_amount_invoice_rate."""
+
+    tolerance = float(config["processing"].get("zero_amount_tolerance_yuan", 0.0))
+    raw_all = _zero_row(summary, "raw_detail", "all", "all")
+    raw_output_void = _zero_row(summary, "raw_detail", "output", "void")
+    raw_input_all = _zero_row(summary, "raw_detail", "input", "all")
+    atomic_valid_all = _zero_row(summary, "atomic_invoice", "all", "valid")
+    atomic_valid_input = _zero_row(summary, "atomic_invoice", "input", "valid")
+    atomic_valid_output = _zero_row(summary, "atomic_invoice", "output", "valid")
+    atomic_void_output = _zero_row(summary, "atomic_invoice", "output", "void")
+
+    raw_exact_from_output_void = int(raw_output_void["exact_zero_count"])
+    raw_tolerance_from_output_void = int(raw_output_void["tolerance_zero_count"])
+    exact_only_output_void = (
+        int(raw_all["exact_zero_count"]) == raw_exact_from_output_void
+        and int(raw_input_all["exact_zero_count"]) == 0
+    )
+    tolerance_only_output_void = (
+        int(raw_all["tolerance_zero_count"]) == raw_tolerance_from_output_void
+        and int(raw_input_all["tolerance_zero_count"]) == 0
+    )
+    enterprise_atomic_valid = detail.loc[
+        detail["stage"].eq("atomic_invoice")
+        & detail["scope"].eq("enterprise")
+        & detail["direction"].eq("all")
+        & detail["status_scope"].eq("valid")
+    ]
+    enterprise_with_exact = int((enterprise_atomic_valid["exact_zero_count"] > 0).sum())
+    enterprise_with_tolerance = int((enterprise_atomic_valid["tolerance_zero_count"] > 0).sum())
+
+    def count_table(stage: str, status_scope: str) -> str:
+        rows = []
+        for direction, label in [("input", "进项"), ("output", "销项"), ("all", "合计")]:
+            row = _zero_row(summary, stage, direction, status_scope)
+            rows.append(
+                {
+                    "方向": label,
+                    "发票数": int(row["invoice_count"]),
+                    "精确零值数": int(row["exact_zero_count"]),
+                    "容差零值数": int(row["tolerance_zero_count"]),
+                    "精确零值率": f"{row['exact_zero_rate']:.8f}" if pd.notna(row["exact_zero_rate"]) else "NA",
+                    "容差零值率": f"{row['tolerance_zero_rate']:.8f}" if pd.notna(row["tolerance_zero_rate"]) else "NA",
+                    "两口径一致": "是" if bool(row["exact_equals_tolerance"]) else "否",
+                }
+            )
+        return _md_table(pd.DataFrame(rows))
+
+    lines = [
+        "# zero_amount_invoice_rate 业务口径决策",
+        "",
+        "本文件由 __BT__src/03_validate_features.py__BT__ 重新读取附件1并程序计算生成。数字来自当前运行结果，不从历史报告复制。",
+        "",
+        "## 一、数据事实",
+        "",
+        f"- 零金额容差配置为 {tolerance:g} 元；精确口径为 __BT__total_yuan == 0__BT__，容差口径为 __BT__abs(total_yuan) <= {tolerance:g}__BT__。",
+        "- 原始明细层（未去除确认的完全重复行）的进项、销项和合计统计如下：",
+        count_table("raw_detail", "all"),
+        "",
+        "- 去除确认的完全重复行后，以及按方向—企业代号—发票号码—开票日期—交易对手—发票状态聚合为原子发票后，全部状态统计如下：",
+        "",
+        "### 去重明细层",
+        "",
+        count_table("deduplicated_detail", "all"),
+        "",
+        "### 原子发票层",
+        "",
+        count_table("atomic_invoice", "all"),
+        "",
+        "- 原子发票层按有效/作废状态的明细如下：",
+        "",
+        "### 原子发票—有效",
+        "",
+        count_table("atomic_invoice", "valid"),
+        "",
+        "### 原子发票—作废",
+        "",
+        count_table("atomic_invoice", "void"),
+        "",
+        f"- 原始明细层的精确零值中，销项作废占比结论为：{'全部来自销项作废' if exact_only_output_void else '并非全部来自销项作废'}；容差零值的对应结论为：{'全部来自销项作废' if tolerance_only_output_void else '并非全部来自销项作废'}。该结论由本次程序按方向和状态重算得到。",
+        f"- 原始明细层销项作废精确零值数为 {raw_exact_from_output_void}，容差零值数为 {raw_tolerance_from_output_void}；原始进项明细精确零值数为 {int(raw_input_all['exact_zero_count'])}，容差零值数为 {int(raw_input_all['tolerance_zero_count'])}。",
+        f"- 原子有效发票层合计分母为 {int(atomic_valid_all['invoice_count'])}；精确零值数为 {int(atomic_valid_all['exact_zero_count'])}，容差零值数为 {int(atomic_valid_all['tolerance_zero_count'])}。按进项分别为 {int(atomic_valid_input['exact_zero_count'])}/{int(atomic_valid_input['tolerance_zero_count'])}，按销项分别为 {int(atomic_valid_output['exact_zero_count'])}/{int(atomic_valid_output['tolerance_zero_count'])}。",
+        f"- 原子销项作废发票的精确零值数/容差零值数为 {int(atomic_void_output['exact_zero_count'])}/{int(atomic_void_output['tolerance_zero_count'])}。企业级有效原子发票统计中，出现精确零值的企业数为 {enterprise_with_exact}，出现容差零值的企业数为 {enterprise_with_tolerance}；完整企业明细见 __BT__results/feature_validation/zero_amount_invoice_business_check.csv__BT__。",
+        "",
+        "## 二、指标业务定义",
+        "",
+        "__BT__zero_amount_invoice_rate__BT__ 定义为：在去除确认的完全重复行，并按照“方向—企业代号—发票号码—开票日期—交易对手—发票状态”聚合明细后，有效且原子发票价税合计为零的发票数除以有效原子发票总数。",
+        "",
+        "零金额判定同时报告两种口径：精确零值 __BT__total_yuan == 0__BT__，以及配置容差零值 __BT__abs(total_yuan) <= zero_amount_tolerance_yuan__BT__。二者不得未经计算直接视为一致。作废发票不进入有效原子发票分母，也不因金额为零而被改写为有效交易。",
+        "",
+        "## 三、最终建模决定",
+        "",
+        "- __BT__zero_amount_invoice_rate__BT__ 不进入任何正式风险模型；",
+        "- 不因为它全为0而删除原始零金额记录；",
+        "- 不把作废零金额发票重新解释为有效交易；",
+        "- 作废行为由 __BT__void_invoice_rate__BT__ 刻画；",
+        "- __BT__zero_amount_invoice_rate__BT__ 仅作为审计型派生字段保留；",
+        "- 若附件2未来出现有效零金额发票，也不得在没有重新训练问题一模型的情况下临时加入预测模型。",
+        "",
+        "## 四、可追溯输出",
+        "",
+        "- __BT__results/feature_validation/zero_amount_invoice_business_check.csv__BT__：按处理层级、方向、状态、企业和两种零值口径的明细统计。",
+        "- __BT__results/feature_validation/zero_amount_invoice_business_summary.csv__BT__：按处理层级、方向和状态汇总的机器可读统计。",
+        "- __BT__results/features/enterprise_features_123.csv__BT__ 仍保留 __BT__zero_amount_invoice_rate__BT__ 列；该列不属于主模型或特征集敏感性模型矩阵。",
+        "",
+    ]
+    write_text("\n".join(lines).replace("__BT__", chr(96)), output_path)
 
 
 def _months(input_ledger: pd.DataFrame, output_ledger: pd.DataFrame, config: dict[str, Any]) -> pd.PeriodIndex:
@@ -346,6 +584,9 @@ def _recalculation_check(
 
 def _write_review_decisions(
     feature_names: list[str],
+    primary_features: list[str],
+    sensitivity_features: list[str],
+    excluded_features: dict[str, Any],
     stats: pd.DataFrame,
     high_pairs: pd.DataFrame,
     validation_path: Path,
@@ -353,77 +594,79 @@ def _write_review_decisions(
     """Write the feature-by-feature economic review using actual validation outputs."""
 
     stat_map = stats.set_index("feature").to_dict(orient="index")
-    constant = set(stats.loc[stats["constant_flag"], "feature"])
     high_features = set(high_pairs["feature_a"]).union(set(high_pairs["feature_b"])) if not high_pairs.empty else set()
-    categories: dict[str, str] = {
-        "sales_growth_trend": "保留为主模型候选特征",
-        "void_invoice_rate": "保留为主模型候选特征",
-        "customer_hhi": "保留为主模型候选特征",
-        "supplier_hhi": "保留为主模型候选特征",
-        "active_month_ratio": "保留为主模型候选特征",
-        "longest_active_streak_ratio": "保留为主模型候选特征",
-        "business_scale_10k": "仅用于描述性分析",
-        "sales_scale_10k": "保留但需要转换",
-        "purchase_scale_10k": "保留但需要转换",
-        "net_sales_10k": "保留但需要转换",
-        "operating_net_inflow_proxy_10k": "保留但需要转换",
-        "sales_monthly_cv": "保留但需要转换",
-        "invoice_activity_per_month": "保留但需要转换",
-        "sales_return_rate": "保留但需要转换",
-        "purchase_return_rate": "保留但需要转换",
-        "customer_count": "保留但需要转换",
-        "supplier_count": "保留但需要转换",
-        "purchase_sales_ratio": "保留但需要转换",
-        "max_customer_share": "需要建模手决定",
-        "max_supplier_share": "需要建模手决定",
-        "zero_amount_invoice_rate": "暂时删除",
-    }
+    primary_set = set(primary_features)
+    sensitivity_set = set(sensitivity_features)
+    excluded_set = set(excluded_features)
+    sensitivity_only = sensitivity_set - primary_set
     lines = [
         "# 问题一特征评审与处理决定",
         "",
-        f"本文件由 `{validation_path.relative_to(ROOT).as_posix()}` 的实际输出生成；本轮没有训练风险模型。",
-        "分类只表示进入后续建模前的处理建议，不覆盖原始特征表。‘经营净流入代理’与‘经营差额’均不是利润。",
+        f"本文件由 {validation_path.relative_to(ROOT).as_posix()} 的实际输出生成；分类只表示模型角色，不覆盖原始特征表。",
+        f"共构造{len(feature_names)}个企业级派生特征，其中{len(primary_features)}个进入主模型，{len(sensitivity_only)}个用于特征集敏感性分析，{', '.join(sorted(excluded_set)) if excluded_set else '无'}仅作审计。",
+        "‘经营净流入代理’与‘经营差额’均不是利润；评级、标签、企业身份和audit_字段不进入正式风险模型矩阵。",
         "",
         "## 分类总表",
         "",
-        "| 特征 | 决定 | 依据与原因 |",
+        "| 特征 | 模型角色 | 依据与原因 |",
         "|---|---|---|",
     ]
     for feature in feature_names:
         row = stat_map[feature]
-        category = categories.get(feature, "需要建模手决定")
+        if feature in excluded_set:
+            category = "审计型派生字段，不进入任何正式模型"
+        elif feature in primary_set:
+            category = "主模型特征"
+        elif feature in sensitivity_only:
+            category = "特征集敏感性分析"
+        else:
+            category = "未进入本轮模型"
         reasons: list[str] = []
         if row["constant_flag"]:
-            reasons.append("当前样本为全常数，不能提供主模型区分度")
+            reasons.append("当前样本为全常数；零金额字段只作为已知审计事实，不阻断主模型验收")
         elif row["near_constant_flag"]:
             reasons.append(f"近似常数（最高频值占比={row['top_frequency_share']:.3f}），需核查")
         if feature.endswith("_10k") or feature in {"customer_count", "supplier_count", "invoice_activity_per_month", "sales_monthly_cv", "purchase_sales_ratio", "sales_return_rate", "purchase_return_rate"}:
             reasons.append("规模/右偏风险较强，按字典在训练折内log1p或有符号log1p并缩尾")
         if feature in high_features:
-            reasons.append("参与|Spearman|>0.85高相关对，不能与相关变量同时入模而不做审查")
+            reasons.append("参与|Spearman|>0.85高相关对，按预先锁定的替代变量组处理")
         if feature == "business_scale_10k":
-            reasons.append("是销售和采购规模之和，适合报告总体规模；与分项规模重叠")
+            reasons.append("与销售、采购规模高度重复，仅放入完整敏感性特征集")
+        if feature == "net_sales_10k":
+            reasons.append("与sales_scale_10k高度相关，仅放入销售规模替代敏感性组")
+        if feature in {"max_customer_share", "max_supplier_share"}:
+            reasons.append("分别作为对应HHI的替代变量组，仅用于敏感性分析")
+        if feature == "longest_active_streak_ratio":
+            reasons.append("与active_month_ratio高度相关，仅用于连续性替代敏感性组")
         if feature == "operating_net_inflow_proxy_10k":
             reasons.append("只能解释为销售净额减采购净额的经营差额代理，不代表利润")
         if feature == "zero_amount_invoice_rate":
-            reasons.append("需要确认零金额作废票的业务含义；当前特征全常数")
+            reasons.append("正式定义和精确/容差核验见q1_zero_amount_invoice_rate_decision.md；作废行为由void_invoice_rate刻画")
         if not reasons:
-            reasons.append("边界在[0,1]或趋势/连续性定义清晰，可保留并在折内预处理")
-        lines.append(f"| `{feature}` | {category} | {'；'.join(reasons)} |")
+            reasons.append("按特征字典定义在折内完成缺失填补、缩尾、变换和标准化")
+        lines.append(f"| {feature} | {category} | {'；'.join(reasons)} |")
     lines.extend([
+        "",
+        "## 已锁定的主模型特征选择规则",
+        "",
+        "- business_scale_10k与销售、采购规模高度重复，只作敏感性分析。",
+        "- sales_scale_10k与net_sales_10k高度相关，主模型保留sales_scale_10k。",
+        "- customer_hhi与max_customer_share高度相关，主模型保留HHI。",
+        "- supplier_hhi与max_supplier_share高度相关，主模型保留HHI。",
+        "- active_month_ratio与longest_active_streak_ratio高度相关，主模型保留active_month_ratio。",
+        "- 被替代变量保留在特征集敏感性分析中，不从特征表删除。",
         "",
         "## 高相关变量处理",
         "",
-        "高相关只作诊断，不在本轮自动删除。后续建模手需要在弹性网、变量组选择或保留一个代表变量之间做决定。",
+        "高相关变量不从原始企业特征表物理删除；正式主模型和敏感性模型使用配置中的明确特征列表。",
         "",
         _md_table(high_pairs),
         "",
-        "## 当前明确的口径缺口",
+        "## 变量排除边界",
         "",
-        "- 需确认审计报告中完全重复行是否确属重复导入；当前构建按 `keep_first`。",
-        "- 需确认是否纳入2016-10与2020-02两个可能不完整的边界月份。",
-        "- 3条金额+税额与价税合计超差记录目前仅标记并保留，是否修正/剔除由建模手决定。",
-        "- 信誉评级和是否违约保留在表中做标签/辅助分析，但不进入主行为特征矩阵；`audit_`列同样只作审计辅助。",
+        "- zero_amount_invoice_rate保留在features.names和企业级特征表中，但不在primary_model_features或sensitivity_model_features中。",
+        "- credit_rating只作单独敏感性实验，default_label只作标签；enterprise_id和enterprise_name只作标识或展示。",
+        "- audit_开头字段只作审计辅助，不进入任何模型矩阵。",
         "",
     ])
     write_text("\n".join(lines), ROOT / "docs" / "q1_feature_review_decisions.md")
@@ -441,9 +684,33 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
     input_hash_before = sha256_file(input_path)
     features = _load_feature_table(feature_path)
     info = _load_enterprise_info(config, input_path)
-    input_ledger, output_ledger, ledger_diagnostics = _load_ledgers(config, input_path)
+    input_ledger, output_ledger, ledger_diagnostics, raw_frames = _load_ledgers(config, input_path)
     months = _months(input_ledger, output_ledger, config)
     feature_names = [str(name) for name in config["features"]["names"]]
+    primary_features = [str(name) for name in config["features"].get("primary_model_features", [])]
+    sensitivity_features = [str(name) for name in config["features"].get("sensitivity_model_features", [])]
+    excluded_features = dict(config["features"].get("excluded_from_model", {}))
+    if not primary_features or not sensitivity_features or not excluded_features:
+        raise DataQualityError("features.primary_model_features, sensitivity_model_features and excluded_from_model are required")
+    if len(primary_features) != len(set(primary_features)) or len(sensitivity_features) != len(set(sensitivity_features)):
+        raise DataQualityError("model feature lists must not contain duplicate names")
+    if not set(primary_features).issubset(set(sensitivity_features)):
+        raise DataQualityError("primary_model_features must be a subset of sensitivity_model_features")
+    if set(excluded_features).intersection(set(primary_features) | set(sensitivity_features)):
+        raise DataQualityError("excluded_from_model variables cannot enter either model feature list")
+    zero_detail, zero_summary = _summarize_zero_amount_business(
+        raw_frames,
+        {"input": input_ledger, "output": output_ledger},
+        config,
+    )
+    write_csv(zero_detail, out_dir / "zero_amount_invoice_business_check.csv")
+    write_csv(zero_summary, out_dir / "zero_amount_invoice_business_summary.csv")
+    _write_zero_amount_decision(
+        zero_detail,
+        zero_summary,
+        config,
+        ROOT / "docs" / "q1_zero_amount_invoice_rate_decision.md",
+    )
     bounded = set(config["features"]["bounded_01"])
     dictionary_names, dictionary_labels = _dictionary_names(DEFAULT_DICTIONARY)
     logger.info("feature_rows=%d feature_columns=%d month_count=%d", len(features), len(features.columns), len(months))
@@ -470,7 +737,13 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
     add_check("credit_rating_complete", "credit_rating" in features and features["credit_rating"].notna().all(), int(features.get("credit_rating", pd.Series(dtype=float)).isna().sum()) if "credit_rating" in features else 1, 0)
 
     missing_feature_columns = [name for name in feature_names if name not in features.columns]
-    add_check("dictionary_main_features_present", not missing_feature_columns, len(missing_feature_columns), 0, detail=json.dumps(missing_feature_columns, ensure_ascii=False))
+    add_check("all_constructed_features_present", not missing_feature_columns, len(missing_feature_columns), 0, detail=json.dumps(missing_feature_columns, ensure_ascii=False))
+    primary_missing = sorted(set(primary_features) - set(features.columns))
+    sensitivity_missing = sorted(set(sensitivity_features) - set(features.columns))
+    add_check("primary_model_features_present", not primary_missing, len(primary_missing), 0, detail=json.dumps(primary_missing, ensure_ascii=False))
+    add_check("sensitivity_model_features_present", not sensitivity_missing, len(sensitivity_missing), 0, detail=json.dumps(sensitivity_missing, ensure_ascii=False))
+    excluded_missing = sorted(set(excluded_features) - set(features.columns))
+    add_check("excluded_features_reported_in_feature_table", not excluded_missing, len(excluded_missing), 0, detail=json.dumps(excluded_missing, ensure_ascii=False))
     dictionary_missing_from_table = sorted(set(dictionary_names) - set(features.columns))
     add_check("dictionary_defined_features_present", not dictionary_missing_from_table, len(dictionary_missing_from_table), 0, detail=json.dumps(dictionary_missing_from_table, ensure_ascii=False))
     allowed_metadata = {"enterprise_id", "enterprise_name", "credit_rating", "default_label"}
@@ -498,14 +771,41 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
     stats = _feature_stats(features, feature_names)
     constant_features = stats.loc[stats["constant_flag"], "feature"].tolist()
     near_constant_features = stats.loc[stats["near_constant_flag"], "feature"].tolist()
-    add_check("no_constant_main_feature", not constant_features, constant_features, [], detail="全常数特征应在建模前移出候选集")
+    primary_constant_features = sorted(set(constant_features).intersection(primary_features))
+    add_check(
+        "no_constant_primary_model_feature",
+        not primary_constant_features,
+        primary_constant_features,
+        [],
+        detail="主模型候选集中不得存在全常数特征；审计型排除特征只报告不阻断",
+    )
+    model_matrix_features = sorted(set(primary_features) | set(sensitivity_features))
+    excluded_in_matrix = sorted(set(excluded_features).intersection(model_matrix_features))
+    add_check(
+        "excluded_features_absent_from_model_matrix",
+        not excluded_in_matrix,
+        excluded_in_matrix,
+        [],
+        detail="excluded_from_model变量不得进入主模型或敏感性模型矩阵",
+    )
+    audit_reported = sorted(
+        name for name, metadata in excluded_features.items()
+        if name in features.columns and str(metadata.get("role", "")) == "audit_only"
+    )
+    add_check(
+        "audit_only_features_reported",
+        audit_reported == sorted(excluded_features),
+        audit_reported,
+        sorted(excluded_features),
+        detail="审计型排除特征必须在特征表保留并报告",
+    )
     add_check("near_constant_feature_reported", True, near_constant_features, "仅报告，不自动删除", severity="warning")
     duplicate_pairs: list[tuple[str, str]] = []
     for i, left in enumerate(feature_names):
         for right in feature_names[i + 1:]:
             if features[left].equals(features[right]):
                 duplicate_pairs.append((left, right))
-    add_check("no_duplicate_main_feature_columns", not duplicate_pairs, duplicate_pairs, [], detail=json.dumps(duplicate_pairs, ensure_ascii=False))
+    add_check("no_duplicate_constructed_feature_columns", not duplicate_pairs, duplicate_pairs, [], detail=json.dumps(duplicate_pairs, ensure_ascii=False))
 
     range_violations: dict[str, int] = {}
     impossible: dict[str, int] = {}
@@ -526,7 +826,8 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
     add_check("count_features_integer_valued", not integer_violations, integer_violations, {}, detail=json.dumps(integer_violations, ensure_ascii=False))
     amount_name_check = all(name.endswith("_10k") for name in ["business_scale_10k", "sales_scale_10k", "purchase_scale_10k", "net_sales_10k", "operating_net_inflow_proxy_10k"])
     add_check("amount_units_match_dictionary", amount_name_check, amount_name_check, True, detail="企业级金额字段统一为万元，变量名带_10k")
-    add_check("main_names_match_config", feature_names == [name for name in dictionary_names if name in feature_names], feature_names, [name for name in dictionary_names if name in feature_names], detail="配置与字典主特征顺序")
+    add_check("constructed_names_match_dictionary", feature_names == dictionary_names, feature_names, dictionary_names, detail="features.names与字典21个构造特征顺序一致")
+    add_check("primary_model_feature_count_15", len(primary_features) == 15, len(primary_features), 15)
 
     leakage_rows: list[dict[str, Any]] = []
     for column in features.columns:
@@ -536,14 +837,32 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
             leakage_type, in_model, status = "label_or_rating", False, "excluded_label_or_auxiliary"
         elif column.startswith("audit_"):
             leakage_type, in_model, status = "audit_auxiliary", False, "excluded_audit_auxiliary"
+        elif column in excluded_features:
+            leakage_type, in_model, status = "audit_excluded_feature", False, "excluded_from_all_model_matrices"
         elif column in feature_names:
-            leakage_type, in_model, status = "behavior_feature", False, "candidate_not_yet_modeled"
+            leakage_type = "primary_model_feature" if column in primary_features else "sensitivity_model_feature"
+            in_model, status = True, "included_in_configured_model_matrix"
         else:
             leakage_type, in_model, status = "unrecognized", True, "review_required"
-        leakage_rows.append({"column": column, "is_main_feature": column in feature_names, "leakage_type": leakage_type, "in_main_model": in_model, "status": status})
+        leakage_rows.append({
+            "column": column,
+            "is_constructed_feature": column in feature_names,
+            "is_primary_model_feature": column in primary_features,
+            "is_sensitivity_model_feature": column in sensitivity_features,
+            "is_excluded_from_model": column in excluded_features,
+            "is_main_feature": column in feature_names,
+            "leakage_type": leakage_type,
+            "in_model_matrix": in_model,
+            "in_main_model": column in primary_features,
+            "status": status,
+        })
     leakage_frame = pd.DataFrame(leakage_rows)
-    leakage_bad = leakage_frame.loc[leakage_frame["in_main_model"], "column"].tolist()
-    add_check("no_identity_label_leakage_in_main_features", not leakage_bad, leakage_bad, [], detail="评级和标签保留在表中但不进入行为特征矩阵")
+    leakage_bad = leakage_frame.loc[
+        leakage_frame["in_model_matrix"]
+        & leakage_frame["column"].isin(["enterprise_id", "enterprise_name", "credit_rating", "default_label"]),
+        "column",
+    ].tolist()
+    add_check("no_identity_label_leakage_in_model_features", not leakage_bad, leakage_bad, [], detail="评级和标签保留在表中但不进入行为特征矩阵")
 
     # Spearman correlation is computed directly from the raw feature values.
     corr = numeric_frame.corr(method="spearman")
@@ -587,10 +906,16 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
 
     alignment_rows: list[dict[str, Any]] = []
     for column in features.columns:
-        if column in dictionary_names:
-            role, status = "main_dictionary_feature", "documented"
+        if column in excluded_features:
+            role, status = "audit_only_excluded_feature", "reported_but_absent_from_model_matrices"
+        elif column in primary_features:
+            role, status = "primary_model_feature", "included_in_primary_model"
+        elif column in sensitivity_features:
+            role, status = "sensitivity_model_feature", "included_in_sensitivity_model"
+        elif column in dictionary_names:
+            role, status = "constructed_not_modelled", "documented_but_not_in_configured_model_matrix"
         elif column in allowed_metadata:
-            role, status = "metadata_or_label", "explicitly_excluded_from_main_feature_matrix"
+            role, status = "metadata_or_label", "explicitly_excluded_from_all_model_matrices"
         elif column in aux_columns:
             role, status = "audit_auxiliary", "kept_for_audit_not_main_model"
         else:
@@ -600,6 +925,17 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         alignment_rows.append({"column": column, "in_feature_table": False, "in_dictionary": True, "role": "missing_dictionary_feature", "alignment_status": "FAIL", "dictionary_label": dictionary_labels.get(column, "")})
     alignment_frame = pd.DataFrame(alignment_rows)
     write_csv(alignment_frame, out_dir / "feature_dictionary_alignment.csv")
+    role_rows = []
+    for feature in feature_names:
+        role_rows.append({
+            "feature": feature,
+            "constructed": True,
+            "primary_model": feature in primary_features,
+            "sensitivity_model": feature in sensitivity_features,
+            "excluded_from_model": feature in excluded_features,
+            "role": "audit_only" if feature in excluded_features else "primary" if feature in primary_features else "sensitivity_only" if feature in sensitivity_features else "constructed_only",
+        })
+    write_csv(pd.DataFrame(role_rows), out_dir / "feature_role_alignment.csv")
 
     overall_failures = [row for row in checks if not row["passed"] and row["severity"] == "blocking"]
     status = "FAIL" if overall_failures else "PASS_WITH_WARNINGS" if any(not row["passed"] for row in checks) else "PASS"
@@ -610,8 +946,15 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         "sampled_enterprises": sampled_ids,
         "feature_rows": int(len(features)),
         "feature_columns": int(len(features.columns)),
-        "main_feature_count": int(len(feature_names)),
+        "constructed_feature_count": int(len(feature_names)),
+        "primary_model_feature_count": int(len(primary_features)),
+        "sensitivity_model_feature_count": int(len(sensitivity_features)),
+        "sensitivity_only_feature_count": int(len(set(sensitivity_features) - set(primary_features))),
+        "primary_model_features": primary_features,
+        "sensitivity_model_features": sensitivity_features,
+        "excluded_from_model": excluded_features,
         "constant_features": constant_features,
+        "primary_constant_features": primary_constant_features,
         "near_constant_features": near_constant_features,
         "auxiliary_columns": aux_columns,
         "unexplained_extra_columns": unexplained_extra,
@@ -630,8 +973,8 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         "",
         f"- 状态：**{status}**",
         f"- 特征表：`{feature_path.relative_to(ROOT).as_posix()}`，形状={features.shape[0]}行×{features.shape[1]}列",
-        f"- 主特征数：{len(feature_names)}；抽查企业：{', '.join(sampled_ids)}",
-        "- 本轮仅做数据验收、重算抽查和描述性分析；未训练风险模型、未拟合流失率、未优化信贷。",
+        f"- 共构造特征数：{len(feature_names)}；主模型特征数：{len(primary_features)}；敏感性模型特征数：{len(sensitivity_features)}；审计型排除特征数：{len(excluded_features)}",
+        f"- 抽查企业：{', '.join(sampled_ids)}；本报告不训练风险模型，只验收特征角色和业务口径。",
         "",
         "## 验收检查",
         "",
@@ -645,9 +988,11 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         "",
         _md_table(warning_frame) if not warning_frame.empty else "_无警告项_",
         "",
-        f"- 允许的 `audit_` 辅助列：{', '.join(aux_columns) if aux_columns else '无'}；这些列不属于字典主模型特征。",
-        f"- 全常数主特征：{', '.join(constant_features) if constant_features else '无'}。",
-        f"- 近似常数主特征：{', '.join(near_constant_features) if near_constant_features else '无'}。",
+        f"- 主模型特征：{', '.join(primary_features)}。",
+        f"- 敏感性模型特征：{', '.join(sensitivity_features)}。",
+        f"- 允许的 `audit_` 辅助列：{', '.join(aux_columns) if aux_columns else '无'}；这些列不属于模型矩阵。",
+        f"- 全常数构造特征：{', '.join(constant_features) if constant_features else '无'}；主模型候选中的全常数特征：{', '.join(primary_constant_features) if primary_constant_features else '无'}。",
+        f"- 近似常数构造特征：{', '.join(near_constant_features) if near_constant_features else '无'}；全常数审计事实仍在报告中显示，不造成主模型验收失败。",
         f"- |Spearman|>0.85的组合数：{len(high_frame)}；本轮不自动删除。",
         "- VIF未计算：当前环境没有额外统计包，且小样本下VIF仅作辅助判断；Spearman结果已完整输出。",
         "",
@@ -656,15 +1001,15 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         f"使用固定种子20260805抽取至少5家企业，容差为absolute={COMPARISON_ATOL:g}、relative={COMPARISON_RTOL:g}；逐特征结果见 `feature_recalculation_check.csv`。",
         _md_table(recalculation.head(40)),
         "",
-        "## 后续不能静默决定的事项",
+        "## 零金额业务核验",
         "",
-        "- `zero_amount_invoice_rate`是否全为0反映真实业务，还是零额作废票应从分母排除，需要建模手确认。",
-        "- 完全重复行、边界月份和3条金额恒等式超差记录的业务含义，需要在模型敏感性分析中明确。",
-        "- 高相关的规模、HHI与最大对手占比变量不自动删除，需由建模手确定变量组策略。",
+        "- 零金额业务核验明细见 `zero_amount_invoice_business_check.csv`，汇总见 `zero_amount_invoice_business_summary.csv`，最终决定见 `docs/q1_zero_amount_invoice_rate_decision.md`。",
+        "- 完全重复行、边界月份和金额恒等式超差记录继续按现有审计口径保留并可追溯。",
+        "- 高相关变量按配置的主模型与敏感性模型列表处理，不从原始特征表删除。",
         "",
     ]
     write_text("\n".join(report_lines), review_path)
-    _write_review_decisions(feature_names, stats, high_frame, review_path)
+    _write_review_decisions(feature_names, primary_features, sensitivity_features, excluded_features, stats, high_frame, review_path)
     logger.info("VALIDATION_STATUS=%s blocking_failures=%d warnings=%d", status, len(overall_failures), summary["warning_count"])
     if overall_failures:
         raise DataQualityError(f"特征验收存在阻断项: {[row['check_id'] for row in overall_failures]}")

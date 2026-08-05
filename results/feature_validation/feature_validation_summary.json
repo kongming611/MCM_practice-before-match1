@@ -9,12 +9,19 @@
     "audit_negative_amount_10k",
     "audit_missing_counterparty_count"
   ],
-  "blocking_failure_count": 1,
+  "blocking_failure_count": 0,
   "comparison_atol": 1e-06,
   "comparison_rtol": 1e-05,
   "constant_features": [
     "zero_amount_invoice_rate"
   ],
+  "constructed_feature_count": 21,
+  "excluded_from_model": {
+    "zero_amount_invoice_rate": {
+      "reason": "constant_valid_zero_rate_and_void_only_raw_zero_records",
+      "role": "audit_only"
+    }
+  },
   "feature_columns": 33,
   "feature_rows": 123,
   "high_correlation_pair_count": 11,
@@ -42,9 +49,27 @@
     },
     "output_sheet": "销项发票信息"
   },
-  "main_feature_count": 21,
   "near_constant_features": [
     "zero_amount_invoice_rate"
+  ],
+  "primary_constant_features": [],
+  "primary_model_feature_count": 15,
+  "primary_model_features": [
+    "sales_scale_10k",
+    "purchase_scale_10k",
+    "operating_net_inflow_proxy_10k",
+    "sales_growth_trend",
+    "sales_monthly_cv",
+    "invoice_activity_per_month",
+    "sales_return_rate",
+    "purchase_return_rate",
+    "void_invoice_rate",
+    "customer_count",
+    "supplier_count",
+    "customer_hhi",
+    "supplier_hhi",
+    "purchase_sales_ratio",
+    "active_month_ratio"
   ],
   "raw_input_sha256": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600",
   "sampled_enterprises": [
@@ -59,7 +84,31 @@
     "E88",
     "E96"
   ],
-  "status": "FAIL",
+  "sensitivity_model_feature_count": 20,
+  "sensitivity_model_features": [
+    "business_scale_10k",
+    "sales_scale_10k",
+    "purchase_scale_10k",
+    "net_sales_10k",
+    "operating_net_inflow_proxy_10k",
+    "sales_growth_trend",
+    "sales_monthly_cv",
+    "invoice_activity_per_month",
+    "sales_return_rate",
+    "purchase_return_rate",
+    "void_invoice_rate",
+    "customer_count",
+    "supplier_count",
+    "customer_hhi",
+    "supplier_hhi",
+    "max_customer_share",
+    "max_supplier_share",
+    "purchase_sales_ratio",
+    "active_month_ratio",
+    "longest_active_streak_ratio"
+  ],
+  "sensitivity_only_feature_count": 5,
+  "status": "PASS",
   "unexplained_extra_columns": [],
   "warning_count": 0
 }

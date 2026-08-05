@@ -291,6 +291,13 @@ def _write_initial_findings(frame: pd.DataFrame, group_stats: pd.DataFrame, out_
         diff_lines.append(f"- {FEATURE_LABELS[feature]}：违约组中位数{med1:.6g}，未违约组{med0:.6g}，违约组{relation}未违约组。")
     validation_summary = json.loads((VALIDATION_DIR / "feature_validation_summary.json").read_text(encoding="utf-8"))
     high = pd.read_csv(VALIDATION_DIR / "high_correlation_pairs.csv", encoding="utf-8-sig")
+    zero_summary_path = VALIDATION_DIR / "zero_amount_invoice_business_summary.csv"
+    zero_summary = pd.read_csv(zero_summary_path, encoding="utf-8-sig") if zero_summary_path.exists() else pd.DataFrame()
+    zero_raw = zero_summary.loc[
+        zero_summary["stage"].eq("raw_detail")
+        & zero_summary["direction"].eq("all")
+        & zero_summary["status_scope"].eq("all")
+    ].iloc[0] if not zero_summary.empty else None
     lines = [
         "# 问题一初步数据发现",
         "",
@@ -333,7 +340,8 @@ def _write_initial_findings(frame: pd.DataFrame, group_stats: pd.DataFrame, out_
         "",
         "## 4. 需要后续处理或核查",
         "",
-        f"- 当前全常数主特征：{', '.join(validation_summary['constant_features']) if validation_summary['constant_features'] else '无'}；在确认数据定义前不应进入主模型。",
+        f"- 当前全常数构造特征：{', '.join(validation_summary['constant_features']) if validation_summary['constant_features'] else '无'}；主模型候选中的全常数特征：{', '.join(validation_summary.get('primary_constant_features', [])) if validation_summary.get('primary_constant_features') else '无'}。zero_amount_invoice_rate虽为全常数，但已按审计型排除，不阻断主模型验收。",
+        f"- 零金额业务核验由程序实际生成；原始明细层精确零值数为{int(zero_raw['exact_zero_count'])}、容差零值数为{int(zero_raw['tolerance_zero_count'])}。完整的去重、原子发票、方向、状态和企业统计见zero_amount_invoice_business_check.csv。" if zero_raw is not None else "- 零金额业务核验报告尚未生成。",
         "- 金额、交易数量和月度波动可能右偏，后续按字典在训练折内采用log1p/有符号log1p、1%/99%缩尾或RobustScaler；不得覆盖本轮原始特征。",
         "- 规模分项、HHI与最大对手占比的高相关需要建模手决定变量组策略；当前保留并输出诊断。",
         "",
