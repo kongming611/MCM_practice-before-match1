@@ -1,0 +1,3 @@
+2026-08-05 18:00:03,813 INFO log_file=logs\q1_03_validate_features_20260805_180003.log
+2026-08-05 18:00:27,059 INFO feature_rows=123 feature_columns=33 month_count=41
+2026-08-05 18:00:27,763 INFO VALIDATION_STATUS=FAIL blocking_failures=1 warnings=0

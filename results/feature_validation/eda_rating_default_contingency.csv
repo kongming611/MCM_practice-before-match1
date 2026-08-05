@@ -1,0 +1,5 @@
+﻿credit_rating,not_default_count,default_count,total_count,default_rate
+A,27,0,27,0
+B,37,1,38,0.02631578947
+C,32,2,34,0.05882352941
+D,0,24,24,1
