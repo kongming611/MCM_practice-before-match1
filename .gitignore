@@ -1,1 +1,8 @@
 建模手交付要求.md
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Runtime logs
+logs/*.log

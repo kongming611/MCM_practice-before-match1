@@ -1,0 +1,20 @@
+{
+  "b_max_10k": 9900.0,
+  "baseline_budget_10k": 4950.0,
+  "baseline_parameters_are_representative": true,
+  "config_sha256": "6f55572962e652af6331d3abd1919f60fc71f46773ed34f051c2f2c200dc09c7",
+  "eligible_count": 99,
+  "official_solve_optimal": true,
+  "output_hashes": {
+    "figures/q1_credit/baseline_amount_by_rating.png": "34dcce50397a2bcca2ab06a56351cbb57cf7e63395ec6a83da9fd1d44a8f7346",
+    "figures/q1_credit/baseline_rate_by_rating.png": "0cd3ba2f7594567e8c36864b932e038ee4dfbc6c2223ad4212d80d15ee783328",
+    "figures/q1_credit/baseline_risk_amount_scatter.png": "c93b64e2439c1baf4387a188936f03697e9bfba2c4675367ffff36c1ef52c515",
+    "results/credit_strategy/baseline_enterprise_strategy.csv": "293935cdbcf3f07344c2d398b0d225d87eb0b712efae942b17c71b5d57d4a4fd",
+    "results/credit_strategy/baseline_portfolio_summary.csv": "1d26edfd6a72c82208a8171861654749881368c64ddb588e465b16a527690cf6",
+    "results/credit_strategy/baseline_solver_diagnostics.json": "b32cd58cfc24f3341d1ff62f56285898839f13e0e6a1900a14b24141b4331741",
+    "results/credit_strategy/baseline_strategy_report.md": "d6da409ac78e5e06385bdda127220f56e8f88b334e32b5712d9095a673795b46"
+  },
+  "risk_column": "selected_model_risk_score",
+  "selected_model": "elastic_net_logistic",
+  "workflow": "fourth_batch_baseline_credit_strategy"
+}

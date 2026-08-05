@@ -155,3 +155,71 @@ model_training:
     max_leaf_nodes: 3
     min_samples_leaf: 15
     l2_regularization: 10.0
+
+churn_model:
+  attachment3: data/附件3：银行贷款年利率与客户流失率关系的统计数据.xlsx
+  expected_sheet: Sheet1
+  method: isotonic_regression
+  increasing: true
+  out_of_bounds: clip
+  allowed_ratings:
+    - A
+    - B
+    - C
+  use_observed_rate_points_only: true
+
+credit_optimization:
+  risk_column: selected_model_risk_score
+  conservative_risk_column: logistic_oof_p90
+  min_loan_10k: 10
+  max_loan_10k: 100
+
+baseline:
+  budget_fraction_of_max: 0.50
+  lgd: 0.50
+  funding_cost_rate: 0.03
+  risk_variant: mean
+  budget_definition: nominal_equality
+
+budget_fractions:
+  - 0.10
+  - 0.20
+  - 0.30
+  - 0.40
+  - 0.50
+  - 0.60
+  - 0.70
+  - 0.80
+  - 0.90
+  - 1.00
+
+lgd_values:
+  - 0.30
+  - 0.50
+  - 0.70
+
+funding_cost_values:
+  - 0.02
+  - 0.03
+  - 0.04
+
+risk_variants:
+  - mean
+  - p90
+
+budget_definitions:
+  - nominal_equality
+  - nominal_cap
+  - expected_disbursement_cap
+
+solver:
+  name: scipy_milp
+  time_limit_seconds: 120
+  mip_rel_gap: 0.000001
+  feasibility_tolerance: 0.000001
+
+strategy_stability:
+  robust_core_frequency: 0.80
+  unstable_frequency_low: 0.20
+  unstable_frequency_high: 0.80
+  unstable_loan_amount_sd_10k: 20.0

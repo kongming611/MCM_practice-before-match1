@@ -1,0 +1,88 @@
+﻿source_sheet,raw_interest_rate_column,raw_churn_rate_column,credit_rating,interest_rate_raw,churn_rate_raw,interest_rate,interest_rate_normalization,churn_rate_normalization,raw_churn_rate,fitted_churn_rate,acceptance_probability,raw_minus_fitted,is_observed_rate,fit_method
+Sheet1,贷款年利率,客户流失率,A,0.04,0,0.04,kept_as_0_1_fraction,kept_as_0_1_fraction,0,0,1,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0425,0.09457412621,0.0425,kept_as_0_1_fraction,kept_as_0_1_fraction,0.09457412621,0.09457412621,0.9054258738,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0465,0.1357271831,0.0465,kept_as_0_1_fraction,kept_as_0_1_fraction,0.1357271831,0.1357271831,0.8642728169,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0505,0.2246033536,0.0505,kept_as_0_1_fraction,kept_as_0_1_fraction,0.2246033536,0.2246033536,0.7753966464,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0545,0.3020381016,0.0545,kept_as_0_1_fraction,kept_as_0_1_fraction,0.3020381016,0.3020381016,0.6979618984,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0585,0.3473156681,0.0585,kept_as_0_1_fraction,kept_as_0_1_fraction,0.3473156681,0.3473156681,0.6526843319,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0625,0.41347177,0.0625,kept_as_0_1_fraction,kept_as_0_1_fraction,0.41347177,0.41347177,0.58652823,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0665,0.4478909726,0.0665,kept_as_0_1_fraction,kept_as_0_1_fraction,0.4478909726,0.4478909726,0.5521090274,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0705,0.4976344534,0.0705,kept_as_0_1_fraction,kept_as_0_1_fraction,0.4976344534,0.4976344534,0.5023655466,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0745,0.511096612,0.0745,kept_as_0_1_fraction,kept_as_0_1_fraction,0.511096612,0.511096612,0.488903388,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0785,0.573393087,0.0785,kept_as_0_1_fraction,kept_as_0_1_fraction,0.573393087,0.573393087,0.426606913,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0825,0.6094921146,0.0825,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6094921146,0.6094921146,0.3905078854,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0865,0.6529447736,0.0865,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6529447736,0.6529447736,0.3470552264,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0905,0.6675418427,0.0905,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6675418427,0.6675418427,0.3324581573,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0945,0.6947799208,0.0945,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6947799208,0.6947799208,0.3052200792,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.0985,0.7083020233,0.0985,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7083020233,0.7083020233,0.2916979767,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1025,0.7312754013,0.1025,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7312754013,0.7312754013,0.2687245987,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1065,0.775091405,0.1065,kept_as_0_1_fraction,kept_as_0_1_fraction,0.775091405,0.775091405,0.224908595,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1105,0.7982273676,0.1105,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7982273676,0.794377317,0.205622683,0.003850050613,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1145,0.7905272664,0.1145,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7905272664,0.794377317,0.205622683,-0.003850050613,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1185,0.8151969865,0.1185,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8151969865,0.8148090077,0.1851909923,0.0003879787987,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1225,0.8144210289,0.1225,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8144210289,0.8148090077,0.1851909923,-0.0003879787987,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1265,0.8548110969,0.1265,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8548110969,0.8548110969,0.1451889031,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1305,0.8703173433,0.1305,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8703173433,0.8703173433,0.1296826567,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1345,0.8714280854,0.1345,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8714280854,0.8714280854,0.1285719146,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1385,0.8859259452,0.1385,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8859259452,0.8801803134,0.1198196866,0.005745631745,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1425,0.8744346817,0.1425,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8744346817,0.8801803134,0.1198196866,-0.005745631745,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.1465,0.9027259086,0.1465,kept_as_0_1_fraction,kept_as_0_1_fraction,0.9027259086,0.9027259086,0.09727409137,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,客户流失率,A,0.15,0.922060687,0.15,kept_as_0_1_fraction,kept_as_0_1_fraction,0.922060687,0.922060687,0.07793931305,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.04,0,0.04,kept_as_0_1_fraction,kept_as_0_1_fraction,0,0,1,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0425,0.06679958332,0.0425,kept_as_0_1_fraction,kept_as_0_1_fraction,0.06679958332,0.06679958332,0.9332004167,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0465,0.1350520596,0.0465,kept_as_0_1_fraction,kept_as_0_1_fraction,0.1350520596,0.1350520596,0.8649479404,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0505,0.20658008,0.0505,kept_as_0_1_fraction,kept_as_0_1_fraction,0.20658008,0.20658008,0.79341992,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0545,0.2768122932,0.0545,kept_as_0_1_fraction,kept_as_0_1_fraction,0.2768122932,0.2768122932,0.7231877068,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0585,0.3028834011,0.0585,kept_as_0_1_fraction,kept_as_0_1_fraction,0.3028834011,0.3028834011,0.6971165989,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0625,0.3702158521,0.0625,kept_as_0_1_fraction,kept_as_0_1_fraction,0.3702158521,0.3702158521,0.6297841479,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0665,0.4062966682,0.0665,kept_as_0_1_fraction,kept_as_0_1_fraction,0.4062966682,0.4062966682,0.5937033318,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0705,0.458295295,0.0705,kept_as_0_1_fraction,kept_as_0_1_fraction,0.458295295,0.458295295,0.541704705,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0745,0.5087186917,0.0745,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5087186917,0.5087186917,0.4912813083,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0785,0.5444088369,0.0785,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5444088369,0.5444088369,0.4555911631,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0825,0.5484939576,0.0825,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5484939576,0.5484939576,0.4515060424,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0865,0.5887656961,0.0865,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5887656961,0.5887656961,0.4112343039,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0905,0.6257645759,0.0905,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6257645759,0.6257645759,0.3742354241,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0945,0.6356051463,0.0945,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6356051463,0.6356051463,0.3643948537,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.0985,0.6735274241,0.0985,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6735274241,0.6735274241,0.3264725759,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1025,0.6969254309,0.1025,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6969254309,0.6969254309,0.3030745691,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1065,0.7053159925,0.1065,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7053159925,0.7053159925,0.2946840075,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1105,0.7429363263,0.1105,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7429363263,0.7429363263,0.2570636737,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1145,0.7764007288,0.1145,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7764007288,0.7692116619,0.2307883381,0.00718906688,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1185,0.762022595,0.1185,kept_as_0_1_fraction,kept_as_0_1_fraction,0.762022595,0.7692116619,0.2307883381,-0.00718906688,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1225,0.7915036971,0.1225,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7915036971,0.7915036971,0.2084963029,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1265,0.8149989325,0.1265,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8149989325,0.8149989325,0.1850010675,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1305,0.8222978615,0.1305,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8222978615,0.8222978615,0.1777021385,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1345,0.8353016023,0.1345,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8353016023,0.8353016023,0.1646983977,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1385,0.8457477454,0.1385,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8457477454,0.8439092946,0.1560907054,0.001838450839,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1425,0.8420708437,0.1425,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8420708437,0.8439092946,0.1560907054,-0.001838450839,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.1465,0.8681595356,0.1465,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8681595356,0.8681595356,0.1318404644,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 2,B,0.15,0.885864919,0.15,kept_as_0_1_fraction,kept_as_0_1_fraction,0.885864919,0.885864919,0.114135081,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.04,0,0.04,kept_as_0_1_fraction,kept_as_0_1_fraction,0,0,1,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0425,0.06872530649,0.0425,kept_as_0_1_fraction,kept_as_0_1_fraction,0.06872530649,0.06872530649,0.9312746935,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0465,0.1220990289,0.0465,kept_as_0_1_fraction,kept_as_0_1_fraction,0.1220990289,0.1220990289,0.8779009711,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0505,0.1812521463,0.0505,kept_as_0_1_fraction,kept_as_0_1_fraction,0.1812521463,0.1812521463,0.8187478537,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0545,0.2633028632,0.0545,kept_as_0_1_fraction,kept_as_0_1_fraction,0.2633028632,0.2633028632,0.7366971368,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0585,0.2901890983,0.0585,kept_as_0_1_fraction,kept_as_0_1_fraction,0.2901890983,0.2901890983,0.7098109017,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0625,0.3497155901,0.0625,kept_as_0_1_fraction,kept_as_0_1_fraction,0.3497155901,0.3497155901,0.6502844099,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0665,0.3907716828,0.0665,kept_as_0_1_fraction,kept_as_0_1_fraction,0.3907716828,0.3907716828,0.6092283172,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0705,0.4572380698,0.0705,kept_as_0_1_fraction,kept_as_0_1_fraction,0.4572380698,0.4572380698,0.5427619302,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0745,0.4926604331,0.0745,kept_as_0_1_fraction,kept_as_0_1_fraction,0.4926604331,0.4926604331,0.5073395669,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0785,0.5136602385,0.0785,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5136602385,0.5136602385,0.4863397615,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0825,0.5302487056,0.0825,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5302487056,0.5302487056,0.4697512944,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0865,0.5877624082,0.0865,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5877624082,0.5877624082,0.4122375918,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0905,0.5900970447,0.0905,kept_as_0_1_fraction,kept_as_0_1_fraction,0.5900970447,0.5900970447,0.4099029553,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0945,0.6429936556,0.0945,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6429936556,0.6429936556,0.3570063444,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.0985,0.6588394158,0.0985,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6588394158,0.6588394158,0.3411605842,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1025,0.6968705731,0.1025,kept_as_0_1_fraction,kept_as_0_1_fraction,0.6968705731,0.6968705731,0.3031294269,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1065,0.7191035524,0.1065,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7191035524,0.7151023945,0.2848976055,0.004001157891,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1105,0.7111012366,0.1105,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7111012366,0.7151023945,0.2848976055,-0.004001157891,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1145,0.7506276561,0.1145,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7506276561,0.7506276561,0.2493723439,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1185,0.7768160432,0.1185,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7768160432,0.7768160432,0.2231839568,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1225,0.7844805121,0.1225,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7844805121,0.7844805121,0.2155194879,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1265,0.7955662741,0.1265,kept_as_0_1_fraction,kept_as_0_1_fraction,0.7955662741,0.7955662741,0.2044337259,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1305,0.8200514336,0.1305,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8200514336,0.8200514336,0.1799485664,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1345,0.8322884215,0.1345,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8322884215,0.8322884215,0.1677115785,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1385,0.8440898754,0.1385,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8440898754,0.8405321006,0.1594678994,0.003557774805,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1425,0.8369743258,0.1425,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8369743258,0.8405321006,0.1594678994,-0.003557774805,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.1465,0.8725589573,0.1465,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8725589573,0.8725589573,0.1274410427,0,True,isotonic_regression_increasing
+Sheet1,贷款年利率,Unnamed: 3,C,0.15,0.8951647387,0.15,kept_as_0_1_fraction,kept_as_0_1_fraction,0.8951647387,0.8951647387,0.1048352613,0,True,isotonic_regression_increasing

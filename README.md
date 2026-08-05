@@ -36,3 +36,69 @@ https://www.mcm.edu.cn/html_cn/node/10405905647c52abfd6377c0311632b5.html
 6. 信誉评级：银行内部根据企业的实际情况人工评定的，银行对信誉评级为 D 的企业原则上
 不予放贷。 
 7. 客户流失率：因为贷款利率等因素银行失去潜在客户的比率。
+
+## 问题一正式可复现流水线
+
+第四批正式流程只使用第三批已经验收的企业级风险表，不重新从原始发票构造风险特征。正式优化读取：
+
+`results/model_training/oof_predictions_by_enterprise.csv`中的`selected_model_risk_score`。
+
+该字段表示依据历史发票行为得到的相对违约倾向，不是严格一年期违约概率。附件3客户流失率是利率情景参数，不是违约率；优化收益和损失是参数化情景结果，不是银行真实利润或真实损失预测。
+
+### 环境与数据
+
+建议使用Python 3.12及仓库中的实际依赖版本：
+
+```text
+python -m pip install -r requirements-q1.txt
+```
+
+原始数据位于`data/`：附件1为123家有信贷记录企业，附件2为302家无信贷记录企业，附件3为贷款年利率与客户流失率统计数据。原始Excel不会被流程覆盖。
+
+### 一键运行
+
+```text
+python run_q1_pipeline.py --stage final
+```
+
+`final`依次运行附件3审计/拟合、代表性基准MILP、全部敏感性分析和最终验收；如果任一步失败，流水线立即返回非零退出码。
+
+如需从数据审计开始完整运行：
+
+```text
+python run_q1_pipeline.py --stage all
+```
+
+`all`按01至09顺序运行数据审计、特征构造、特征验收、探索分析、风险模型、附件3曲线、基准优化、敏感性分析和最终验收。每个子任务使用独立参数列表调用，不使用`shell=True`；实际命令、开始时间、结束时间、耗时和状态写入`logs/q1_pipeline_*.log`。
+
+也可以单独运行第四批：
+
+```text
+python src/06_fit_churn_curves.py
+python src/07_optimize_credit_strategy.py
+python src/08_credit_sensitivity_analysis.py
+python src/09_validate_q1_final.py
+```
+
+最终验收脚本成功时只输出`PASS`；失败时输出`FAIL`及全部失败项。
+
+### 阶段输出
+
+- 附件3审计和曲线：`results/churn_model/`、`figures/q1_credit/churn_curve_raw_vs_fitted.png`。
+- 代表性基准策略：`results/credit_strategy/baseline_enterprise_strategy.csv`及对应组合汇总、求解诊断。
+- 预算、LGD、资金成本、风险mean/p90、预算定义和联合情景：`results/sensitivity/`。
+- 企业策略稳定性：`results/sensitivity/enterprise_strategy_stability.csv`。
+- 最终Excel：`results/final/q1_final_delivery.xlsx`；最终验收：`results/final/q1_final_validation_report.md`。
+- 论文材料：`docs/q1_final_results_for_paper.md`、`docs/q1_final_assumptions_and_limitations.md`、`docs/q1_submission_checklist.md`。
+
+### 参数化情景
+
+问题一没有给定年度预算，因此基准预算是`0.50×B_max`的代表性参数化情景，不是题目给定预算。当前中心情景LGD=0.50、资金成本率=0.03同样不是题目给定值，也不是从现有数据估计出的真实参数。
+
+第四批参数集中在`config/q1.yaml`的`churn_model`、`credit_optimization`、`baseline`、`budget_fractions`、`lgd_values`、`funding_cost_values`、`risk_variants`和`budget_definitions`。调整预算、LGD或资金成本时，应修改配置后重新运行`--stage final`；不要手工改写CSV或Excel。
+
+D级企业原则上不予放贷；评级只用于附件3曲线匹配、D级业务约束和展示，不进入第三批违约风险模型。`default_label`只作为历史参考字段，不进入优化目标或约束。
+
+### 历史脚本说明
+
+根目录的`question1_model_comparison.py`和`question2_model_comparison.py`保留为历史参考，不属于当前正式流水线。正式风险模型读取已验收的企业级特征表；正式第四批读取已生成的OOF风险表和附件3拟合结果。
