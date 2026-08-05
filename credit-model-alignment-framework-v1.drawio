@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-08-05T00:00:00.000Z" agent="Codex" version="26.0.9" type="device" pages="6">
+  <diagram id="overview" name="00-总览与三问主线">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="1" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="ov-title" value="2020 国赛 C 题：中小微企业信贷决策｜团队建模思路对齐图 v1" style="text;html=1;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="2200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-bg" value="问题背景与任务边界" style="swimlane;startSize=34;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#F3F4F6;strokeColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="40" y="75" width="2320" height="165" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-bg1" value="&lt;b&gt;业务逻辑&lt;/b&gt;&lt;br&gt;银行先评估企业风险，再联合决定贷不贷、贷多少、收多少利率" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=10;fillColor=#FFFFFF;strokeColor=#9CA3AF;" vertex="1" parent="ov-bg">
+          <mxGeometry x="30" y="55" width="690" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-bg2" value="&lt;b&gt;硬约束&lt;/b&gt;&lt;br&gt;获贷企业 10–100 万元；年利率 4%–15%；期限 1 年；D 级原则上不贷" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=10;fillColor=#FFFFFF;strokeColor=#9CA3AF;" vertex="1" parent="ov-bg">
+          <mxGeometry x="760" y="55" width="720" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-bg3" value="&lt;b&gt;三问递进&lt;/b&gt;&lt;br&gt;Q1 有标签建风险模型 → Q2 迁移到无标签企业 → Q3 在突发事件下压力重估并稳健调整" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=10;fillColor=#FFFFFF;strokeColor=#9CA3AF;" vertex="1" parent="ov-bg">
+          <mxGeometry x="1520" y="55" width="760" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-data" value="数据输入" style="swimlane;startSize=34;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F4F8;strokeColor=#0EA5E9;" vertex="1" parent="1">
+          <mxGeometry x="40" y="275" width="2320" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-d1" value="&lt;b&gt;附件 1&lt;/b&gt;&lt;br&gt;123 家：企业信息＋进/销项发票&lt;br&gt;标签：信誉评级、是否违约" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="ov-data">
+          <mxGeometry x="130" y="50" width="420" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-d2" value="&lt;b&gt;附件 2&lt;/b&gt;&lt;br&gt;302 家：企业名称＋进/销项发票&lt;br&gt;无信誉评级、无违约标签" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="ov-data">
+          <mxGeometry x="670" y="50" width="420" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-d3" value="&lt;b&gt;附件 3&lt;/b&gt;&lt;br&gt;4%–15% 的利率点&lt;br&gt;A/B/C 评级对应客户流失率" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="ov-data">
+          <mxGeometry x="1210" y="50" width="420" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-d4" value="&lt;b&gt;外部/团队参数接口&lt;/b&gt;&lt;br&gt;Q1 预算 B；LGD/回收率；资金成本；Q3 行业冲击区间与来源" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="ov-data">
+          <mxGeometry x="1750" y="50" width="440" height="78" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-engine" value="共用的“风险—定价—优化”引擎" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F5E9;strokeColor=#16A34A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="2320" height="225" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-e1" value="&lt;b&gt;① 数据清洗&lt;/b&gt;&lt;br&gt;状态/负数/零额/重复键&lt;br&gt;统一统计口径" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="ov-engine">
+          <mxGeometry x="55" y="75" width="280" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-e2" value="&lt;b&gt;② 企业级特征&lt;/b&gt;&lt;br&gt;规模、成长、稳定、收支&lt;br&gt;集中度、异常交易" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="ov-engine">
+          <mxGeometry x="420" y="75" width="280" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-e3" value="&lt;b&gt;③ 风险预测&lt;/b&gt;&lt;br&gt;弹性网 Logistic 主模型&lt;br&gt;输出违约倾向与区间" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="ov-engine">
+          <mxGeometry x="785" y="75" width="280" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-e4" value="&lt;b&gt;④ 客户接受概率&lt;/b&gt;&lt;br&gt;A/B/C 流失率单调化&lt;br&gt;q=1−流失率" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="ov-engine">
+          <mxGeometry x="1150" y="75" width="280" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-e5" value="&lt;b&gt;⑤ 单位贷款价值&lt;/b&gt;&lt;br&gt;利息收益−资金成本&lt;br&gt;−预期违约损失" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="ov-engine">
+          <mxGeometry x="1515" y="75" width="280" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-e6" value="&lt;b&gt;⑥ 组合优化&lt;/b&gt;&lt;br&gt;MILP / 区间鲁棒 MILP&lt;br&gt;企业×额度×利率联动" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="ov-engine">
+          <mxGeometry x="1880" y="75" width="310" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-ee1" edge="1" parent="ov-engine" source="ov-e1" target="ov-e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-ee2" edge="1" parent="ov-engine" source="ov-e2" target="ov-e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-ee3" edge="1" parent="ov-engine" source="ov-e3" target="ov-e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-ee4" edge="1" parent="ov-engine" source="ov-e4" target="ov-e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-ee5" edge="1" parent="ov-engine" source="ov-e5" target="ov-e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q1" value="问题一｜123 家有信贷记录企业" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#DAE8FC;strokeColor=#2563EB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="730" width="740" height="355" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q1a" value="&lt;b&gt;风险层&lt;/b&gt;&lt;br&gt;发票共同特征 → Elastic-Net Logistic&lt;br&gt;信誉评级不进主模型，避免泄漏" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="ov-q1">
+          <mxGeometry x="35" y="60" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q1b" value="&lt;b&gt;验证层&lt;/b&gt;&lt;br&gt;5 折×10 次重复分层 CV＋企业级 bootstrap&lt;br&gt;主看 PR-AUC、Brier、LogLoss、Top20% 召回" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="ov-q1">
+          <mxGeometry x="35" y="155" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q1c" value="&lt;b&gt;决策层&lt;/b&gt;&lt;br&gt;已知评级选流失率曲线；对预算 B 做参数化 MILP&lt;br&gt;输出是否贷款、额度、利率、收益、风险、预算核对" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="ov-q1">
+          <mxGeometry x="35" y="250" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q2" value="问题二｜302 家无信贷记录企业" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#FFF2CC;strokeColor=#CA8A04;" vertex="1" parent="1">
+          <mxGeometry x="830" y="730" width="740" height="355" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q2a" value="&lt;b&gt;监督迁移主线&lt;/b&gt;&lt;br&gt;同口径特征 → Elastic-Net Logistic 预测风险&lt;br&gt;有序 Logistic 预测 A/B/C/D 评级概率" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="ov-q2">
+          <mxGeometry x="35" y="60" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q2b" value="&lt;b&gt;迁移安全阀&lt;/b&gt;&lt;br&gt;Label Spreading 作交叉检查＋5NN 分布支持距离&lt;br&gt;高分歧/分布外企业：标记降额或人工复核" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="ov-q2">
+          <mxGeometry x="35" y="155" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q2c" value="&lt;b&gt;决策层&lt;/b&gt;&lt;br&gt;评级概率加权客户接受率 → 分段线性 MILP&lt;br&gt;1 亿元=10,000 万元；按方案要求足额投放并严格核对" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="ov-q2">
+          <mxGeometry x="35" y="250" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q3" value="问题三｜方案 A：突发事件压力调整" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#FCE4EC;strokeColor=#DB2777;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="730" width="740" height="355" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q3a" value="&lt;b&gt;行业情景&lt;/b&gt;&lt;br&gt;企业名称粗分类；未知行业单列&lt;br&gt;轻/中/重冲击作用于销售、波动、集中度等" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DB2777;" vertex="1" parent="ov-q3">
+          <mxGeometry x="35" y="60" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q3b" value="&lt;b&gt;压力重估&lt;/b&gt;&lt;br&gt;冲击特征重新进入既有风险模型&lt;br&gt;形成各企业压力风险区间 [p⁻, p⁺]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DB2777;" vertex="1" parent="ov-q3">
+          <mxGeometry x="35" y="155" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-q3c" value="&lt;b&gt;稳健调整&lt;/b&gt;&lt;br&gt;区间鲁棒 MILP 按最坏风险优化 1 亿元组合&lt;br&gt;比较调整前后额度、利率、行业暴露和压力损失" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DB2777;" vertex="1" parent="ov-q3">
+          <mxGeometry x="35" y="250" width="670" height="75" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-hand" value="三人对齐：每层必须交付“输入表—模型/公式—输出表—核验项”" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#F3E8FF;strokeColor=#7C3AED;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1130" width="2320" height="265" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-h1" value="&lt;b&gt;建模手&lt;/b&gt;&lt;br&gt;定义特征口径、公式、参数区间、约束与方案切换条件&lt;br&gt;&lt;font color=&quot;#B91C1C&quot;&gt;不填无依据的唯一参数值&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="ov-hand">
+          <mxGeometry x="70" y="70" width="650" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-h2" value="&lt;b&gt;编程手&lt;/b&gt;&lt;br&gt;逐层落表：清洗报告、企业特征、OOF 风险、流失率曲线、策略明细、预算/约束核对&lt;br&gt;&lt;font color=&quot;#B91C1C&quot;&gt;企业级切分，禁止发票行泄漏&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="ov-hand">
+          <mxGeometry x="835" y="70" width="650" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-h3" value="&lt;b&gt;论文手&lt;/b&gt;&lt;br&gt;解释“为何选模型—怎样验证—结果如何改变授信”并写清局限&lt;br&gt;&lt;font color=&quot;#B91C1C&quot;&gt;风险值称历史违约倾向；相关不写成因果&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="ov-hand">
+          <mxGeometry x="1600" y="70" width="650" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="ov-foot" value="阅读顺序：本页看主线 → 01 看风险层 → 02 看问题二迁移 → 03 看定价与 MILP → 04 看问题三方案 A → 05 看交接与验收" style="text;html=1;align=center;fontSize=12;fontColor=#6B7280;" vertex="1" parent="1">
+          <mxGeometry x="300" y="1420" width="1800" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="risk" name="01-共享风险模型怎么用">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="1" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="r-title" value="共享风险层：从发票行为到可验证的企业违约倾向" style="text;html=1;fontSize=24;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="2200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-raw" value="A. 原始数据与清洗口径" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F4F8;strokeColor=#0284C7;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="2320" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-in" value="进项发票&lt;br&gt;企业购买/供应端" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="r-raw">
+          <mxGeometry x="60" y="75" width="230" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-out" value="销项发票&lt;br&gt;企业销售/客户侧" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="r-raw">
+          <mxGeometry x="60" y="155" width="230" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-clean" value="&lt;b&gt;按企业聚合前先核验&lt;/b&gt;&lt;br&gt;状态：有效/作废&lt;br&gt;负数：退货，不可简单删&lt;br&gt;零金额：单列占比&lt;br&gt;重复：企业—发票号—日期—交易对手核验" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=10;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="r-raw">
+          <mxGeometry x="390" y="65" width="520" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-month" value="&lt;b&gt;时间口径&lt;/b&gt;&lt;br&gt;按月聚合，避免企业发票量差异主导&lt;br&gt;金额做 signed-log / 缩尾&lt;br&gt;训练与测试的预处理只在训练侧拟合" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=10;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="r-raw">
+          <mxGeometry x="1010" y="65" width="520" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-leak" value="&lt;b&gt;防泄漏红线&lt;/b&gt;&lt;br&gt;先得到“一企一行”特征，再按企业切分&lt;br&gt;同一企业的发票不能分到训练/测试两侧&lt;br&gt;主风险模型不使用信誉评级" style="rounded=1;whiteSpace=wrap;html=1;align=left;spacing=10;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;" vertex="1" parent="r-raw">
+          <mxGeometry x="1630" y="65" width="610" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-feat" value="B. 企业级特征工程（附件 1 与附件 2 必须完全同口径）" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F5E9;strokeColor=#16A34A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="365" width="2320" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-f1" value="&lt;b&gt;规模/活跃&lt;/b&gt;&lt;br&gt;有效金额、发票数&lt;br&gt;活跃月/日、交易对手数" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="r-feat">
+          <mxGeometry x="45" y="75" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-f2" value="&lt;b&gt;成长/近期变化&lt;/b&gt;&lt;br&gt;月金额趋势&lt;br&gt;近 3 月/前 3 月比" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="r-feat">
+          <mxGeometry x="415" y="75" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-f3" value="&lt;b&gt;稳定性&lt;/b&gt;&lt;br&gt;月金额标准差/CV&lt;br&gt;月净额波动" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="r-feat">
+          <mxGeometry x="785" y="75" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-f4" value="&lt;b&gt;收支代理&lt;/b&gt;&lt;br&gt;销项/进项金额比&lt;br&gt;销项−进项净额" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="r-feat">
+          <mxGeometry x="1155" y="75" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-f5" value="&lt;b&gt;上下游集中度&lt;/b&gt;&lt;br&gt;最大交易对手占比&lt;br&gt;客户/供应商 HHI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="r-feat">
+          <mxGeometry x="1525" y="75" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-f6" value="&lt;b&gt;异常交易&lt;/b&gt;&lt;br&gt;作废/负数/零额率&lt;br&gt;重复行率、有效率" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="r-feat">
+          <mxGeometry x="1895" y="75" width="300" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-model" value="C. 主模型：Elastic-Net Logistic（小样本、稀疏、可解释）" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#DAE8FC;strokeColor=#2563EB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="660" width="1500" height="410" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-pre" value="&lt;b&gt;预处理&lt;/b&gt;&lt;br&gt;中位数填补 → signed-log → RobustScaler&lt;br&gt;全部步骤装入训练管道" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="r-model">
+          <mxGeometry x="45" y="70" width="370" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-logit" value="&lt;b&gt;违约倾向&lt;/b&gt;&lt;br&gt;pᵢ = sigmoid(β₀ + xᵢβ)&lt;br&gt;最小化 LogLoss + λ[α‖β‖₁ +(1−α)‖β‖²₂/2]&lt;br&gt;预固定：C=0.2，l1-ratio=0.8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="r-model">
+          <mxGeometry x="520" y="55" width="440" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-why" value="&lt;b&gt;模型作用&lt;/b&gt;&lt;br&gt;L1：筛掉冗余特征&lt;br&gt;L2：缓解共线与小样本波动&lt;br&gt;系数符号解释风险方向" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="r-model">
+          <mxGeometry x="1065" y="70" width="380" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-oof" value="&lt;b&gt;OOF 输出&lt;/b&gt;&lt;br&gt;每家企业重复测试概率取均值&lt;br&gt;bootstrap 给不确定区间&lt;br&gt;正式部署再用全部 123 家重训" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="r-model">
+          <mxGeometry x="260" y="235" width="430" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-output" value="&lt;b&gt;风险层交付字段&lt;/b&gt;&lt;br&gt;firm_id｜p_base｜p_low｜p_high｜风险排序&lt;br&gt;关键特征贡献｜模型版本｜是否分布外" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="r-model">
+          <mxGeometry x="810" y="235" width="480" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-me1" edge="1" parent="r-model" source="r-pre" target="r-logit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-me2" edge="1" parent="r-model" source="r-logit" target="r-why" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-me3" edge="1" parent="r-model" source="r-logit" target="r-oof" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-me4" edge="1" parent="r-model" source="r-oof" target="r-output" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-eval" value="D. 模型选择与验证：只比较风险预测层" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#FFF2CC;strokeColor=#CA8A04;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="660" width="780" height="410" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-cv" value="&lt;b&gt;切分&lt;/b&gt;&lt;br&gt;5 折×10 次重复分层 CV&lt;br&gt;50 个配对小块；随机种子 20260805&lt;br&gt;单位始终是企业，不是发票" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="r-eval">
+          <mxGeometry x="35" y="65" width="330" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-bench" value="&lt;b&gt;对照模型 B&lt;/b&gt;&lt;br&gt;浅层 HistGradientBoosting&lt;br&gt;只作稳健性对照，不因复杂而优先&lt;br&gt;与 A 使用完全相同测试小块" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="r-eval">
+          <mxGeometry x="415" y="65" width="330" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-metrics" value="&lt;b&gt;主指标&lt;/b&gt;&lt;br&gt;① PR-AUC：稀有违约排序&lt;br&gt;② Brier / LogLoss：概率质量&lt;br&gt;③ Top20% 召回：有限审查名额&lt;br&gt;辅：ROC-AUC、ECE、F1、Balanced Acc." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;align=left;spacing=10;" vertex="1" parent="r-eval">
+          <mxGeometry x="35" y="225" width="330" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-rule" value="&lt;b&gt;替换规则&lt;/b&gt;&lt;br&gt;企业级配对 bootstrap 1000 次&lt;br&gt;B 需在 ≥3 个主指标上：95% 区间不跨 0 且 P(B优)≥0.95&lt;br&gt;否则保留 A 主模型" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;align=left;spacing=10;" vertex="1" parent="r-eval">
+          <mxGeometry x="415" y="225" width="330" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-note" value="口径：在没有违约发生时间与观察窗时，pᵢ只能解释为“基于历史发票行为的相对违约倾向”，不能写成严格的一年期监管 PD。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1110" width="2320" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="r-team" value="模型手给：特征字典、训练管道、替换规则｜编程手给：一企一行特征表、OOF 表、指标与区间｜论文手写：小样本选择理由、泄漏控制、概率解释边界" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7C3AED;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1235" width="2320" height="90" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="transfer" name="02-问题二迁移与安全阀">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="1" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="t-title" value="问题二：把附件 1 学到的规律迁移到 302 家，并给风险结论加“安全阀”" style="text;html=1;fontSize=24;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="2200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-input" value="统一输入空间" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F4F8;strokeColor=#0284C7;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="2320" height="190" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-lab" value="&lt;b&gt;123 家带标签&lt;/b&gt;&lt;br&gt;X₁：共同发票特征&lt;br&gt;y：是否违约；g：A/B/C/D" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="t-input">
+          <mxGeometry x="90" y="60" width="420" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-unlab" value="&lt;b&gt;302 家无标签&lt;/b&gt;&lt;br&gt;X₂：完全同口径发票特征&lt;br&gt;仅有企业名称，可辅助粗行业分类" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="t-input">
+          <mxGeometry x="650" y="60" width="420" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-common" value="&lt;b&gt;同口径合同&lt;/b&gt;&lt;br&gt;字段名、聚合窗口、异常处理、变换和特征顺序一致&lt;br&gt;不能为附件 2 单独重定义“更好看”的特征" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="t-input">
+          <mxGeometry x="1210" y="60" width="520" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-missing" value="&lt;b&gt;事实边界&lt;/b&gt;&lt;br&gt;302 家无真实违约/评级，因此只能预测，不能声称已外部验证&lt;br&gt;使用标签遮蔽式验证模拟真实部署条件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;" vertex="1" parent="t-input">
+          <mxGeometry x="1860" y="60" width="400" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-main" value="A. 监督迁移主线（最终决策主输入）" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#DAE8FC;strokeColor=#2563EB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="310" width="1120" height="470" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-pd" value="&lt;b&gt;违约模型&lt;/b&gt;&lt;br&gt;用 123 家拟合 Elastic-Net Logistic&lt;br&gt;对 302 家输出 pᵢᴬ 与风险区间" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="t-main">
+          <mxGeometry x="55" y="70" width="420" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-ord" value="&lt;b&gt;有序 Logistic 评级模型&lt;/b&gt;&lt;br&gt;P(G≤g|x)=sigmoid(θg−γᵀx)&lt;br&gt;输出 πᵢA, πᵢB, πᵢC, πᵢD&lt;br&gt;利用评级的有序性，而非四个无关类别" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="t-main">
+          <mxGeometry x="635" y="55" width="430" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-accept" value="&lt;b&gt;评级概率接入定价&lt;/b&gt;&lt;br&gt;qᵢ(rₖ)=Σg∈{A,B,C} πᵢg·[1−d_g(rₖ)]&lt;br&gt;D 概率不贡献客户接受率，并进入拒贷/风险约束" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="t-main">
+          <mxGeometry x="55" y="250" width="470" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-mainout" value="&lt;b&gt;主线输出与评级验证&lt;/b&gt;&lt;br&gt;firm_id｜pᵢᴬ｜风险区间｜πA/B/C/D｜qᵢ(rₖ)&lt;br&gt;评级模型在 123 家内单独做重复 CV，查等级 MAE、加权 Kappa 与概率 LogLoss" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="t-main">
+          <mxGeometry x="635" y="250" width="430" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-me1" edge="1" parent="t-main" source="t-pd" target="t-accept" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-me2" edge="1" parent="t-main" source="t-ord" target="t-accept" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-me3" edge="1" parent="t-main" source="t-accept" target="t-mainout" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1D4ED8;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-safe" value="B. 迁移安全阀（不替代主模型，只识别“不该盲信”的企业）" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#FFF2CC;strokeColor=#CA8A04;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="310" width="1160" height="470" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-label" value="&lt;b&gt;Label Spreading 对照&lt;/b&gt;&lt;br&gt;425 家共同构建 KNN 图&lt;br&gt;123 家给标签，302 家为无标签节点&lt;br&gt;输出半监督风险 pᵢᴮ&lt;br&gt;固定：k=10，α=0.2，max_iter=50" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="t-safe">
+          <mxGeometry x="45" y="55" width="470" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-ood" value="&lt;b&gt;5NN 分布支持距离&lt;/b&gt;&lt;br&gt;在稳健变换后的特征空间求附件 2 到附件 1 的平均 5NN 距离&lt;br&gt;超过训练企业内部距离 P95 → 分布外标记" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="t-safe">
+          <mxGeometry x="650" y="55" width="465" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-disagree" value="&lt;b&gt;分歧诊断&lt;/b&gt;&lt;br&gt;|pᵢᴬ−pᵢᴮ|、风险排名差、Top20% 是否冲突&lt;br&gt;再结合 outside_support" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="t-safe">
+          <mxGeometry x="45" y="260" width="470" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-action" value="&lt;b&gt;安全阀输出，不私设阈值&lt;/b&gt;&lt;br&gt;review_flag｜risk_disagreement｜outside_support&lt;br&gt;进入 MILP 的“降额/不贷/人工复核”规则由团队确认或做阈值敏感性分析" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#DB2777;" vertex="1" parent="t-safe">
+          <mxGeometry x="650" y="245" width="465" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-se1" edge="1" parent="t-safe" source="t-label" target="t-disagree" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#A16207;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-se2" edge="1" parent="t-safe" source="t-ood" target="t-action" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#A16207;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-se3" edge="1" parent="t-safe" source="t-disagree" target="t-action" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#A16207;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-valid" value="C. 标签遮蔽式验证：怎样证明迁移方案没有“自说自话”" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F5E9;strokeColor=#16A34A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="820" width="2320" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-v1" value="&lt;b&gt;每个测试小块&lt;/b&gt;&lt;br&gt;隐藏 123 家中的一部分真标签&lt;br&gt;A：只用剩余标签训练&lt;br&gt;B：剩余标签＋302 无标签图节点" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="t-valid">
+          <mxGeometry x="60" y="80" width="450" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-v2" value="&lt;b&gt;配对评测&lt;/b&gt;&lt;br&gt;A/B 对同一批隐藏企业预测&lt;br&gt;5 折×10 次；先按企业聚合&lt;br&gt;再做 1000 次企业级配对 bootstrap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="t-valid">
+          <mxGeometry x="620" y="80" width="450" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-v3" value="&lt;b&gt;判定&lt;/b&gt;&lt;br&gt;A 在现有主指标点估计均优于 B；B 未达替换条件&lt;br&gt;因此 A 主导决策，B 只作交叉检查" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="t-valid">
+          <mxGeometry x="1180" y="80" width="450" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-v4" value="&lt;b&gt;302 家部署诊断&lt;/b&gt;&lt;br&gt;按规模/交易对手分层，确定性分成 10 块&lt;br&gt;仅查分布支持和方案分歧，不冒充效果测试" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="t-valid">
+          <mxGeometry x="1740" y="80" width="500" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-ve1" edge="1" parent="t-valid" source="t-v1" target="t-v2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-ve2" edge="1" parent="t-valid" source="t-v2" target="t-v3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-ve3" edge="1" parent="t-valid" source="t-v3" target="t-v4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="t-handoff" value="交付给优化层：302 行企业表＝风险 pᵢᴬ＋区间＋评级概率 πᵢg＋利率接受概率 qᵢ(rₖ)＋分歧/OOD 标记。优化层不得直接把 pᵢᴮ 当真值。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7C3AED;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1160" width="2320" height="95" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="pricing" name="03-定价与MILP怎么用">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="1" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="p-title" value="定价与组合优化层：把“风险概率”变成“是否贷、贷多少、利率多少”" style="text;html=1;fontSize=24;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="2200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-churn" value="A. 利率—流失率模型" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F4F8;strokeColor=#0284C7;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="2320" height="260" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-a3" value="&lt;b&gt;附件 3 原始点&lt;/b&gt;&lt;br&gt;rₖ∈[4%,15%]&lt;br&gt;A/B/C 三条观测流失率曲线&lt;br&gt;局部下降属于抽样噪声" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="p-churn">
+          <mxGeometry x="55" y="70" width="370" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-iso" value="&lt;b&gt;保序回归 / 单调样条&lt;/b&gt;&lt;br&gt;对每个评级 g 分别拟合 d_g(r)&lt;br&gt;约束：利率升高时流失率不下降&lt;br&gt;禁止高阶多项式制造振荡" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="p-churn">
+          <mxGeometry x="555" y="60" width="440" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-q1" value="&lt;b&gt;Q1 已知评级&lt;/b&gt;&lt;br&gt;qᵢ(rₖ)=1−d_{gᵢ}(rₖ)&lt;br&gt;若 gᵢ=D，则原则上不进入候选集" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="p-churn">
+          <mxGeometry x="1125" y="70" width="430" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-q2" value="&lt;b&gt;Q2 评级未知&lt;/b&gt;&lt;br&gt;qᵢ(rₖ)=Σg∈{A,B,C}πᵢg[1−d_g(rₖ)]&lt;br&gt;用评级概率混合，不能先硬分级再当真值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="p-churn">
+          <mxGeometry x="1685" y="70" width="480" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-ce1" edge="1" parent="p-churn" source="p-a3" target="p-iso" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0369A1;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-ce2" edge="1" parent="p-churn" source="p-iso" target="p-q1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0369A1;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-ce3" edge="1" parent="p-churn" source="p-iso" target="p-q2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0369A1;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-value" value="B. 风险—收益换算（参数化，不伪造唯一经济参数）" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F5E9;strokeColor=#16A34A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="380" width="2320" height="255" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-param" value="&lt;b&gt;参数接口&lt;/b&gt;&lt;br&gt;pᵢ：风险倾向；LGD：违约损失率&lt;br&gt;c：资金/运营成本；qᵢ(rₖ)：客户接受概率&lt;br&gt;缺失参数用区间或情景网格" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="p-value">
+          <mxGeometry x="55" y="65" width="500" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-margin" value="&lt;b&gt;候选利率下的每万元期望净收益&lt;/b&gt;&lt;br&gt;mᵢₖ = qᵢ(rₖ)·[(1−pᵢ)rₖ − pᵢ·LGD − c]&lt;br&gt;若采用其他回收/计息口径，只替换此处收益系数，MILP 结构不变" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;fontSize=15;" vertex="1" parent="p-value">
+          <mxGeometry x="690" y="55" width="870" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-loss" value="&lt;b&gt;风险量&lt;/b&gt;&lt;br&gt;ELᵢₖ = qᵢ(rₖ)·pᵢ·LGD&lt;br&gt;用于报告组合预期损失；若团队给风险上限，可加入 MILP 约束" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="p-value">
+          <mxGeometry x="1695" y="65" width="500" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-milp" value="C. 分段线性混合整数规划（MILP）" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#DAE8FC;strokeColor=#2563EB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="675" width="1500" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-var" value="&lt;b&gt;决策变量&lt;/b&gt;&lt;br&gt;zᵢₖ∈{0,1}：企业 i 是否选择利率档 k&lt;br&gt;wᵢₖ≥0：在该利率档投放的万元数&lt;br&gt;∑ₖzᵢₖ≤1：每家最多选一个利率" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;align=left;spacing=10;" vertex="1" parent="p-milp">
+          <mxGeometry x="40" y="65" width="430" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-obj" value="&lt;b&gt;目标函数&lt;/b&gt;&lt;br&gt;max ΣᵢΣₖ mᵢₖ·wᵢₖ&lt;br&gt;如果经济参数只给区间：对参数网格重复求解，画策略稳定区，而非报单一伪精确解" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;align=left;spacing=10;" vertex="1" parent="p-milp">
+          <mxGeometry x="535" y="65" width="430" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-hard" value="&lt;b&gt;单家硬约束&lt;/b&gt;&lt;br&gt;10zᵢₖ ≤ wᵢₖ ≤ 100zᵢₖ&lt;br&gt;4%≤rₖ≤15%（使用离散候选利率点）&lt;br&gt;Q1 已知 D：zᵢₖ=0；Q2 的 πD 连续进 q/风险，不私设硬阈值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;align=left;spacing=10;" vertex="1" parent="p-milp">
+          <mxGeometry x="1030" y="65" width="430" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-b1" value="&lt;b&gt;Q1 预算约束&lt;/b&gt;&lt;br&gt;Σᵢₖwᵢₖ ≤ B&lt;br&gt;B 作为参数扫描，输出“预算—收益—风险—获贷数”曲线&lt;br&gt;若团队确认必须足额，才改为 =B" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;align=left;spacing=10;" vertex="1" parent="p-milp">
+          <mxGeometry x="170" y="270" width="500" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-b2" value="&lt;b&gt;Q2 预算约束&lt;/b&gt;&lt;br&gt;Σᵢₖwᵢₖ = 10,000 万元&lt;br&gt;足额投放；求解后必须程序化 assert&lt;br&gt;同时核验单家额度、利率和拒贷规则" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;align=left;spacing=10;" vertex="1" parent="p-milp">
+          <mxGeometry x="830" y="270" width="500" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-riskcap" value="&lt;b&gt;可选风险约束接口&lt;/b&gt;&lt;br&gt;Σᵢₖ ELᵢₖ·wᵢₖ ≤ R̄&lt;br&gt;仅当团队给出风险容忍度 R̄ 时启用；否则作为风险结果报告，不暗填阈值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="p-milp">
+          <mxGeometry x="500" y="440" width="500" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-out" value="D. 求解输出与验收" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#F3E8FF;strokeColor=#7C3AED;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="675" width="780" height="520" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-detail" value="&lt;b&gt;逐企业策略表&lt;/b&gt;&lt;br&gt;firm_id｜是否贷款｜额度｜利率&lt;br&gt;接受概率｜p/区间｜期望收益｜预期损失&lt;br&gt;不贷原因/复核标记" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="p-out">
+          <mxGeometry x="45" y="65" width="690" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-summary" value="&lt;b&gt;组合摘要&lt;/b&gt;&lt;br&gt;总投放、获贷数、平均利率、预计流失&lt;br&gt;期望净收益、预期损失、风险分布&lt;br&gt;Q3 再增加行业暴露" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="p-out">
+          <mxGeometry x="45" y="225" width="690" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-check" value="&lt;b&gt;程序化验收&lt;/b&gt;&lt;br&gt;□ 预算等式/不等式满足&lt;br&gt;□ 每家额度为 0 或 [10,100]&lt;br&gt;□ 利率在 [4%,15%] 且最多一个档位&lt;br&gt;□ D 级/复核规则执行&lt;br&gt;□ 汇总值与明细逐行可回算" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;align=left;spacing=10;" vertex="1" parent="p-out">
+          <mxGeometry x="45" y="375" width="690" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="p-sens" value="敏感性：B（Q1）、LGD、资金成本 c、风险上限 R̄、安全阀阈值分别做单因素/网格扫描；记录企业入选稳定率与额度/利率变化。" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#DB2777;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1235" width="2320" height="90" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="stress" name="04-问题三方案A压力测试">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="1" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="s-title" value="问题三｜方案 A：行业情景压力测试＋区间鲁棒 MILP" style="text;html=1;fontSize=24;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="2200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-base" value="起点：问题二基准状态" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F4F8;strokeColor=#0284C7;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="520" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-b1" value="302 家统一特征 Xᵢ" style="shape=mxgraph.flowchart.document;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="s-base">
+          <mxGeometry x="70" y="65" width="380" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-b2" value="基准风险 pᵢ⁰、评级概率 πᵢg&lt;br&gt;接受概率 qᵢ(rₖ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="s-base">
+          <mxGeometry x="70" y="165" width="380" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-b3" value="基准 1 亿元 MILP 策略&lt;br&gt;额度 Lᵢ⁰、利率 rᵢ⁰" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0284C7;" vertex="1" parent="s-base">
+          <mxGeometry x="70" y="280" width="380" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-b4" value="基准不是最终答案，而是“调整前”对照组" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;" vertex="1" parent="s-base">
+          <mxGeometry x="70" y="385" width="380" height="35" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-ind" value="① 行业/经营类型映射" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#FFF2CC;strokeColor=#CA8A04;" vertex="1" parent="1">
+          <mxGeometry x="620" y="80" width="520" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-i1" value="企业名称关键词＋人工规则&lt;br&gt;映射到粗行业 h(i)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="s-ind">
+          <mxGeometry x="70" y="65" width="380" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-i2" value="逐企业保留：原名称、命中关键词、行业标签、置信度、人工修订记录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="s-ind">
+          <mxGeometry x="70" y="175" width="380" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-i3" value="名称无法识别者（如“个体经营 E××”）进入“未知行业”，禁止强行归类" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;" vertex="1" parent="s-ind">
+          <mxGeometry x="70" y="300" width="380" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-scn" value="② 轻/中/重行业冲击情景" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#FCE4EC;strokeColor=#DB2777;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="80" width="1160" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-source" value="&lt;b&gt;冲击参数来源接口&lt;/b&gt;&lt;br&gt;优先：官方行业统计/权威研究&lt;br&gt;不足处：由团队确认透明区间&lt;br&gt;不得从缺少疫情后观察期的附件反推因果效应" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=left;spacing=10;" vertex="1" parent="s-scn">
+          <mxGeometry x="45" y="60" width="390" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-light" value="&lt;b&gt;轻度情景 s=1&lt;/b&gt;&lt;br&gt;行业销售/交易量小幅下降&lt;br&gt;波动率小幅上升" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="s-scn">
+          <mxGeometry x="500" y="60" width="270" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-mid" value="&lt;b&gt;中度情景 s=2&lt;/b&gt;&lt;br&gt;销售下降＋成本刚性&lt;br&gt;客户集中风险上升" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="s-scn">
+          <mxGeometry x="830" y="60" width="270" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-heavy" value="&lt;b&gt;重度情景 s=3&lt;/b&gt;&lt;br&gt;销售/活跃显著下降&lt;br&gt;波动和上下游集中显著上升" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;" vertex="1" parent="s-scn">
+          <mxGeometry x="665" y="195" width="300" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-map" value="&lt;b&gt;冲击映射表 Δh,s&lt;/b&gt;&lt;br&gt;行业 h × 情景 s × 特征&lt;br&gt;销售规模、近期趋势、月度波动、成本刚性代理、客户/供应商集中度&lt;br&gt;每个数有来源/假设标签与上下界" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DB2777;" vertex="1" parent="s-scn">
+          <mxGeometry x="45" y="245" width="480" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-notcausal" value="情景是假设性压力测试，不写成“疫情导致某企业必然违约”的因果结论" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#7C3AED;fontStyle=1;" vertex="1" parent="s-scn">
+          <mxGeometry x="610" y="345" width="490" height="45" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-recalc" value="③ 压力风险重估：复用问题二模型，不重新发明评分体系" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#E8F5E9;strokeColor=#16A34A;" vertex="1" parent="1">
+          <mxGeometry x="40" y="570" width="1120" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-x" value="&lt;b&gt;生成情景特征&lt;/b&gt;&lt;br&gt;Xᵢˢ = StressTransform(Xᵢ, Δh(i),s)&lt;br&gt;只改受冲击的可解释特征&lt;br&gt;保留原始 Xᵢ 与变更日志" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="s-recalc">
+          <mxGeometry x="55" y="70" width="420" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-p" value="&lt;b&gt;重新评分&lt;/b&gt;&lt;br&gt;pᵢˢ = ElasticNetLogistic(Xᵢˢ)&lt;br&gt;主方案按 plan：压力化违约风险&lt;br&gt;评级概率/流失率沿用 Q2 基准，另做同步压力化敏感性检查" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="s-recalc">
+          <mxGeometry x="640" y="60" width="425" height="155" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-int" value="&lt;b&gt;形成风险区间&lt;/b&gt;&lt;br&gt;pᵢ⁻ = min_s pᵢˢ，pᵢ⁺ = max_s pᵢˢ&lt;br&gt;保留各情景值，不只存上下界&lt;br&gt;未知行业用更宽、可追溯的冲击区间" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="s-recalc">
+          <mxGeometry x="345" y="270" width="430" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-re1" edge="1" parent="s-recalc" source="s-x" target="s-p" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-re2" edge="1" parent="s-recalc" source="s-p" target="s-int" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#15803D;strokeWidth=2;endArrow=classic;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-rob" value="④ 区间鲁棒 MILP：在最坏风险下仍可接受" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#DAE8FC;strokeColor=#2563EB;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="570" width="1160" height="440" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-rmargin" value="&lt;b&gt;最坏情景收益系数&lt;/b&gt;&lt;br&gt;m̲ᵢₖ = qᵢ(rₖ)·[(1−pᵢ⁺)rₖ − pᵢ⁺·LGD − c]&lt;br&gt;等价于对 pᵢ∈[pᵢ⁻,pᵢ⁺] 取最不利端点" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="s-rob">
+          <mxGeometry x="45" y="65" width="500" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-robobj" value="&lt;b&gt;鲁棒目标&lt;/b&gt;&lt;br&gt;max ΣᵢΣₖ m̲ᵢₖ·wᵢₖ&lt;br&gt;在所有允许冲击区间内最大化最坏期望净收益" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="s-rob">
+          <mxGeometry x="615" y="65" width="500" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-rcon" value="&lt;b&gt;沿用硬约束&lt;/b&gt;&lt;br&gt;Σwᵢₖ=10,000 万元；10–100 万/获贷企业；利率 4%–15%；每企最多一个利率档；D/复核规则不变" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="s-rob">
+          <mxGeometry x="45" y="245" width="500" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-nocap" value="&lt;b&gt;行业集中度处理&lt;/b&gt;&lt;br&gt;默认先报告行业额度占比与 HHI，不凭空设行业上限&lt;br&gt;只有团队给出监管/策略阈值时，才加入行业额度约束" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="s-rob">
+          <mxGeometry x="615" y="235" width="500" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-compare" value="⑤ 回答第三问的最终证据：不是“再排一次名”，而是解释调整机制" style="swimlane;startSize=36;rounded=1;html=1;fontStyle=1;fontSize=16;fillColor=#F3E8FF;strokeColor=#7C3AED;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1060" width="2320" height="285" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-c1" value="&lt;b&gt;企业层&lt;/b&gt;&lt;br&gt;Δpᵢ、Δ额度、Δ利率&lt;br&gt;哪些企业被降额/拒贷/新增" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="s-compare">
+          <mxGeometry x="60" y="75" width="430" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-c2" value="&lt;b&gt;行业层&lt;/b&gt;&lt;br&gt;调整前后额度占比、平均风险&lt;br&gt;行业 HHI、资金转移方向" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="s-compare">
+          <mxGeometry x="620" y="75" width="430" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-c3" value="&lt;b&gt;组合层&lt;/b&gt;&lt;br&gt;基准收益 vs 最坏收益&lt;br&gt;压力损失、风险分位数、预算核对" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="s-compare">
+          <mxGeometry x="1180" y="75" width="430" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="s-c4" value="&lt;b&gt;稳健性&lt;/b&gt;&lt;br&gt;冲击强度、LGD、c、未知行业区间扫描&lt;br&gt;报告策略稳定企业与脆弱企业" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="s-compare">
+          <mxGeometry x="1740" y="75" width="500" height="120" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="handoff" name="05-三人交接与验收清单">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1500" math="1" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="h-title" value="三人对齐：谁定义什么、谁产出什么、怎样判断做对了" style="text;html=1;fontSize=24;fontStyle=1;fontColor=#1F2937;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="2200" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-modeler" value="建模手｜定义与决策" style="swimlane;startSize=42;rounded=1;html=1;fontStyle=1;fontSize=18;fillColor=#DAE8FC;strokeColor=#2563EB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="720" height="990" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-m1" value="&lt;b&gt;数据口径&lt;/b&gt;&lt;br&gt;负数/作废/零额/重复如何统计&lt;br&gt;企业级特征公式与时间窗口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="h-modeler">
+          <mxGeometry x="40" y="75" width="640" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-m2" value="&lt;b&gt;模型合同&lt;/b&gt;&lt;br&gt;Elastic-Net、Ordinal Logit、Isotonic、Label Spreading、5NN OOD、MILP、鲁棒 MILP 的输入/公式/输出" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="h-modeler">
+          <mxGeometry x="40" y="215" width="640" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-m3" value="&lt;b&gt;参数登记表&lt;/b&gt;&lt;br&gt;B 网格、LGD 区间、资金成本区间&lt;br&gt;行业分类规则、冲击参数及来源&lt;br&gt;每项标“题给/外部/假设/待确认”" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;" vertex="1" parent="h-modeler">
+          <mxGeometry x="40" y="375" width="640" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-m4" value="&lt;b&gt;方案切换条件&lt;/b&gt;&lt;br&gt;树模型何时可替代 Logistic&lt;br&gt;Label Spreading 何时只作警报&lt;br&gt;风险/行业约束何时才启用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;" vertex="1" parent="h-modeler">
+          <mxGeometry x="40" y="545" width="640" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-m5" value="&lt;b&gt;解释边界&lt;/b&gt;&lt;br&gt;历史违约倾向 ≠ 一年期监管 PD&lt;br&gt;相关 ≠ 因果；不贷 ≠ 必然违约&lt;br&gt;情景压力 ≠ 疫情因果估计" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;" vertex="1" parent="h-modeler">
+          <mxGeometry x="40" y="700" width="640" height="125" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-mout" value="&lt;b&gt;交给编程手/论文手&lt;/b&gt;&lt;br&gt;一页模型说明卡：目的、输入、公式、参数、约束、输出、验证、局限" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;" vertex="1" parent="h-modeler">
+          <mxGeometry x="40" y="855" width="640" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-coder" value="编程手｜实现与可回算" style="swimlane;startSize=42;rounded=1;html=1;fontStyle=1;fontSize=18;fillColor=#E8F5E9;strokeColor=#16A34A;" vertex="1" parent="1">
+          <mxGeometry x="840" y="90" width="720" height="990" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-c1" value="&lt;b&gt;01 数据质量表&lt;/b&gt;&lt;br&gt;表数/行数/时间范围/企业覆盖&lt;br&gt;缺失、异常、作废、负数、零额、重复键" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="h-coder">
+          <mxGeometry x="40" y="75" width="640" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-c2" value="&lt;b&gt;02 特征与风险表&lt;/b&gt;&lt;br&gt;123/302 家一企一行特征&lt;br&gt;OOF 预测、区间、模型版本、系数/重要性&lt;br&gt;评级概率、Label Spreading 分歧、5NN OOD" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="h-coder">
+          <mxGeometry x="40" y="220" width="640" height="140" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-c3" value="&lt;b&gt;03 定价中间表&lt;/b&gt;&lt;br&gt;单调化 A/B/C 流失率曲线&lt;br&gt;每企×每利率：qᵢ(rₖ)、mᵢₖ、ELᵢₖ&lt;br&gt;参数版本可追踪" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="h-coder">
+          <mxGeometry x="40" y="390" width="640" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-c4" value="&lt;b&gt;04 优化输出&lt;/b&gt;&lt;br&gt;Q1 多预算策略；Q2 基准 1 亿元；Q3 各情景与鲁棒策略&lt;br&gt;逐企业明细＋组合汇总＋调整前后差异" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;" vertex="1" parent="h-coder">
+          <mxGeometry x="40" y="550" width="640" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-c5" value="&lt;b&gt;05 自动测试&lt;/b&gt;&lt;br&gt;企业无重复、概率在 [0,1]&lt;br&gt;训练/测试企业不重叠&lt;br&gt;预算、额度、利率、D 级、单利率约束全部 assert&lt;br&gt;汇总可从明细回算" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="h-coder">
+          <mxGeometry x="40" y="710" width="640" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-cout" value="&lt;b&gt;交给论文手&lt;/b&gt;&lt;br&gt;固定列名的数据包＋图表数据源＋README（口径、单位、参数版本、复现命令）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;" vertex="1" parent="h-coder">
+          <mxGeometry x="40" y="885" width="640" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-writer" value="论文手｜论证与叙事" style="swimlane;startSize=42;rounded=1;html=1;fontStyle=1;fontSize=18;fillColor=#F3E8FF;strokeColor=#7C3AED;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="90" width="720" height="990" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-w1" value="&lt;b&gt;题目重述&lt;/b&gt;&lt;br&gt;不是静态综合评价，而是风险预测＋定价＋组合优化＋压力测试" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="h-writer">
+          <mxGeometry x="40" y="75" width="640" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-w2" value="&lt;b&gt;模型选择论证&lt;/b&gt;&lt;br&gt;为什么小样本选 Elastic-Net&lt;br&gt;为什么利率曲线要单调&lt;br&gt;为什么决策用 MILP、Q3 用区间鲁棒 MILP" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="h-writer">
+          <mxGeometry x="40" y="205" width="640" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-w3" value="&lt;b&gt;验证证据&lt;/b&gt;&lt;br&gt;重复分层 CV＋企业级 bootstrap&lt;br&gt;模型 A/B 的替换规则&lt;br&gt;302 家只做标签遮蔽代理验证与分布支持诊断" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="h-writer">
+          <mxGeometry x="40" y="365" width="640" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-w4" value="&lt;b&gt;结果叙事模板&lt;/b&gt;&lt;br&gt;谁风险上升 → 为什么额度/利率改变 → 资金转移到哪里 → 收益/损失/行业暴露如何变化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7C3AED;" vertex="1" parent="h-writer">
+          <mxGeometry x="40" y="525" width="640" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-w5" value="&lt;b&gt;必须披露&lt;/b&gt;&lt;br&gt;B、LGD、c、冲击参数的来源/区间&lt;br&gt;未知行业、时间泄漏风险、外部验证缺失&lt;br&gt;策略是条件于参数的建议，不是绝对真值" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#7F1D1D;" vertex="1" parent="h-writer">
+          <mxGeometry x="40" y="675" width="640" height="135" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-wout" value="&lt;b&gt;正文/附录分工&lt;/b&gt;&lt;br&gt;正文放机制、验证、组合摘要和典型企业；逐企业完整策略表放附录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontStyle=1;" vertex="1" parent="h-writer">
+          <mxGeometry x="40" y="850" width="640" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-gate" value="联合验收 Gate：任何一项不通过就不进入下一层" style="swimlane;startSize=38;rounded=1;html=1;fontStyle=1;fontSize=17;fillColor=#FFF2CC;strokeColor=#CA8A04;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1125" width="2320" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-g1" value="□ 数据：一企一行，口径一致，无企业级泄漏" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="h-gate">
+          <mxGeometry x="55" y="75" width="500" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-g2" value="□ 风险：概率与区间齐全，指标/替换规则执行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="h-gate">
+          <mxGeometry x="625" y="75" width="500" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-g3" value="□ 优化：预算/额度/利率/D级约束逐条通过" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="h-gate">
+          <mxGeometry x="1195" y="75" width="500" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-g4" value="□ 论文：参数有来源，因果与相关不混写，结果可回算" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CA8A04;" vertex="1" parent="h-gate">
+          <mxGeometry x="1765" y="75" width="500" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="h-final" value="本图是协作蓝图，不是论文终稿图；每完成一个模块，三人对照对应页更新“参数—字段—验收”后再推进。" style="text;html=1;align=center;fontSize=13;fontStyle=1;fontColor=#6B7280;" vertex="1" parent="h-gate">
+          <mxGeometry x="350" y="175" width="1600" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
