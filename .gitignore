@@ -3,5 +3,13 @@
 __pycache__/
 *.py[cod]
 
-# Runtime logs
-logs/*.log
+# Runtime logs and temporary pipeline state
+logs/
+data/processed/_runtime/
+outputs/q1/_runtime/
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
