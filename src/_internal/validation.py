@@ -1,8 +1,4 @@
-"""Final question-one acceptance checks.
-
-The command intentionally prints only PASS, or FAIL followed by every failed
-check.  Detailed evidence is written to results/final/q1_final_validation_report.md.
-"""
+"""Final question-one acceptance checks for the stable project layout."""
 
 from __future__ import annotations
 
@@ -15,7 +11,20 @@ import numpy as np
 import pandas as pd
 import yaml
 
-from q1_common import ROOT, config_hash, load_config, relative, sha256_file, write_csv, write_json, write_text
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    PAPER_ROOT,
+    PROCESSED_ROOT,
+    RUNTIME_ROOT,
+    ROOT,
+    config_hash,
+    load_config,
+    relative,
+    sha256_file,
+    write_csv,
+    write_json,
+    write_text,
+)
 
 
 REQUIRED_FIGURES = [
@@ -49,47 +58,49 @@ def main() -> int:
     rows: list[dict[str, object]] = []
 
     required_paths = [
-        ROOT / "results" / "audit" / "invoice_status_summary.csv",
-        ROOT / "results" / "audit" / "data_quality_report.md",
-        ROOT / "results" / "feature_validation" / "feature_validation_summary.json",
-        ROOT / "results" / "model_training" / "model_training_report.md",
-        ROOT / "results" / "model_training" / "oof_predictions_by_enterprise.csv",
-        ROOT / "results" / "model_training" / "model_training_manifest.json",
-        ROOT / "results" / "model_training" / "model_training_config_snapshot.yaml",
-        ROOT / "results" / "churn_model" / "attachment3_audit.csv",
-        ROOT / "results" / "churn_model" / "attachment3_normalized.csv",
-        ROOT / "results" / "churn_model" / "churn_curve_fitted.csv",
-        ROOT / "results" / "churn_model" / "churn_curve_metrics.csv",
-        ROOT / "results" / "churn_model" / "churn_curve_cross_rating_check.csv",
-        ROOT / "results" / "credit_strategy" / "baseline_enterprise_strategy.csv",
-        ROOT / "results" / "credit_strategy" / "baseline_portfolio_summary.csv",
-        ROOT / "results" / "credit_strategy" / "baseline_solver_diagnostics.json",
-        ROOT / "results" / "sensitivity" / "budget_sensitivity_summary.csv",
-        ROOT / "results" / "sensitivity" / "parameter_sensitivity_summary.csv",
-        ROOT / "results" / "sensitivity" / "enterprise_strategy_stability.csv",
-        ROOT / "results" / "sensitivity" / "sensitivity_solver_diagnostics.csv",
-        ROOT / "results" / "final" / "q1_final_delivery.xlsx",
-        ROOT / "results" / "final" / "q1_final_manifest.json",
-        ROOT / "results" / "final" / "q1_final_output_index.csv",
-        ROOT / "docs" / "q1_final_results_for_paper.md",
-        ROOT / "docs" / "q1_final_assumptions_and_limitations.md",
-        ROOT / "docs" / "q1_submission_checklist.md",
+        RUNTIME_ROOT / "audit" / "invoice_status_summary.csv",
+        OUTPUT_ROOT / "reports" / "q1_data_quality_report.md",
+        RUNTIME_ROOT / "feature_validation" / "feature_validation_summary.json",
+        OUTPUT_ROOT / "reports" / "model_training_report.md",
+        PROCESSED_ROOT / "q1_enterprise_features.csv",
+        PROCESSED_ROOT / "q1_risk_scores.csv",
+        RUNTIME_ROOT / "model_training" / "model_training_manifest.json",
+        RUNTIME_ROOT / "model_training" / "model_training_config_snapshot.yaml",
+        OUTPUT_ROOT / "tables" / "attachment3_audit.csv",
+        OUTPUT_ROOT / "tables" / "attachment3_normalized.csv",
+        OUTPUT_ROOT / "tables" / "churn_curve_fitted.csv",
+        OUTPUT_ROOT / "tables" / "churn_curve_metrics.csv",
+        OUTPUT_ROOT / "tables" / "churn_curve_cross_rating_check.csv",
+        OUTPUT_ROOT / "tables" / "baseline_enterprise_strategy.csv",
+        OUTPUT_ROOT / "tables" / "baseline_portfolio_summary.csv",
+        OUTPUT_ROOT / "reports" / "baseline_solver_diagnostics.json",
+        OUTPUT_ROOT / "tables" / "budget_sensitivity_summary.csv",
+        OUTPUT_ROOT / "tables" / "parameter_sensitivity_summary.csv",
+        OUTPUT_ROOT / "tables" / "enterprise_strategy_stability.csv",
+        RUNTIME_ROOT / "sensitivity" / "sensitivity_solver_diagnostics.csv",
+        OUTPUT_ROOT / "final" / "q1_final_delivery.xlsx",
+        OUTPUT_ROOT / "final" / "q1_final_manifest.json",
+        OUTPUT_ROOT / "final" / "q1_final_output_index.csv",
+        PAPER_ROOT / "q1_final_results_for_paper.md",
+        PAPER_ROOT / "q1_final_assumptions_and_limitations.md",
+        PAPER_ROOT / "q1_submission_checklist.md",
     ]
     check(all(path.exists() for path in required_paths), "required_files_exist", "all first-to-final delivery inputs exist", failures, rows)
 
-    phase_a = json.loads((ROOT / "results" / "feature_validation" / "feature_validation_summary.json").read_text(encoding="utf-8")) if (ROOT / "results" / "feature_validation" / "feature_validation_summary.json").exists() else {}
+    phase_a_path = RUNTIME_ROOT / "feature_validation" / "feature_validation_summary.json"
+    phase_a = json.loads(phase_a_path.read_text(encoding="utf-8")) if phase_a_path.exists() else {}
     check(phase_a.get("status") == "PASS" and phase_a.get("blocking_failure_count") == 0, "phase_a_feature_validation_pass", str(phase_a.get("status")), failures, rows)
     config_features = config["features"]
     check("zero_amount_invoice_rate" not in config_features["primary_model_features"] and "zero_amount_invoice_rate" not in config_features["sensitivity_model_features"], "zero_amount_excluded_from_models", "zero_amount_invoice_rate absent from formal feature lists", failures, rows)
 
-    risk_path = ROOT / "results" / "model_training" / "oof_predictions_by_enterprise.csv"
+    risk_path = PROCESSED_ROOT / "q1_risk_scores.csv"
     risk = pd.read_csv(risk_path) if risk_path.exists() else pd.DataFrame()
     check(len(risk) == 123 and risk.get("enterprise_id", pd.Series(dtype=str)).nunique() == 123, "risk_table_123_unique", str(risk.shape), failures, rows)
     if not risk.empty:
         check(risk["selected_model"].nunique() == 1 and risk["selected_model"].iloc[0] == "elastic_net_logistic", "selected_model_elastic_net_logistic", str(risk["selected_model"].value_counts().to_dict()), failures, rows)
         check(risk["selected_model_risk_score"].notna().all() and risk["selected_model_risk_score"].between(0, 1).all(), "risk_values_legal", "selected_model_risk_score in [0,1]", failures, rows)
 
-    manifest_path = ROOT / "results" / "model_training" / "cv_split_manifest.csv"
+    manifest_path = RUNTIME_ROOT / "model_training" / "cv_split_manifest.csv"
     if manifest_path.exists():
         cv = pd.read_csv(manifest_path)
         test = cv[cv["split_role"] == "test"]
@@ -98,10 +109,10 @@ def main() -> int:
         count_ok = False
     check(count_ok, "risk_test_count_10_per_enterprise", "cv_split_manifest test rows", failures, rows)
 
-    audit_path = ROOT / "results" / "churn_model" / "attachment3_audit.csv"
+    audit_path = OUTPUT_ROOT / "tables" / "attachment3_audit.csv"
     audit = pd.read_csv(audit_path) if audit_path.exists() else pd.DataFrame()
     check(not audit.empty and audit["status"].eq("PASS").all(), "attachment3_audit_pass", "all attachment-3 checks PASS", failures, rows)
-    fitted_path = ROOT / "results" / "churn_model" / "churn_curve_fitted.csv"
+    fitted_path = OUTPUT_ROOT / "tables" / "churn_curve_fitted.csv"
     fitted = pd.read_csv(fitted_path) if fitted_path.exists() else pd.DataFrame()
     check(len(fitted) == 87 and set(fitted.get("credit_rating", pd.Series(dtype=str)).unique()) == {"A", "B", "C"}, "churn_fitted_complete", str(fitted.shape), failures, rows)
     if not fitted.empty:
@@ -110,10 +121,11 @@ def main() -> int:
         acceptance_monotone = fitted.sort_values(["credit_rating", "interest_rate"]).groupby("credit_rating")["acceptance_probability"].diff().dropna().le(1e-8).all()
         check(bool(monotone and acceptance_monotone), "churn_curves_monotone", "churn nondecreasing and acceptance nonincreasing", failures, rows)
 
-    baseline_diag_path = ROOT / "results" / "credit_strategy" / "baseline_solver_diagnostics.json"
+    baseline_diag_path = OUTPUT_ROOT / "reports" / "baseline_solver_diagnostics.json"
     baseline_diag = json.loads(baseline_diag_path.read_text(encoding="utf-8")) if baseline_diag_path.exists() else {}
     check(bool(baseline_diag.get("is_optimal")), "baseline_milp_optimal", str(baseline_diag.get("solver_message")), failures, rows)
-    baseline = pd.read_csv(ROOT / "results" / "credit_strategy" / "baseline_enterprise_strategy.csv") if (ROOT / "results" / "credit_strategy" / "baseline_enterprise_strategy.csv").exists() else pd.DataFrame()
+    baseline_path = OUTPUT_ROOT / "tables" / "baseline_enterprise_strategy.csv"
+    baseline = pd.read_csv(baseline_path) if baseline_path.exists() else pd.DataFrame()
     check(len(baseline) == 123 and baseline.get("enterprise_id", pd.Series(dtype=str)).nunique() == 123, "baseline_strategy_123_unique", str(baseline.shape), failures, rows)
     if not baseline.empty:
         d_zero = (baseline.loc[baseline["credit_rating"] == "D", "offered_loan_amount_10k"] == 0).all()
@@ -125,11 +137,12 @@ def main() -> int:
         recomputed = baseline["expected_interest_income_10k"] - baseline["expected_credit_loss_10k"] - baseline["expected_funding_cost_10k"]
         check(bool(np.allclose(recomputed, baseline["expected_net_return_10k"], atol=1e-6, rtol=0)), "baseline_return_decomposition", "interest - loss - funding = net return", failures, rows)
         check(bool(np.isfinite(baseline[["offered_loan_amount_10k", "expected_disbursed_amount_10k", "expected_interest_income_10k", "expected_credit_loss_10k", "expected_funding_cost_10k", "expected_net_return_10k"]].to_numpy(dtype=float)).all()), "baseline_numeric_finite", "monetary strategy fields finite", failures, rows)
-    summary = pd.read_csv(ROOT / "results" / "credit_strategy" / "baseline_portfolio_summary.csv") if (ROOT / "results" / "credit_strategy" / "baseline_portfolio_summary.csv").exists() else pd.DataFrame()
+    summary_path = OUTPUT_ROOT / "tables" / "baseline_portfolio_summary.csv"
+    summary = pd.read_csv(summary_path) if summary_path.exists() else pd.DataFrame()
     if not summary.empty:
         check(abs(float(summary.loc[0, "budget_used_10k"]) - float(summary.loc[0, "budget_10k"])) <= 1e-6, "baseline_nominal_budget_equality", str(summary.loc[0, "budget_used_10k"]), failures, rows)
 
-    diag_path = ROOT / "results" / "sensitivity" / "sensitivity_solver_diagnostics.csv"
+    diag_path = RUNTIME_ROOT / "sensitivity" / "sensitivity_solver_diagnostics.csv"
     diagnostics = pd.read_csv(diag_path) if diag_path.exists() else pd.DataFrame()
     all_optimal = not diagnostics.empty and diagnostics["is_optimal"].astype(bool).all()
     failures_empty = not diagnostics.empty and diagnostics["validation_failures"].astype(str).eq("[]").all()
@@ -138,14 +151,14 @@ def main() -> int:
     if not diagnostics.empty:
         check(len(diagnostics) == 30, "sensitivity_scenario_count", str(len(diagnostics)), failures, rows)
 
-    stability_path = ROOT / "results" / "sensitivity" / "enterprise_strategy_stability.csv"
+    stability_path = OUTPUT_ROOT / "tables" / "enterprise_strategy_stability.csv"
     stability = pd.read_csv(stability_path) if stability_path.exists() else pd.DataFrame()
     check(len(stability) == 123 and stability.get("enterprise_id", pd.Series(dtype=str)).nunique() == 123, "stability_table_123_unique", str(stability.shape), failures, rows)
 
-    figures_dir = ROOT / "figures" / "q1_credit"
+    figures_dir = OUTPUT_ROOT / "figures" / "credit"
     figure_ok = all((figures_dir / name).exists() and (figures_dir / name).stat().st_size > 0 for name in REQUIRED_FIGURES)
     check(figure_ok, "required_figures_nonempty", "all requested q1_credit figures", failures, rows)
-    excel_path = ROOT / "results" / "final" / "q1_final_delivery.xlsx"
+    excel_path = OUTPUT_ROOT / "final" / "q1_final_delivery.xlsx"
     required_sheets = {"README", "RiskScores", "ChurnRaw", "ChurnFitted", "BaselineStrategy", "BaselinePortfolio", "BudgetSensitivity", "ParameterSensitivity", "StrategyStability", "ModelMetrics", "Assumptions", "Validation"}
     if excel_path.exists():
         sheets = set(pd.ExcelFile(excel_path).sheet_names)
@@ -153,12 +166,12 @@ def main() -> int:
         sheets = set()
     check(required_sheets.issubset(sheets), "final_excel_re_readable", str(sorted(sheets)), failures, rows)
 
-    docs = [ROOT / "docs" / "q1_final_results_for_paper.md", ROOT / "docs" / "q1_final_assumptions_and_limitations.md", ROOT / "docs" / "q1_submission_checklist.md"]
+    docs = [PAPER_ROOT / "q1_final_results_for_paper.md", PAPER_ROOT / "q1_final_assumptions_and_limitations.md", PAPER_ROOT / "q1_submission_checklist.md"]
     placeholder_pattern = re.compile(r"TODO|TBD|PLACEHOLDER|待填|占位", re.IGNORECASE)
     docs_ok = all(not placeholder_pattern.search(path.read_text(encoding="utf-8")) for path in docs if path.exists())
     check(docs_ok, "final_docs_no_placeholders", "final paper/assumptions/checklist documents", failures, rows)
 
-    final_manifest_path = ROOT / "results" / "final" / "q1_final_manifest.json"
+    final_manifest_path = OUTPUT_ROOT / "final" / "q1_final_manifest.json"
     final_manifest = json.loads(final_manifest_path.read_text(encoding="utf-8")) if final_manifest_path.exists() else {}
     check(final_manifest.get("selected_model") == "elastic_net_logistic", "final_manifest_selected_model", str(final_manifest.get("selected_model")), failures, rows)
     check(final_manifest.get("risk_column") == "selected_model_risk_score", "final_manifest_risk_column", str(final_manifest.get("risk_column")), failures, rows)
@@ -171,7 +184,7 @@ def main() -> int:
         check(bool(code_ok), "final_code_hashes_match", "core fourth-batch code hashes", failures, rows)
     else:
         check(False, "final_code_hashes_match", "code_hashes missing", failures, rows)
-    output_index_path = ROOT / "results" / "final" / "q1_final_output_index.csv"
+    output_index_path = OUTPUT_ROOT / "final" / "q1_final_output_index.csv"
     if output_index_path.exists():
         output_index = pd.read_csv(output_index_path)
         index_ok = True
@@ -182,7 +195,7 @@ def main() -> int:
     else:
         check(False, "output_index_hashes_match", "output index missing", failures, rows)
 
-    report_path = ROOT / "results" / "final" / "q1_final_validation_report.md"
+    report_path = OUTPUT_ROOT / "final" / "q1_final_validation_report.md"
     report_lines = [
         "# 问题一最终验收报告",
         "",

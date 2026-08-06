@@ -20,7 +20,19 @@ from scipy.optimize import Bounds, LinearConstraint, milp
 from scipy.sparse import csr_matrix
 from sklearn.isotonic import IsotonicRegression
 
-from q1_common import ROOT, config_hash, load_config, relative, resolve_path, sha256_file, write_csv, write_json, write_text
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    RUNTIME_ROOT,
+    ROOT,
+    config_hash,
+    load_config,
+    relative,
+    resolve_path,
+    sha256_file,
+    write_csv,
+    write_json,
+    write_text,
+)
 
 
 CHURN_RATINGS = ("A", "B", "C")
@@ -400,8 +412,8 @@ def write_churn_outputs(config: Mapping[str, Any], normalized: pd.DataFrame, aud
     """Fit attachment 3 and write all churn-model artifacts."""
 
     fitted, metrics, cross, fit_meta = fit_churn_curves(normalized, config)
-    out_dir = ROOT / "results" / "churn_model"
-    figure_dir = ROOT / "figures" / "q1_credit"
+    out_dir = RUNTIME_ROOT / "churn_model"
+    figure_dir = OUTPUT_ROOT / "figures" / "credit"
     out_dir.mkdir(parents=True, exist_ok=True)
     figure_dir.mkdir(parents=True, exist_ok=True)
     paths = {
@@ -439,8 +451,8 @@ def write_churn_outputs(config: Mapping[str, Any], normalized: pd.DataFrame, aud
         "rating_order_crossing_count": fit_meta["rating_order_crossing_count"],
         "config_sha256": config_hash(config),
         "code_hashes": {
-            "src/06_fit_churn_curves.py": sha256_file(ROOT / "src" / "06_fit_churn_curves.py"),
-            "src/q1_credit_common.py": sha256_file(ROOT / "src" / "q1_credit_common.py"),
+            "src/_internal/stages/06_fit_churn_curves.py": sha256_file(ROOT / "src" / "_internal" / "stages" / "06_fit_churn_curves.py"),
+            "src/_internal/credit_strategy.py": sha256_file(ROOT / "src" / "_internal" / "credit_strategy.py"),
         },
         "output_hashes": {
             relative(path): sha256_file(path)
@@ -453,7 +465,7 @@ def write_churn_outputs(config: Mapping[str, Any], normalized: pd.DataFrame, aud
 
 
 def load_fitted_churn(config: Mapping[str, Any]) -> pd.DataFrame:
-    path = ROOT / "results" / "churn_model" / "churn_curve_fitted.csv"
+    path = RUNTIME_ROOT / "churn_model" / "churn_curve_fitted.csv"
     if not path.exists():
         raise FileNotFoundError(path)
     fitted = pd.read_csv(path)

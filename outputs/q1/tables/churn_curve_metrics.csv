@@ -1,0 +1,4 @@
+﻿credit_rating,fit_method,observed_point_count,raw_monotonic_violation_count,fitted_monotonic_violation_count,mae,rmse,maximum_absolute_adjustment,mean_absolute_adjustment,flat_interval_count,raw_min,raw_max,fitted_min,fitted_max
+A,isotonic_regression_increasing,29,3,0,0.0006885283556,0.001819164291,0.005745631745,0.0006885283556,3,0,0.922060687,0,0.922060687
+B,isotonic_regression_increasing,29,2,0,0.0006225874289,0.001948696896,0.00718906688,0.0006225874289,2,0,0.885864919,0,0.885864919
+C,isotonic_regression_increasing,29,2,0,0.0005213057032,0.001406071221,0.004001157891,0.0005213057032,2,0,0.8951647387,0,0.8951647387

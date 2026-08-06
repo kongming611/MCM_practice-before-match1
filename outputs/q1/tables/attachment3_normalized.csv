@@ -1,0 +1,88 @@
+﻿source_sheet,raw_interest_rate_column,raw_churn_rate_column,credit_rating,interest_rate_raw,churn_rate_raw,interest_rate,churn_rate,interest_rate_normalization,churn_rate_normalization
+Sheet1,贷款年利率,客户流失率,A,0.04,0,0.04,0,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0425,0.09457412621,0.0425,0.09457412621,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0465,0.1357271831,0.0465,0.1357271831,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0505,0.2246033536,0.0505,0.2246033536,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0545,0.3020381016,0.0545,0.3020381016,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0585,0.3473156681,0.0585,0.3473156681,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0625,0.41347177,0.0625,0.41347177,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0665,0.4478909726,0.0665,0.4478909726,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0705,0.4976344534,0.0705,0.4976344534,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0745,0.511096612,0.0745,0.511096612,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0785,0.573393087,0.0785,0.573393087,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0825,0.6094921146,0.0825,0.6094921146,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0865,0.6529447736,0.0865,0.6529447736,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0905,0.6675418427,0.0905,0.6675418427,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0945,0.6947799208,0.0945,0.6947799208,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.0985,0.7083020233,0.0985,0.7083020233,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1025,0.7312754013,0.1025,0.7312754013,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1065,0.775091405,0.1065,0.775091405,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1105,0.7982273676,0.1105,0.7982273676,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1145,0.7905272664,0.1145,0.7905272664,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1185,0.8151969865,0.1185,0.8151969865,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1225,0.8144210289,0.1225,0.8144210289,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1265,0.8548110969,0.1265,0.8548110969,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1305,0.8703173433,0.1305,0.8703173433,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1345,0.8714280854,0.1345,0.8714280854,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1385,0.8859259452,0.1385,0.8859259452,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1425,0.8744346817,0.1425,0.8744346817,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.1465,0.9027259086,0.1465,0.9027259086,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,客户流失率,A,0.15,0.922060687,0.15,0.922060687,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.04,0,0.04,0,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0425,0.06679958332,0.0425,0.06679958332,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0465,0.1350520596,0.0465,0.1350520596,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0505,0.20658008,0.0505,0.20658008,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0545,0.2768122932,0.0545,0.2768122932,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0585,0.3028834011,0.0585,0.3028834011,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0625,0.3702158521,0.0625,0.3702158521,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0665,0.4062966682,0.0665,0.4062966682,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0705,0.458295295,0.0705,0.458295295,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0745,0.5087186917,0.0745,0.5087186917,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0785,0.5444088369,0.0785,0.5444088369,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0825,0.5484939576,0.0825,0.5484939576,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0865,0.5887656961,0.0865,0.5887656961,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0905,0.6257645759,0.0905,0.6257645759,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0945,0.6356051463,0.0945,0.6356051463,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.0985,0.6735274241,0.0985,0.6735274241,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1025,0.6969254309,0.1025,0.6969254309,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1065,0.7053159925,0.1065,0.7053159925,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1105,0.7429363263,0.1105,0.7429363263,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1145,0.7764007288,0.1145,0.7764007288,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1185,0.762022595,0.1185,0.762022595,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1225,0.7915036971,0.1225,0.7915036971,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1265,0.8149989325,0.1265,0.8149989325,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1305,0.8222978615,0.1305,0.8222978615,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1345,0.8353016023,0.1345,0.8353016023,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1385,0.8457477454,0.1385,0.8457477454,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1425,0.8420708437,0.1425,0.8420708437,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.1465,0.8681595356,0.1465,0.8681595356,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 2,B,0.15,0.885864919,0.15,0.885864919,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.04,0,0.04,0,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0425,0.06872530649,0.0425,0.06872530649,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0465,0.1220990289,0.0465,0.1220990289,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0505,0.1812521463,0.0505,0.1812521463,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0545,0.2633028632,0.0545,0.2633028632,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0585,0.2901890983,0.0585,0.2901890983,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0625,0.3497155901,0.0625,0.3497155901,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0665,0.3907716828,0.0665,0.3907716828,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0705,0.4572380698,0.0705,0.4572380698,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0745,0.4926604331,0.0745,0.4926604331,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0785,0.5136602385,0.0785,0.5136602385,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0825,0.5302487056,0.0825,0.5302487056,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0865,0.5877624082,0.0865,0.5877624082,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0905,0.5900970447,0.0905,0.5900970447,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0945,0.6429936556,0.0945,0.6429936556,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.0985,0.6588394158,0.0985,0.6588394158,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1025,0.6968705731,0.1025,0.6968705731,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1065,0.7191035524,0.1065,0.7191035524,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1105,0.7111012366,0.1105,0.7111012366,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1145,0.7506276561,0.1145,0.7506276561,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1185,0.7768160432,0.1185,0.7768160432,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1225,0.7844805121,0.1225,0.7844805121,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1265,0.7955662741,0.1265,0.7955662741,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1305,0.8200514336,0.1305,0.8200514336,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1345,0.8322884215,0.1345,0.8322884215,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1385,0.8440898754,0.1385,0.8440898754,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1425,0.8369743258,0.1425,0.8369743258,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.1465,0.8725589573,0.1465,0.8725589573,kept_as_0_1_fraction,kept_as_0_1_fraction
+Sheet1,贷款年利率,Unnamed: 3,C,0.15,0.8951647387,0.15,0.8951647387,kept_as_0_1_fraction,kept_as_0_1_fraction

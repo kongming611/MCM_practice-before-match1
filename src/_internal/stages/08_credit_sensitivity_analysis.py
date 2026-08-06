@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -11,8 +12,22 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from q1_common import ROOT, config_hash, load_config, relative, resolve_path, sha256_file, write_csv, write_json, write_text
-from q1_credit_common import (
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    PAPER_ROOT,
+    PROCESSED_ROOT,
+    RUNTIME_ROOT,
+    ROOT,
+    config_hash,
+    load_config,
+    relative,
+    resolve_path,
+    sha256_file,
+    write_csv,
+    write_json,
+    write_text,
+)
+from _internal.credit_strategy import (
     ALL_RATINGS,
     CHURN_RATINGS,
     jaccard_selected,
@@ -26,7 +41,7 @@ from q1_credit_common import (
 def load_risk_table(config: dict[str, Any]) -> pd.DataFrame:
     """Load only the accepted enterprise-level OOF risk table."""
 
-    path = ROOT / "results" / "model_training" / "oof_predictions_by_enterprise.csv"
+    path = PROCESSED_ROOT / "q1_risk_scores.csv"
     frame = pd.read_csv(path)
     required = {
         "enterprise_id", "enterprise_name", "credit_rating", "default_label",
@@ -343,7 +358,7 @@ def _assumptions_rows(config: dict[str, Any]) -> pd.DataFrame:
 
 
 def _final_paper_doc(config: dict[str, Any], risk: pd.DataFrame, churn_metrics: pd.DataFrame, baseline: dict[str, Any], budget: pd.DataFrame, parameter: pd.DataFrame, stability: pd.DataFrame, figures: list[Path]) -> str:
-    model_metrics_path = ROOT / "results" / "model_training" / "model_metrics_summary.csv"
+    model_metrics_path = RUNTIME_ROOT / "model_training" / "model_metrics_summary.csv"
     model_metrics = pd.read_csv(model_metrics_path)
     model_metrics = model_metrics[model_metrics["scope"] == "enterprise_aggregated_oof"]
     lines = [
@@ -400,7 +415,7 @@ def _final_paper_doc(config: dict[str, Any], risk: pd.DataFrame, churn_metrics: 
         "",
         "## 8. 图表与附录",
         "",
-        "可直接放入论文的图表位于`figures/q1_credit/`，包括流失率拟合、接受概率、基准策略、预算、LGD/资金成本、风险mean/p90、预算定义、联合情景和企业稳定性图。完整123家企业策略表应作为论文附录或补充材料，主文只展示代表性汇总。",
+        "可直接放入论文的图表位于`outputs/q1/figures/`下的eda、model和credit目录，包括流失率拟合、接受概率、基准策略、预算、LGD/资金成本、风险mean/p90、预算定义、联合情景和企业稳定性图。完整123家企业策略表应作为论文附录或补充材料，主文只展示代表性汇总。",
         "",
         "## 9. 局限与解释边界",
         "",
@@ -408,9 +423,9 @@ def _final_paper_doc(config: dict[str, Any], risk: pd.DataFrame, churn_metrics: 
         "",
         "## 10. 主要文件",
         "",
-        "- 完整交付Excel：`results/final/q1_final_delivery.xlsx`。",
-        "- 完整策略：`results/credit_strategy/baseline_enterprise_strategy.csv`。",
-        "- 最终验证：`results/final/q1_final_validation_report.md`。",
+        "- 完整交付Excel：`outputs/q1/final/q1_final_delivery.xlsx`。",
+        "- 完整策略：`outputs/q1/tables/baseline_enterprise_strategy.csv`。",
+        "- 最终验证：`outputs/q1/final/q1_final_validation_report.md`。",
         "",
     ]
     return "\n".join(lines)
@@ -422,7 +437,7 @@ def _assumptions_doc(config: dict[str, Any]) -> str:
         "",
         "## 已锁定假设",
         "",
-        "- 正式优化读取`results/model_training/oof_predictions_by_enterprise.csv`的`selected_model_risk_score`，不重新训练风险模型、不使用default_label决策、不把评级放入违约风险模型。",
+        "- 正式优化读取`data/processed/q1_risk_scores.csv`的`selected_model_risk_score`，不重新训练风险模型、不使用default_label决策、不把评级放入违约风险模型。",
         "- 附件3的A/B/C曲线分别独立使用IsotonicRegression保序拟合，基准只在附件3实际利率点上报价。",
         "- D级企业原则上不予放贷；该约束来自业务题意，D级不建立放贷变量。",
         "- 最低/最高额度为10/100万元，利率取4%—15%的附件3观测点。",
@@ -441,7 +456,7 @@ def _assumptions_doc(config: dict[str, Any]) -> str:
 
 
 def build_final_excel(config: dict[str, Any], risk: pd.DataFrame, churn_normalized: pd.DataFrame, churn_fitted: pd.DataFrame, baseline_strategy: pd.DataFrame, baseline_summary: pd.DataFrame, budget_summary: pd.DataFrame, parameter_summary: pd.DataFrame, stability: pd.DataFrame, model_metrics: pd.DataFrame, validation_rows: pd.DataFrame, baseline_summary_dict: dict[str, Any], eligible_count: int, b_max: float) -> Path:
-    final_dir = ROOT / "results" / "final"
+    final_dir = OUTPUT_ROOT / "final"
     final_dir.mkdir(parents=True, exist_ok=True)
     path = final_dir / "q1_final_delivery.xlsx"
     readme = _strategy_readme_rows(config, baseline_summary_dict, eligible_count, b_max)
@@ -462,14 +477,57 @@ def build_final_excel(config: dict[str, Any], risk: pd.DataFrame, churn_normaliz
     return path
 
 
+def _publish_credit_outputs() -> None:
+    """Copy the formal credit artifacts out of ignored runtime storage."""
+
+    table_dir = OUTPUT_ROOT / "tables"
+    report_dir = OUTPUT_ROOT / "reports"
+    table_dir.mkdir(parents=True, exist_ok=True)
+    report_dir.mkdir(parents=True, exist_ok=True)
+    table_names = [
+        "attachment3_audit.csv",
+        "attachment3_normalized.csv",
+        "churn_curve_fitted.csv",
+        "churn_curve_metrics.csv",
+        "churn_curve_cross_rating_check.csv",
+    ]
+    table_names += [
+        "baseline_enterprise_strategy.csv",
+        "baseline_portfolio_summary.csv",
+    ]
+    table_names += [
+        "budget_sensitivity_summary.csv",
+        "lgd_sensitivity_summary.csv",
+        "funding_cost_sensitivity_summary.csv",
+        "risk_sensitivity_summary.csv",
+        "budget_definition_sensitivity_summary.csv",
+        "parameter_sensitivity_summary.csv",
+        "lgd_funding_joint_summary.csv",
+        "enterprise_strategy_stability.csv",
+    ]
+    source_dirs = [RUNTIME_ROOT / "churn_model", RUNTIME_ROOT / "credit_strategy", RUNTIME_ROOT / "sensitivity"]
+    for name in table_names:
+        source = next((directory / name for directory in source_dirs if (directory / name).exists()), None)
+        if source is None:
+            raise FileNotFoundError(f"formal credit output is missing: {name}")
+        shutil.copy2(source, table_dir / name)
+    report_pairs = [
+        (RUNTIME_ROOT / "churn_model" / "attachment3_audit_report.md", report_dir / "attachment3_audit_report.md"),
+        (RUNTIME_ROOT / "credit_strategy" / "baseline_strategy_report.md", report_dir / "baseline_strategy_report.md"),
+        (RUNTIME_ROOT / "credit_strategy" / "baseline_solver_diagnostics.json", report_dir / "baseline_solver_diagnostics.json"),
+    ]
+    for source, target in report_pairs:
+        shutil.copy2(source, target)
+
+
 def main() -> int:
     config = load_config()
     risk = load_risk_table(config)
     churn = load_fitted_churn(config)
-    churn_normalized = pd.read_csv(ROOT / "results" / "churn_model" / "attachment3_normalized.csv")
-    churn_metrics = pd.read_csv(ROOT / "results" / "churn_model" / "churn_curve_metrics.csv")
-    baseline_strategy = pd.read_csv(ROOT / "results" / "credit_strategy" / "baseline_enterprise_strategy.csv")
-    baseline_summary_dict = pd.read_csv(ROOT / "results" / "credit_strategy" / "baseline_portfolio_summary.csv").iloc[0].to_dict()
+    churn_normalized = pd.read_csv(RUNTIME_ROOT / "churn_model" / "attachment3_normalized.csv")
+    churn_metrics = pd.read_csv(RUNTIME_ROOT / "churn_model" / "churn_curve_metrics.csv")
+    baseline_strategy = pd.read_csv(RUNTIME_ROOT / "credit_strategy" / "baseline_enterprise_strategy.csv")
+    baseline_summary_dict = pd.read_csv(RUNTIME_ROOT / "credit_strategy" / "baseline_portfolio_summary.csv").iloc[0].to_dict()
     baseline_summary_dict = {key: value for key, value in baseline_summary_dict.items()}
     baseline_summary = pd.DataFrame([baseline_summary_dict])
     eligible_count = int(risk["credit_rating"].isin(CHURN_RATINGS).sum())
@@ -575,7 +633,7 @@ def main() -> int:
     parameter_strategy_frame = pd.concat(parameter_strategies, ignore_index=True)
     joint_strategy_frame = pd.concat(joint_strategies, ignore_index=True)
 
-    out_dir = ROOT / "results" / "sensitivity"
+    out_dir = RUNTIME_ROOT / "sensitivity"
     out_dir.mkdir(parents=True, exist_ok=True)
     write_csv(budget_summary, out_dir / "budget_sensitivity_summary.csv")
     write_csv(budget_strategy_frame, out_dir / "budget_strategy_all_enterprises.csv")
@@ -627,9 +685,9 @@ def main() -> int:
     stability = pd.DataFrame(stability_rows).sort_values(["selection_frequency", "enterprise_id"], ascending=[False, True]).reset_index(drop=True)
     write_csv(stability, out_dir / "enterprise_strategy_stability.csv")
 
-    figure_paths = write_sensitivity_figures(budget_summary, parameter_summary, stability, joint_summary, ROOT / "figures" / "q1_credit")
+    figure_paths = write_sensitivity_figures(budget_summary, parameter_summary, stability, joint_summary, OUTPUT_ROOT / "figures" / "credit")
 
-    baseline_figures = [ROOT / "figures" / "q1_credit" / name for name in ["baseline_risk_amount_scatter.png", "baseline_amount_by_rating.png", "baseline_rate_by_rating.png"]]
+    baseline_figures = [OUTPUT_ROOT / "figures" / "credit" / name for name in ["baseline_risk_amount_scatter.png", "baseline_amount_by_rating.png", "baseline_rate_by_rating.png"]]
     all_figures = baseline_figures + figure_paths
 
     # Summary rows for the final Excel validation sheet.
@@ -641,13 +699,13 @@ def main() -> int:
         {"check_name": "D_enterprises_have_zero_amount", "status": bool((baseline_strategy.loc[baseline_strategy["credit_rating"] == "D", "offered_loan_amount_10k"] == 0).all()), "detail": "D-level business rule"},
     ])
 
-    model_metrics = pd.read_csv(ROOT / "results" / "model_training" / "model_metrics_summary.csv")
+    model_metrics = pd.read_csv(RUNTIME_ROOT / "model_training" / "model_metrics_summary.csv")
     final_excel = build_final_excel(config, risk, churn_normalized, churn, baseline_strategy, pd.DataFrame([baseline_summary_dict]), budget_summary, parameter_summary, stability, model_metrics, validation_rows, baseline_summary_dict, eligible_count, b_max)
 
-    final_dir = ROOT / "results" / "final"
-    paper_path = ROOT / "docs" / "q1_final_results_for_paper.md"
-    assumptions_path = ROOT / "docs" / "q1_final_assumptions_and_limitations.md"
-    checklist_path = ROOT / "docs" / "q1_submission_checklist.md"
+    final_dir = OUTPUT_ROOT / "final"
+    paper_path = PAPER_ROOT / "q1_final_results_for_paper.md"
+    assumptions_path = PAPER_ROOT / "q1_final_assumptions_and_limitations.md"
+    checklist_path = PAPER_ROOT / "q1_submission_checklist.md"
     write_text(_final_paper_doc(config, risk, churn_metrics, baseline_summary_dict, budget_summary, parameter_summary, stability, all_figures), paper_path)
     write_text(_assumptions_doc(config), assumptions_path)
     checklist = "\n".join([
@@ -660,18 +718,19 @@ def main() -> int:
         "- [x] 123家企业完整策略表已生成，D级企业金额为0。",
         "- [x] 收益、信用损失、资金成本分解恒等式已检查。",
         "- [x] 最终Excel、CSV、图表、论文文档和假设文档已生成。",
-        "- [x] 最终验证由src/09_validate_q1_final.py执行。",
+        "- [x] 最终验证由src/q1.py --stage validate执行。",
         "",
-        "所有数值以results目录中的CSV计算源文件为准；代表性预算、LGD和资金成本不是题目给定参数。",
+        "所有数值以data/processed和outputs/q1中的正式文件为准；代表性预算、LGD和资金成本不是题目给定参数。",
         "",
     ])
     write_text(checklist, checklist_path)
+    _publish_credit_outputs()
 
     output_index_rows: list[dict[str, Any]] = []
     candidate_outputs = [
-        *[path for path in (ROOT / "results" / "churn_model").glob("*") if path.is_file()],
-        *[path for path in (ROOT / "results" / "credit_strategy").glob("*") if path.is_file()],
-        *[path for path in out_dir.glob("*") if path.is_file()],
+        *[path for path in (OUTPUT_ROOT / "tables").glob("*") if path.is_file()],
+        *[path for path in (OUTPUT_ROOT / "reports").glob("*") if path.is_file()],
+        *[path for path in (OUTPUT_ROOT / "figures").glob("**/*.png") if path.is_file()],
         *all_figures,
         final_excel,
         paper_path,
@@ -693,7 +752,10 @@ def main() -> int:
     output_index = pd.DataFrame(output_index_rows).sort_values("path")
     write_csv(output_index, final_dir / "q1_final_output_index.csv")
 
-    code_files = [ROOT / "src" / name for name in ["06_fit_churn_curves.py", "07_optimize_credit_strategy.py", "08_credit_sensitivity_analysis.py", "09_validate_q1_final.py", "q1_credit_common.py"]]
+    code_files = [
+        ROOT / "src" / "_internal" / "stages" / name
+        for name in ["06_fit_churn_curves.py", "07_optimize_credit_strategy.py", "08_credit_sensitivity_analysis.py"]
+    ] + [ROOT / "src" / "_internal" / name for name in ["credit_strategy.py", "validation.py"]]
     final_manifest = {
         "workflow": "question_one_final_delivery",
         "selected_model": str(risk["selected_model"].iloc[0]),
@@ -706,9 +768,9 @@ def main() -> int:
         "all_sensitivity_scenarios_optimal": bool(all_diag_frame["is_optimal"].all()),
         "config_sha256": config_hash(config),
         "input_hashes": {
-            "risk_table": sha256_file(ROOT / "results" / "model_training" / "oof_predictions_by_enterprise.csv"),
-            "churn_fitted": sha256_file(ROOT / "results" / "churn_model" / "churn_curve_fitted.csv"),
-            "attachment3_workbook": json.loads((ROOT / "results" / "churn_model" / "churn_model_manifest.json").read_text(encoding="utf-8"))["input_workbook_sha256"],
+            "risk_table": sha256_file(PROCESSED_ROOT / "q1_risk_scores.csv"),
+            "churn_fitted": sha256_file(RUNTIME_ROOT / "churn_model" / "churn_curve_fitted.csv"),
+            "attachment3_workbook": json.loads((RUNTIME_ROOT / "churn_model" / "churn_model_manifest.json").read_text(encoding="utf-8"))["input_workbook_sha256"],
         },
         "code_hashes": {relative(path): sha256_file(path) for path in code_files},
         "output_index_sha256": sha256_file(final_dir / "q1_final_output_index.csv"),

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import sys
 
-from q1_common import load_config
-from q1_credit_common import read_attachment3, write_churn_outputs
+from _internal.data_pipeline import load_config
+from _internal.credit_strategy import read_attachment3, write_churn_outputs
 import pandas as pd
 
 

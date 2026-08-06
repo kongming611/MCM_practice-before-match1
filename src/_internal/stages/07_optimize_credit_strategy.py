@@ -9,8 +9,21 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from q1_common import ROOT, config_hash, load_config, relative, resolve_path, sha256_file, write_csv, write_json, write_text
-from q1_credit_common import (
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    PROCESSED_ROOT,
+    RUNTIME_ROOT,
+    ROOT,
+    config_hash,
+    load_config,
+    relative,
+    resolve_path,
+    sha256_file,
+    write_csv,
+    write_json,
+    write_text,
+)
+from _internal.credit_strategy import (
     ALL_RATINGS,
     CHURN_RATINGS,
     load_fitted_churn,
@@ -22,7 +35,7 @@ from q1_credit_common import (
 
 
 def _risk_table(config: dict) -> pd.DataFrame:
-    path = ROOT / "results" / "model_training" / "oof_predictions_by_enterprise.csv"
+    path = PROCESSED_ROOT / "q1_risk_scores.csv"
     if not path.exists():
         raise FileNotFoundError(path)
     frame = pd.read_csv(path)
@@ -201,8 +214,8 @@ def main() -> int:
     if validation_failures:
         raise RuntimeError(f"Baseline strategy validation failed: {validation_failures}")
 
-    out_dir = ROOT / "results" / "credit_strategy"
-    figure_dir = ROOT / "figures" / "q1_credit"
+    out_dir = RUNTIME_ROOT / "credit_strategy"
+    figure_dir = OUTPUT_ROOT / "figures" / "credit"
     out_dir.mkdir(parents=True, exist_ok=True)
     write_csv(strategy, out_dir / "baseline_enterprise_strategy.csv")
     write_csv(pd.DataFrame([summary]), out_dir / "baseline_portfolio_summary.csv")
@@ -212,12 +225,12 @@ def main() -> int:
         "eligible_count": eligible_count,
         "b_max_10k": b_max,
         "baseline_budget_10k": baseline_budget,
-        "risk_input_sha256": sha256_file(ROOT / "results" / "model_training" / "oof_predictions_by_enterprise.csv"),
-        "churn_input_sha256": sha256_file(ROOT / "results" / "churn_model" / "churn_curve_fitted.csv"),
+        "risk_input_sha256": sha256_file(PROCESSED_ROOT / "q1_risk_scores.csv"),
+        "churn_input_sha256": sha256_file(RUNTIME_ROOT / "churn_model" / "churn_curve_fitted.csv"),
         "config_sha256": config_hash(config),
         "code_hashes": {
-            "src/07_optimize_credit_strategy.py": sha256_file(ROOT / "src" / "07_optimize_credit_strategy.py"),
-            "src/q1_credit_common.py": sha256_file(ROOT / "src" / "q1_credit_common.py"),
+            "src/_internal/stages/07_optimize_credit_strategy.py": sha256_file(ROOT / "src" / "_internal" / "stages" / "07_optimize_credit_strategy.py"),
+            "src/_internal/credit_strategy.py": sha256_file(ROOT / "src" / "_internal" / "credit_strategy.py"),
         },
     }
     write_json(diagnostics_payload, out_dir / "baseline_solver_diagnostics.json")
