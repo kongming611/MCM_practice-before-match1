@@ -7,6 +7,6 @@
 - [x] 123家企业完整策略表已生成，D级企业金额为0。
 - [x] 收益、信用损失、资金成本分解恒等式已检查。
 - [x] 最终Excel、CSV、图表、论文文档和假设文档已生成。
-- [x] 最终验证由src/09_validate_q1_final.py执行。
+- [x] 最终验证由src/q1.py --stage validate执行。
 
-所有数值以results目录中的CSV计算源文件为准；代表性预算、LGD和资金成本不是题目给定参数。
+所有数值以data/processed和outputs/q1中的正式文件为准；代表性预算、LGD和资金成本不是题目给定参数。

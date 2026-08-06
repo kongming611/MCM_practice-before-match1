@@ -2,7 +2,7 @@
 
 ## 已锁定假设
 
-- 正式优化读取`results/model_training/oof_predictions_by_enterprise.csv`的`selected_model_risk_score`，不重新训练风险模型、不使用default_label决策、不把评级放入违约风险模型。
+- 正式优化读取`data/processed/q1_risk_scores.csv`的`selected_model_risk_score`，不重新训练风险模型、不使用default_label决策、不把评级放入违约风险模型。
 - 附件3的A/B/C曲线分别独立使用IsotonicRegression保序拟合，基准只在附件3实际利率点上报价。
 - D级企业原则上不予放贷；该约束来自业务题意，D级不建立放贷变量。
 - 最低/最高额度为10/100万元，利率取4%—15%的附件3观测点。

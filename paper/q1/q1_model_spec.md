@@ -50,9 +50,9 @@ G_i^d=\sum_j q_{ij}^{d,+},\qquad N_i^d=\sum_j q_{ij}^d.
 \[
 HHI_i^C=\sum_c w_{ic}^2,\qquad Top_i^C=\max_c w_{ic};
 \]
-供应商指标同理。共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。完整特征角色由config/q1.yaml中的features.names、primary_model_features、sensitivity_model_features和excluded_from_model锁定。
+供应商指标同理。共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。完整特征角色由src/_internal/q1_config.yaml中的features.names、primary_model_features、sensitivity_model_features和excluded_from_model锁定。
 
-zero_amount_invoice_rate的业务核验口径为：去除确认的完全重复行，并按“方向—企业代号—发票号码—开票日期—交易对手—发票状态”聚合为原子发票后，有效且原子发票价税合计为零的发票数除以有效原子发票总数。零值同时按total_yuan==0和abs(total_yuan)<=zero_amount_tolerance_yuan核对；具体程序事实见docs/q1_zero_amount_invoice_rate_decision.md。
+zero_amount_invoice_rate的业务核验口径为：去除确认的完全重复行，并按“方向—企业代号—发票号码—开票日期—交易对手—发票状态”聚合为原子发票后，有效且原子发票价税合计为零的发票数除以有效原子发票总数。零值同时按total_yuan==0和abs(total_yuan)<=zero_amount_tolerance_yuan核对；具体程序事实见outputs/q1/reports/q1_zero_amount_invoice_rate_decision.md。
 
 主模型固定使用以下15项：sales_scale_10k、purchase_scale_10k、operating_net_inflow_proxy_10k、sales_growth_trend、sales_monthly_cv、invoice_activity_per_month、sales_return_rate、purchase_return_rate、void_invoice_rate、customer_count、supplier_count、customer_hhi、supplier_hhi、purchase_sales_ratio、active_month_ratio。business_scale_10k、net_sales_10k、max_customer_share、max_supplier_share、longest_active_streak_ratio只用于特征集敏感性分析；zero_amount_invoice_rate不进入任何正式模型矩阵，但保留在特征表中。
 

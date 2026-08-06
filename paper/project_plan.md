@@ -1,6 +1,6 @@
 结论先说：这不是单纯的“综合评价题”，而是一道“数据驱动的信用风险预测 + 信贷组合优化 + 突发事件压力测试”混合题。最稳妥的主线是：发票特征工程 → 可解释风险模型 → 利率—流失率拟合 → 约束优化；第三问再增加行业情景和稳健优化。
 
-题目约束是：单家获贷企业额度 10～100 万元、年利率 4%～15%、期限 1 年；D 级企业原则上不放贷。:codex-file-citation{path="E:\MCM_practice-before-match1\data\2020C-中小微企业的信贷决策.docx" purpose="source" artifact_kind="document"}
+题目约束是：单家获贷企业额度 10～100 万元、年利率 4%～15%、期限 1 年；D 级企业原则上不放贷。原始题目文件见 `data/raw/2020C-中小微企业的信贷决策.docx`。
 
 ## 1. 题型判断
 
@@ -89,12 +89,12 @@
 
 作为敏感性检查，把信誉评级加入后，B的PR-AUC从A的0.8257提高到0.9420，Brier从0.0987降到0.0318，Top-20%召回率从0.7037提高到0.8889；这只能说明树模型更充分利用了评级这一强先验，不能改变主比较的特征集，也不能用于问题二的无评级企业。
 
-完整的切块记录、企业级聚合预测和评测报告见：
+当前正式问一流程不再保留旧的模型比较脚本；可复现入口、正式模型报告和指标表见：
 
-- [评测脚本](question1_model_comparison.py)
-- [发票行为特征评测报告](results/question1_model_comparison_behavior_only.md)
-- [50个小块的逐企业预测](results/question1_small_blocks_behavior_only.csv)
-- [方案比较统计表](results/question1_model_comparison_behavior_only.csv)
+- [问一统一入口](../src/q1.py)
+- [模型训练报告](../outputs/q1/reports/model_training_report.md)
+- [企业级OOF风险表](../data/processed/q1_risk_scores.csv)
+- [模型指标汇总](../outputs/q1/tables/model_metrics_summary.csv)
 
 ### 问题二
 
@@ -144,14 +144,7 @@
 
 结论是：方案A在4项主要指标上的点估计均优于方案B，但没有一项达到“统计上稳定胜出”；方案B也没有达到替代A的条件。因此问题二采用“方案A为主、方案B作交叉检查”的结论最稳妥。对302家无标签企业，若两方案风险排序差异大、且企业超出附件1训练分布支持，应标记为高不确定性并降额或人工复核，而不能把方案B的簇标签当成真实违约结果。
 
-完整的切块记录、企业级聚合预测、302家部署小块和评测报告见：
-
-- [问题二评测脚本](question2_model_comparison.py)
-- [问题二评测报告](results/question2_model_comparison.md)
-- [50个隐藏测试小块的逐企业预测](results/question2_small_blocks.csv)
-- [方案比较统计表](results/question2_model_comparison.csv)
-- [302家部署小块汇总](results/question2_deployment_blocks.csv)
-- [302家企业风险与分歧诊断](results/question2_deployment_scores.csv)
+本整理分支暂不迁移问题二历史程序和验证结果，仅保留 [问题二入口占位](../src/q2.py)；后续实现时应重新建立与当前目录契约一致的验证结果。
 
 ### 问题三
 
@@ -177,7 +170,7 @@
 
 ### 现有数据能够支持的部分
 
-附件1共有123家企业，其中A/B/C/D分别为27、38、34、24家，违约27家；24家D级企业全部违约，另外只有2家C级和1家B级违约，A级没有违约。这个结构说明评级与违约高度绑定，容易造成模型“看起来很准”的假象。:codex-file-citation{path="E:\MCM_practice-before-match1\data\附件1：123家有信贷记录企业的相关数据.xlsx" purpose="source" artifact_kind="workbook" sheet="企业信息" range="A1:D124"}
+附件1共有123家企业，其中A/B/C/D分别为27、38、34、24家，违约27家；24家D级企业全部违约，另外只有2家C级和1家B级违约，A级没有违约。这个结构说明评级与违约高度绑定，容易造成模型“看起来很准”的假象。数据来源：`data/raw/附件1：123家有信贷记录企业的相关数据.xlsx` 的“企业信息”工作表。
 
 发票数据方面：
 
@@ -185,11 +178,11 @@
 - 附件2有395,175条进项和330,835条销项记录，302家企业也都有数据。
 - 四张发票表的8个关键字段没有空值，时间范围基本一致，约为2016年10月至2020年2月。
 - 企业间数据量差异非常大，单家发票记录可以从个位数到数万条，因此金额和数量特征必须取对数、按月标准化或做稳健缩尾。
-- 存在负数有效发票、零金额销项以及同一企业重复发票号，不能简单删除：负数往往表示退货，重复号码可能是同张发票的多个明细行，应先按“企业—发票号—日期—交易对手”核验和聚合。:codex-file-citation{path="E:\MCM_practice-before-match1\data\附件1：123家有信贷记录企业的相关数据.xlsx" purpose="source" artifact_kind="workbook" sheet="进项发票信息" range="A1:H210948"} :codex-file-citation{path="E:\MCM_practice-before-match1\data\附件1：123家有信贷记录企业的相关数据.xlsx" purpose="source" artifact_kind="workbook" sheet="销项发票信息" range="A1:H162485"}
+- 存在负数有效发票、零金额销项以及同一企业重复发票号，不能简单删除：负数往往表示退货，重复号码可能是同张发票的多个明细行，应先按“企业—发票号—日期—交易对手”核验和聚合。数据来源：`data/raw/附件1：123家有信贷记录企业的相关数据.xlsx` 的“进项发票信息”和“销项发票信息”工作表。
 
-附件2与附件1的核心发票字段一致，足够生成规模、趋势、波动、作废率、退货率、客户/供应商集中度等共同特征；但没有信誉评级和违约结果，因此只能预测，不能验证预测是否真的正确。:codex-file-citation{path="E:\MCM_practice-before-match1\data\附件2：302家无信贷记录企业的相关数据.xlsx" purpose="source" artifact_kind="workbook" sheet="企业信息" range="A1:B303"} :codex-file-citation{path="E:\MCM_practice-before-match1\data\附件2：302家无信贷记录企业的相关数据.xlsx" purpose="source" artifact_kind="workbook" sheet="销项发票信息" range="A1:H330836"} :codex-file-citation{path="E:\MCM_practice-before-match1\data\附件2：302家无信贷记录企业的相关数据.xlsx" purpose="source" artifact_kind="workbook" sheet="进项发票信息" range="A1:H395176"}
+附件2与附件1的核心发票字段一致，足够生成规模、趋势、波动、作废率、退货率、客户/供应商集中度等共同特征；但没有信誉评级和违约结果，因此只能预测，不能验证预测是否真的正确。数据来源：`data/raw/附件2：302家无信贷记录企业的相关数据.xlsx`。
 
-附件3提供4%～15%之间的29个利率点及A/B/C三级流失率，足够做插值；但三条曲线都存在少量局部下降，说明有抽样噪声，应使用保序回归或单调样条，不能用高阶多项式强行拟合。:codex-file-citation{path="E:\MCM_practice-before-match1\data\附件3：银行贷款年利率与客户流失率关系的统计数据.xlsx" purpose="source" artifact_kind="workbook" sheet="Sheet1" range="A1:D31"}
+附件3提供4%～15%之间的29个利率点及A/B/C三级流失率，足够做插值；但三条曲线都存在少量局部下降，说明有抽样噪声，应使用保序回归或单调样条，不能用高阶多项式强行拟合。数据来源：`data/raw/附件3：银行贷款年利率与客户流失率关系的统计数据.xlsx` 的 `Sheet1` 工作表。
 
 ### 缕清后仍缺少的数据
 

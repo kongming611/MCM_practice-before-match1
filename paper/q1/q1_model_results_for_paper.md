@@ -8,7 +8,7 @@
 
 ## 2. 最终使用的特征集
 
-共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。主模型实际列表写入model_training_config_snapshot.yaml；zero_amount_invoice_rate的业务核验见docs/q1_zero_amount_invoice_rate_decision.md。
+共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。主模型实际列表写入运行目录的model_training_config_snapshot.yaml；zero_amount_invoice_rate的业务核验见outputs/q1/reports/q1_zero_amount_invoice_rate_decision.md。
 
 ## 3. 企业级重复分层交叉验证设计
 
@@ -60,8 +60,8 @@
 
 ## 12. 论文图表路径
 
-可直接引用的图表位于figures/q1_model/pr_curve_oof.png、roc_curve_oof.png、calibration_curve_oof.png、model_metric_comparison.png、logistic_coefficient_stability.png、oof_probability_distribution.png和risk_rank_by_default.png。
+可直接引用的图表位于outputs/q1/figures/model/pr_curve_oof.png、roc_curve_oof.png、calibration_curve_oof.png、model_metric_comparison.png、logistic_coefficient_stability.png、oof_probability_distribution.png和risk_rank_by_default.png。
 
 ## 13. 后续信贷优化读取字段
 
-后续信贷优化应读取results/model_training/oof_predictions_by_enterprise.csv中的logistic_oof_mean对应字段，或读取selected_model_risk_score；credit_rating只作展示，不能重新进入行为主模型。
+后续信贷优化应读取data/processed/q1_risk_scores.csv中的logistic_oof_mean对应字段，或读取selected_model_risk_score；credit_rating只作展示，不能重新进入行为主模型。

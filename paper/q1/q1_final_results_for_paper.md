@@ -67,7 +67,7 @@ mean与p90的比较是风险不确定性敏感性；p90场景称为`conservative
 
 ## 8. 图表与附录
 
-可直接放入论文的图表位于`figures/q1_credit/`，包括流失率拟合、接受概率、基准策略、预算、LGD/资金成本、风险mean/p90、预算定义、联合情景和企业稳定性图。完整123家企业策略表应作为论文附录或补充材料，主文只展示代表性汇总。
+可直接放入论文的图表位于`outputs/q1/figures/`下的eda、model和credit目录，包括流失率拟合、接受概率、基准策略、预算、LGD/资金成本、风险mean/p90、预算定义、联合情景和企业稳定性图。完整123家企业策略表应作为论文附录或补充材料，主文只展示代表性汇总。
 
 ## 9. 局限与解释边界
 
@@ -75,6 +75,6 @@ mean与p90的比较是风险不确定性敏感性；p90场景称为`conservative
 
 ## 10. 主要文件
 
-- 完整交付Excel：`results/final/q1_final_delivery.xlsx`。
-- 完整策略：`results/credit_strategy/baseline_enterprise_strategy.csv`。
-- 最终验证：`results/final/q1_final_validation_report.md`。
+- 完整交付Excel：`outputs/q1/final/q1_final_delivery.xlsx`。
+- 完整策略：`outputs/q1/tables/baseline_enterprise_strategy.csv`。
+- 最终验证：`outputs/q1/final/q1_final_validation_report.md`。
