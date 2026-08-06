@@ -401,13 +401,13 @@ def run_eda(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
     write_csv(group_stats, VALIDATION_DIR / "eda_main_feature_group_stats.csv")
 
     chart_rows = [
-        {"file": "figures/q1_eda/class_distribution.png", "title": "违约与未违约企业数量", "source": "enterprise_features_123.csv:default_label"},
-        {"file": "figures/q1_eda/rating_distribution.png", "title": "A/B/C/D评级企业数量", "source": "enterprise_features_123.csv:credit_rating"},
-        {"file": "figures/q1_eda/rating_default_distribution.png", "title": "评级—是否违约交叉分布（企业数）", "source": "eda_rating_default_contingency.csv"},
-        {"file": "figures/q1_eda/rating_default_rate.png", "title": "各评级违约率（括号显示样本数）", "source": "eda_rating_default_contingency.csv"},
-        {"file": "figures/q1_eda/main_feature_distributions.png", "title": "主要特征总体分布", "source": "enterprise_features_123.csv:main features"},
-        {"file": "figures/q1_eda/main_features_by_default.png", "title": "主要特征按违约标签箱线图", "source": "enterprise_features_123.csv:main features/default_label"},
-        {"file": "figures/q1_eda/feature_correlation_heatmap.png", "title": "候选特征Spearman相关性", "source": "enterprise_features_123.csv:main features"},
+        {"file": "outputs/q1/figures/eda/class_distribution.png", "title": "违约与未违约企业数量", "source": "data/processed/q1_enterprise_features.csv:default_label"},
+        {"file": "outputs/q1/figures/eda/rating_distribution.png", "title": "A/B/C/D评级企业数量", "source": "data/processed/q1_enterprise_features.csv:credit_rating"},
+        {"file": "outputs/q1/figures/eda/rating_default_distribution.png", "title": "评级—是否违约交叉分布（企业数）", "source": "data/processed/_runtime/feature_validation/eda_rating_default_contingency.csv"},
+        {"file": "outputs/q1/figures/eda/rating_default_rate.png", "title": "各评级违约率（括号显示样本数）", "source": "data/processed/_runtime/feature_validation/eda_rating_default_contingency.csv"},
+        {"file": "outputs/q1/figures/eda/main_feature_distributions.png", "title": "主要特征总体分布", "source": "data/processed/q1_enterprise_features.csv:main features"},
+        {"file": "outputs/q1/figures/eda/main_features_by_default.png", "title": "主要特征按违约标签箱线图", "source": "data/processed/q1_enterprise_features.csv:main features/default_label"},
+        {"file": "outputs/q1/figures/eda/feature_correlation_heatmap.png", "title": "候选特征Spearman相关性", "source": "data/processed/q1_enterprise_features.csv:main features"},
     ]
     _bar_chart(FIGURE_DIR / "class_distribution.png", ["未违约", "违约"], [int(default_counts[0]), int(default_counts[1])], "违约与未违约企业数量", "企业数", labels=[f"n={int(default_counts[0])}", f"n={int(default_counts[1])}"], colors=[PALETTE["0"], PALETTE["1"]])
     _bar_chart(FIGURE_DIR / "rating_distribution.png", ["A", "B", "C", "D"], [int(rating_counts[r]) for r in ["A", "B", "C", "D"]], "A/B/C/D评级企业数量", "企业数", labels=[f"n={int(rating_counts[r])}" for r in ["A", "B", "C", "D"]], colors=[PALETTE[r] for r in ["A", "B", "C", "D"]])

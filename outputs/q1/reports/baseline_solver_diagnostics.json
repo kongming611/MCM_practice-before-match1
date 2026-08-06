@@ -25,7 +25,7 @@
   "risk_input_sha256": "b2811c60480dced17c4caf5b2e548de29d6c38b638cb733e43c3bfd3c6d04d6c",
   "scenario_id": "baseline_representative_parameterized_scenario",
   "selected_offer_count": 50,
-  "solve_time_seconds": 0.1,
+  "solve_time_seconds": 0.108305,
   "solver": "scipy.optimize.milp",
   "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
   "solver_status_code": 0,

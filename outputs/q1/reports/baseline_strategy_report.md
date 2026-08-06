@@ -20,7 +20,7 @@
 
 ## 求解与验收
 
-- 求解器：scipy.optimize.milp；状态：0；是否最优：True；耗时：0.1秒。
+- 求解器：scipy.optimize.milp；状态：0；是否最优：True；耗时：0.108305秒。
 - 本策略分解恒等式及预算约束检查：PASS。
 
 完整企业策略见`baseline_enterprise_strategy.csv`；未获贷企业仍保留在表中，D级企业与优化未选择企业的原因分开记录。
