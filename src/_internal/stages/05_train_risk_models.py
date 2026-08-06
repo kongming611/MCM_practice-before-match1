@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 import platform
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -23,8 +24,22 @@ import scipy
 import sklearn
 import yaml
 
-from q1_common import ROOT, config_hash, load_config, relative, sha256_file, stable_sort, write_csv, write_json, write_text
-from q1_modeling import (
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    PAPER_ROOT,
+    PROCESSED_ROOT,
+    RUNTIME_ROOT,
+    ROOT,
+    config_hash,
+    load_config,
+    relative,
+    sha256_file,
+    stable_sort,
+    write_csv,
+    write_json,
+    write_text,
+)
+from _internal.risk_model import (
     LOGISTIC_NAME,
     TREE_NAME,
     coefficient_stability,
@@ -43,14 +58,14 @@ from q1_modeling import (
 )
 
 
-FEATURE_FILE = ROOT / "results" / "features" / "enterprise_features_123.csv"
-MODEL_DIR = ROOT / "results" / "model_training"
-FIGURE_DIR = ROOT / "figures" / "q1_model"
+FEATURE_FILE = PROCESSED_ROOT / "q1_enterprise_features.csv"
+MODEL_DIR = RUNTIME_ROOT / "model_training"
+FIGURE_DIR = OUTPUT_ROOT / "figures" / "model"
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train third-batch question-one risk models.")
-    parser.add_argument("--config", type=Path, default=ROOT / "config" / "q1.yaml")
+    parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--feature-file", type=Path, default=FEATURE_FILE)
     return parser.parse_args()
 
@@ -73,7 +88,7 @@ def _git_value(arguments: list[str]) -> str:
 def _phase_a_assert(config: dict[str, Any]) -> None:
     """Do not let phase B start unless the repaired phase A passed."""
 
-    summary_path = ROOT / "results" / "feature_validation" / "feature_validation_summary.json"
+    summary_path = RUNTIME_ROOT / "feature_validation" / "feature_validation_summary.json"
     if not summary_path.exists():
         raise RuntimeError("phase A validation summary is missing")
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -232,7 +247,7 @@ def _write_manifest(
     stable_metric_count: int,
     output_paths: list[Path],
 ) -> None:
-    code_paths = [ROOT / "src" / "05_train_risk_models.py", ROOT / "src" / "q1_modeling.py"]
+    code_paths = [ROOT / "src" / "_internal" / "stages" / "05_train_risk_models.py", ROOT / "src" / "_internal" / "risk_model.py"]
     code_hashes = {relative(path): sha256_file(path) for path in code_paths}
     output_hashes = {
         relative(path): sha256_file(path)
@@ -262,6 +277,27 @@ def _write_manifest(
         "output_hashes": output_hashes,
     }
     write_json(payload, MODEL_DIR / "model_training_manifest.json")
+
+
+def _publish_model_outputs() -> None:
+    """Publish only the model artifacts that belong in the stable layout."""
+
+    table_names = [
+        "model_metrics_summary.csv",
+        "model_metrics_confidence_intervals.csv",
+        "paired_bootstrap_comparison.csv",
+        "final_logistic_coefficients.csv",
+        "logistic_coefficient_stability.csv",
+        "feature_set_sensitivity.csv",
+        "rating_leakage_sensitivity.csv",
+    ]
+    table_dir = OUTPUT_ROOT / "tables"
+    report_dir = OUTPUT_ROOT / "reports"
+    table_dir.mkdir(parents=True, exist_ok=True)
+    report_dir.mkdir(parents=True, exist_ok=True)
+    for name in table_names:
+        shutil.copy2(MODEL_DIR / name, table_dir / name)
+    shutil.copy2(MODEL_DIR / "model_training_report.md", report_dir / "model_training_report.md")
 
 
 def run_training(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
@@ -308,6 +344,7 @@ def run_training(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
     selected_model, stable_metric_count = select_model(bootstrap)
     aggregate = _add_risk_ranks(aggregate, selected_model)
     write_csv(aggregate, MODEL_DIR / "oof_predictions_by_enterprise.csv")
+    write_csv(aggregate, PROCESSED_ROOT / "q1_risk_scores.csv")
     write_csv(metric_summary, MODEL_DIR / "model_metrics_summary.csv")
     write_csv(bootstrap, MODEL_DIR / "paired_bootstrap_comparison.csv")
 
@@ -385,8 +422,9 @@ def run_training(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
         selected_model,
         stable_metric_count,
         MODEL_DIR / "model_training_report.md",
-        ROOT / "docs" / "q1_model_results_for_paper.md",
+        PAPER_ROOT / "q1_model_results_for_paper.md",
     )
+    _publish_model_outputs()
 
     output_paths = [
         MODEL_DIR / "cv_split_manifest.csv",
@@ -406,7 +444,7 @@ def run_training(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
         MODEL_DIR / "model_training_config_snapshot.yaml",
         MODEL_DIR / "environment.txt",
         MODEL_DIR / "model_training_report.md",
-        ROOT / "docs" / "q1_model_results_for_paper.md",
+        PAPER_ROOT / "q1_model_results_for_paper.md",
         *sorted(FIGURE_DIR.glob("*.png")),
     ]
     _write_manifest(

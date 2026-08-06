@@ -1,0 +1,16 @@
+﻿training_scope,feature,feature_label,coefficient_standardized,intercept,nonzero,sign,converged,n_iter,max_iter_used,convergence_warning
+full_123_display_model,sales_scale_10k,销售规模,-1.064066064,-1.855458281,True,negative,True,372,5000,False
+full_123_display_model,purchase_scale_10k,采购规模,0,-1.855458281,False,zero,True,372,5000,False
+full_123_display_model,operating_net_inflow_proxy_10k,经营净流入代理,-0.133041702,-1.855458281,True,negative,True,372,5000,False
+full_123_display_model,sales_growth_trend,销售增长趋势,0,-1.855458281,False,zero,True,372,5000,False
+full_123_display_model,sales_monthly_cv,销售月度波动CV,0.6823888164,-1.855458281,True,positive,True,372,5000,False
+full_123_display_model,invoice_activity_per_month,月均发票活跃度,0,-1.855458281,False,zero,True,372,5000,False
+full_123_display_model,sales_return_rate,销售退货率,0,-1.855458281,False,zero,True,372,5000,False
+full_123_display_model,purchase_return_rate,采购退货率,0.001449805583,-1.855458281,True,positive,True,372,5000,False
+full_123_display_model,void_invoice_rate,作废发票率,0.1218788562,-1.855458281,True,positive,True,372,5000,False
+full_123_display_model,customer_count,客户数量,0,-1.855458281,False,zero,True,372,5000,False
+full_123_display_model,supplier_count,供应商数量,0,-1.855458281,False,zero,True,372,5000,False
+full_123_display_model,customer_hhi,客户HHI,0.1773098411,-1.855458281,True,positive,True,372,5000,False
+full_123_display_model,supplier_hhi,供应商HHI,-0.1944525174,-1.855458281,True,negative,True,372,5000,False
+full_123_display_model,purchase_sales_ratio,进销比,0.1135584799,-1.855458281,True,positive,True,372,5000,False
+full_123_display_model,active_month_ratio,活跃月份比例,0,-1.855458281,False,zero,True,372,5000,False

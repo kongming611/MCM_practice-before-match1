@@ -10,7 +10,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from q1_common import (
+from _internal.data_pipeline import (
     ROOT,
     DataQualityError,
     assert_input_unchanged,
@@ -31,7 +31,7 @@ from q1_common import (
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Audit question-one attachment 1.")
-    parser.add_argument("--config", type=Path, default=ROOT / "config" / "q1.yaml")
+    parser.add_argument("--config", type=Path, default=None)
     return parser.parse_args()
 
 
@@ -554,7 +554,7 @@ def run_audit(config: dict[str, Any]) -> dict[str, Any]:
         len(errors),
     )
     if errors:
-        raise DataQualityError("Data audit failed; see results/audit/data_quality_report.md")
+        raise DataQualityError("Data audit failed; see data/processed/_runtime/audit/data_quality_report.md")
     return quality
 
 

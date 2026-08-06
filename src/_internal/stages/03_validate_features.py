@@ -16,7 +16,9 @@ from typing import Any, Iterable
 import numpy as np
 import pandas as pd
 
-from q1_common import (
+from _internal.data_pipeline import (
+    PAPER_ROOT,
+    PROCESSED_ROOT,
     ROOT,
     DataQualityError,
     collapse_invoice_lines,
@@ -33,16 +35,16 @@ from q1_common import (
 )
 
 
-DEFAULT_FEATURE_FILE = ROOT / "results" / "features" / "enterprise_features_123.csv"
-DEFAULT_DICTIONARY = ROOT / "docs" / "q1_feature_dictionary.md"
-DEFAULT_REPORT = ROOT / "results" / "feature_validation" / "feature_validation_report.md"
+DEFAULT_FEATURE_FILE = PROCESSED_ROOT / "q1_enterprise_features.csv"
+DEFAULT_DICTIONARY = PAPER_ROOT / "q1_feature_dictionary.md"
+DEFAULT_REPORT = ROOT / "outputs" / "q1" / "reports" / "feature_validation_report.md"
 COMPARISON_ATOL = 1e-6
 COMPARISON_RTOL = 1e-5
 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate question-one enterprise features.")
-    parser.add_argument("--config", type=Path, default=ROOT / "config" / "q1.yaml")
+    parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--feature-file", type=Path, default=DEFAULT_FEATURE_FILE)
     return parser.parse_args()
 
@@ -296,7 +298,7 @@ def _write_zero_amount_decision(
     lines = [
         "# zero_amount_invoice_rate 业务口径决策",
         "",
-        "本文件由 __BT__src/03_validate_features.py__BT__ 重新读取附件1并程序计算生成。数字来自当前运行结果，不从历史报告复制。",
+        "本文件由 __BT__src/_internal/stages/03_validate_features.py__BT__ 重新读取附件1并程序计算生成。数字来自当前运行结果，不从历史报告复制。",
         "",
         "## 一、数据事实",
         "",
@@ -327,7 +329,7 @@ def _write_zero_amount_decision(
         f"- 原始明细层的精确零值中，销项作废占比结论为：{'全部来自销项作废' if exact_only_output_void else '并非全部来自销项作废'}；容差零值的对应结论为：{'全部来自销项作废' if tolerance_only_output_void else '并非全部来自销项作废'}。该结论由本次程序按方向和状态重算得到。",
         f"- 原始明细层销项作废精确零值数为 {raw_exact_from_output_void}，容差零值数为 {raw_tolerance_from_output_void}；原始进项明细精确零值数为 {int(raw_input_all['exact_zero_count'])}，容差零值数为 {int(raw_input_all['tolerance_zero_count'])}。",
         f"- 原子有效发票层合计分母为 {int(atomic_valid_all['invoice_count'])}；精确零值数为 {int(atomic_valid_all['exact_zero_count'])}，容差零值数为 {int(atomic_valid_all['tolerance_zero_count'])}。按进项分别为 {int(atomic_valid_input['exact_zero_count'])}/{int(atomic_valid_input['tolerance_zero_count'])}，按销项分别为 {int(atomic_valid_output['exact_zero_count'])}/{int(atomic_valid_output['tolerance_zero_count'])}。",
-        f"- 原子销项作废发票的精确零值数/容差零值数为 {int(atomic_void_output['exact_zero_count'])}/{int(atomic_void_output['tolerance_zero_count'])}。企业级有效原子发票统计中，出现精确零值的企业数为 {enterprise_with_exact}，出现容差零值的企业数为 {enterprise_with_tolerance}；完整企业明细见 __BT__results/feature_validation/zero_amount_invoice_business_check.csv__BT__。",
+        f"- 原子销项作废发票的精确零值数/容差零值数为 {int(atomic_void_output['exact_zero_count'])}/{int(atomic_void_output['tolerance_zero_count'])}。企业级有效原子发票统计中，出现精确零值的企业数为 {enterprise_with_exact}，出现容差零值的企业数为 {enterprise_with_tolerance}；完整企业明细见 __BT__data/processed/_runtime/feature_validation/zero_amount_invoice_business_check.csv__BT__。",
         "",
         "## 二、指标业务定义",
         "",
@@ -346,9 +348,9 @@ def _write_zero_amount_decision(
         "",
         "## 四、可追溯输出",
         "",
-        "- __BT__results/feature_validation/zero_amount_invoice_business_check.csv__BT__：按处理层级、方向、状态、企业和两种零值口径的明细统计。",
-        "- __BT__results/feature_validation/zero_amount_invoice_business_summary.csv__BT__：按处理层级、方向和状态汇总的机器可读统计。",
-        "- __BT__results/features/enterprise_features_123.csv__BT__ 仍保留 __BT__zero_amount_invoice_rate__BT__ 列；该列不属于主模型或特征集敏感性模型矩阵。",
+        "- __BT__data/processed/_runtime/feature_validation/zero_amount_invoice_business_check.csv__BT__：按处理层级、方向、状态、企业和两种零值口径的明细统计。",
+        "- __BT__data/processed/_runtime/feature_validation/zero_amount_invoice_business_summary.csv__BT__：按处理层级、方向和状态汇总的机器可读统计。",
+        "- __BT__data/processed/q1_enterprise_features.csv__BT__ 仍保留 __BT__zero_amount_invoice_rate__BT__ 列；该列不属于主模型或特征集敏感性模型矩阵。",
         "",
     ]
     write_text("\n".join(lines).replace("__BT__", chr(96)), output_path)
@@ -669,7 +671,7 @@ def _write_review_decisions(
         "- audit_开头字段只作审计辅助，不进入任何模型矩阵。",
         "",
     ])
-    write_text("\n".join(lines), ROOT / "docs" / "q1_feature_review_decisions.md")
+    write_text("\n".join(lines), ROOT / "outputs" / "q1" / "reports" / "q1_feature_review_decisions.md")
 
 
 def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
@@ -679,7 +681,7 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
     logger = setup_logging("03_validate_features", config, paths)
     input_path = (ROOT / config["input"]["attachment1"]).resolve()
     feature_path = feature_path.resolve()
-    out_dir = ROOT / "results" / "feature_validation"
+    out_dir = paths["validation"]
     out_dir.mkdir(parents=True, exist_ok=True)
     input_hash_before = sha256_file(input_path)
     features = _load_feature_table(feature_path)
@@ -709,7 +711,7 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         zero_detail,
         zero_summary,
         config,
-        ROOT / "docs" / "q1_zero_amount_invoice_rate_decision.md",
+        paths["reports"] / "q1_zero_amount_invoice_rate_decision.md",
     )
     bounded = set(config["features"]["bounded_01"])
     dictionary_names, dictionary_labels = _dictionary_names(DEFAULT_DICTIONARY)
@@ -892,7 +894,7 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         raise DataQualityError(f"特征表重新读取失败: {exc}") from exc
     add_check("feature_output_re_readable", output_readable, str(features.shape), str(reloaded.shape) if output_readable else "unreadable")
     add_check("fixed_random_seed_20260805", int(config["random_seed"]) == 20260805, int(config["random_seed"]), 20260805)
-    manifest_path = ROOT / "results" / "reports" / "q1_run_manifest.json"
+    manifest_path = paths["reports"] / "q1_run_manifest.json"
     add_check("upstream_reproducibility_manifest_present", manifest_path.exists(), str(manifest_path) if manifest_path.exists() else "missing", "present", severity="warning")
 
     # Persist machine-readable outputs.
@@ -1003,7 +1005,7 @@ def run_validation(config: dict[str, Any], feature_path: Path) -> dict[str, Any]
         "",
         "## 零金额业务核验",
         "",
-        "- 零金额业务核验明细见 `zero_amount_invoice_business_check.csv`，汇总见 `zero_amount_invoice_business_summary.csv`，最终决定见 `docs/q1_zero_amount_invoice_rate_decision.md`。",
+        "- 零金额业务核验明细见运行目录的 `zero_amount_invoice_business_check.csv`，汇总见 `zero_amount_invoice_business_summary.csv`，最终决定见 `outputs/q1/reports/q1_zero_amount_invoice_rate_decision.md`。",
         "- 完全重复行、边界月份和金额恒等式超差记录继续按现有审计口径保留并可追溯。",
         "- 高相关变量按配置的主模型与敏感性模型列表处理，不从原始特征表删除。",
         "",

@@ -16,13 +16,23 @@ from typing import Any, Iterable
 import numpy as np
 import pandas as pd
 
-from q1_common import ROOT, load_config, output_paths, setup_logging, write_csv, write_text
-from q1_plot_backend import line, rect, save_png, text
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    PROCESSED_ROOT,
+    RUNTIME_ROOT,
+    ROOT,
+    load_config,
+    output_paths,
+    setup_logging,
+    write_csv,
+    write_text,
+)
+from _internal.plotting import line, rect, save_png, text
 
 
-FEATURE_FILE = ROOT / "results" / "features" / "enterprise_features_123.csv"
-VALIDATION_DIR = ROOT / "results" / "feature_validation"
-FIGURE_DIR = ROOT / "figures" / "q1_eda"
+FEATURE_FILE = PROCESSED_ROOT / "q1_enterprise_features.csv"
+VALIDATION_DIR = RUNTIME_ROOT / "feature_validation"
+FIGURE_DIR = OUTPUT_ROOT / "figures" / "eda"
 MAIN_FEATURES = [
     "business_scale_10k", "sales_growth_trend", "sales_monthly_cv", "invoice_activity_per_month",
     "sales_return_rate", "void_invoice_rate", "customer_hhi", "supplier_hhi",
@@ -56,7 +66,7 @@ PALETTE = {"0": "#4472C4", "1": "#C00000", "A": "#70AD47", "B": "#FFC000", "C": 
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Question-one descriptive EDA.")
-    parser.add_argument("--config", type=Path, default=ROOT / "config" / "q1.yaml")
+    parser.add_argument("--config", type=Path, default=None)
     parser.add_argument("--feature-file", type=Path, default=FEATURE_FILE)
     return parser.parse_args()
 
@@ -270,7 +280,7 @@ def _feature_group_stats(frame: pd.DataFrame) -> pd.DataFrame:
 def _write_initial_findings(frame: pd.DataFrame, group_stats: pd.DataFrame, out_path: Path) -> None:
     """Write a paper-facing findings note with facts, interpretations and hypotheses separated."""
 
-    audit = pd.read_csv(ROOT / "results" / "audit" / "invoice_status_sign_summary.csv", encoding="utf-8-sig")
+    audit = pd.read_csv(RUNTIME_ROOT / "audit" / "invoice_status_sign_summary.csv", encoding="utf-8-sig")
     status_lines = []
     for direction, name in [("input", "进项"), ("output", "销项")]:
         subset = audit[audit["direction"].eq(direction)]
@@ -410,8 +420,8 @@ def run_eda(config: dict[str, Any], feature_path: Path) -> dict[str, Any]:
     feature_names = [column for column in frame.columns if column in config["features"]["names"]]
     _correlation_heatmap(FIGURE_DIR / "feature_correlation_heatmap.png", frame, feature_names)
     write_csv(pd.DataFrame(chart_rows), VALIDATION_DIR / "eda_chart_index.csv")
-    write_text("# 问题一EDA图表索引\n\n" + "\n".join([f"- `{row['file']}`：{row['title']}；数据源：{row['source']}。" for row in chart_rows]) + "\n", ROOT / "docs" / "q1_eda_chart_index.md")
-    _write_initial_findings(frame, group_stats, ROOT / "docs" / "q1_initial_findings.md")
+    write_text("# 问题一EDA图表索引\n\n" + "\n".join([f"- `{row['file']}`：{row['title']}；数据源：{row['source']}。" for row in chart_rows]) + "\n", OUTPUT_ROOT / "reports" / "q1_eda_chart_index.md")
+    _write_initial_findings(frame, group_stats, OUTPUT_ROOT / "reports" / "q1_initial_findings.md")
     logger.info("EDA_STATUS=PASS figures=%d rows=%d", len(chart_rows), len(frame))
     return {"status": "PASS", "figure_count": len(chart_rows), "default_counts": default_counts.to_dict(), "rating_counts": rating_counts.to_dict()}
 

@@ -1,0 +1,47 @@
+{
+  "scripts": {
+    "01_data_audit": {
+      "code_hash": "1f4c21a6f7e82a36d50ebe743d7c52cb3615ddf88906793ab6645ac0dc3ff987",
+      "config_hash": "e0e3705fc3104893d1a49439b6b0ea9aa924387e0134120caa9b38b6b573cca2",
+      "input_hashes": {
+        "attachment1": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600"
+      },
+      "output_hashes": {
+        "data/processed/_runtime/audit/amount_anomalies.csv": "731c39e95692d1d93b5bca5f50e8cd93457af2bde394005a9318f765979cb488",
+        "data/processed/_runtime/audit/data_quality_report.md": "5250ffb95ee38013d1d22953ac7654161e481ecac9bfbc7548035f7e38051df7",
+        "data/processed/_runtime/audit/date_range.csv": "613c18e3632de84432f979c9a6064a5e5efb6e12bbedc4e96bc9f641b925e2d0",
+        "data/processed/_runtime/audit/duplicate_check.csv": "5308f0b28aa6269e4ff9e0d008ae9fe149ded269a8f727b73864835bc3dceb33",
+        "data/processed/_runtime/audit/duplicate_key_issues.csv": "5308f0b28aa6269e4ff9e0d008ae9fe149ded269a8f727b73864835bc3dceb33",
+        "data/processed/_runtime/audit/enterprise_coverage.csv": "e344df11fc3bfb851ad758751db1d04ae2ad4695bfe2a7d5d6113588212cb396",
+        "data/processed/_runtime/audit/enterprise_record_counts.csv": "ad76ff43677d92af4e005a0efedc377d1290308a61efa45d70843d4ed778320d",
+        "data/processed/_runtime/audit/invoice_status_sign_summary.csv": "244bf0744fca6ca9d225d8829fa2a473cc2ab707e5bd0ec1e7389eb026c30116",
+        "data/processed/_runtime/audit/invoice_status_summary.csv": "244bf0744fca6ca9d225d8829fa2a473cc2ab707e5bd0ec1e7389eb026c30116",
+        "data/processed/_runtime/audit/missing_values.csv": "2f2e9f5dccc1887418a3ab310c7d07113bd136a3d9e0dff4982a2c277df5d314",
+        "data/processed/_runtime/audit/q1_data_quality.json": "27f25c5c260807bfb2016b715ba12f1ae8a3edaaaef86ad463cd52c19f657267",
+        "data/processed/_runtime/audit/table_profile.csv": "d542099aa5006381215000402493e66738316c6471e84d9f7df50fef8f777c90",
+        "data/processed/_runtime/audit/table_summary.csv": "d542099aa5006381215000402493e66738316c6471e84d9f7df50fef8f777c90"
+      },
+      "pandas": "3.0.2",
+      "python": "3.11.14"
+    },
+    "02_build_features": {
+      "code_hash": "fa7080c10e414c690f3d2e6b21ae9cf0bc397ec3c5a8dacfcd959f02c647b034",
+      "config_hash": "e0e3705fc3104893d1a49439b6b0ea9aa924387e0134120caa9b38b6b573cca2",
+      "input_hashes": {
+        "attachment1": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600"
+      },
+      "output_hashes": {
+        "data/processed/_runtime/audit/q1_feature_quality.json": "cc3707fdb72b44e3329548882498fd984a18f1a9db86d23da8113c9b41b0019f",
+        "data/processed/_runtime/features/enterprise_features_123.csv": "1d09406ee7d6e129e41770f2eb236a16298dabcf3a0f5a2d0f00c777419e10fc",
+        "data/processed/_runtime/features/enterprise_monthly_123.csv": "646a67de53db9f56fbcb36c2cfa4c06f71ec556b1fb66ccf7f679dc31eb54bbd",
+        "data/processed/_runtime/features/feature_quality_report.md": "5f7c88141a6b04cf97de1ab8523a4a4961617e4e41e3024a1af3db342e565ea6",
+        "data/processed/_runtime/intermediate/q1_clean_invoice_ledger.parquet": "388405b861da09d566a0ba8fd088e93e3dbeaada431df3a0299f42a45ae67ac2",
+        "data/processed/_runtime/intermediate/q1_enterprise_monthly.parquet": "dd13725fc3120a4113ee6cecfc6de6777ca094d64cac02a3280b0c462fada391",
+        "data/processed/q1_enterprise_features.csv": "1d09406ee7d6e129e41770f2eb236a16298dabcf3a0f5a2d0f00c777419e10fc",
+        "outputs/q1/reports/q1_feature_quality_report.md": "5f7c88141a6b04cf97de1ab8523a4a4961617e4e41e3024a1af3db342e565ea6"
+      },
+      "pandas": "3.0.2",
+      "python": "3.11.14"
+    }
+  }
+}

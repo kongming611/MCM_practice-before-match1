@@ -10,8 +10,9 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from q1_common import (
+from _internal.data_pipeline import (
     ROOT,
+    PROCESSED_ROOT,
     DataQualityError,
     assert_input_unchanged,
     check_finite,
@@ -70,7 +71,7 @@ BOUNDED_FEATURES = [
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build question-one enterprise features.")
-    parser.add_argument("--config", type=Path, default=ROOT / "config" / "q1.yaml")
+    parser.add_argument("--config", type=Path, default=None)
     return parser.parse_args()
 
 
@@ -564,7 +565,7 @@ def run_features(config: dict[str, Any]) -> dict[str, Any]:
         paths["reports"] / "q1_feature_quality_report.md",
         paths["intermediate"] / "q1_enterprise_monthly.parquet",
         paths["intermediate"] / "q1_clean_invoice_ledger.parquet",
-        ROOT / "results" / "enterprise_features_123.csv",
+        PROCESSED_ROOT / "q1_enterprise_features.csv",
     ]
     update_manifest(
         config,
@@ -575,7 +576,7 @@ def run_features(config: dict[str, Any]) -> dict[str, Any]:
     )
     write_csv(monthly, feature_dir / "enterprise_monthly_123.csv")
     write_csv(features, feature_dir / "enterprise_features_123.csv")
-    write_csv(features, ROOT / "results" / "enterprise_features_123.csv")
+    write_csv(features, PROCESSED_ROOT / "q1_enterprise_features.csv")
     monthly.to_parquet(intermediate_dir / "q1_enterprise_monthly.parquet", index=False)
     clean_ledger = pd.concat([input_ledger, output_ledger], ignore_index=True)
     clean_ledger = stable_sort(clean_ledger, ["enterprise_id", "direction", "invoice_date", "invoice_number"])

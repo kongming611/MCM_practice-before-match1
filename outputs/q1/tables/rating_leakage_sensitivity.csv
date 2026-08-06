@@ -1,0 +1,3 @@
+﻿experiment,model,scope,n_behavior_features,rating_used,pr_auc,brier,log_loss,roc_auc,calibration_error_5bin,balanced_accuracy,f1,threshold_0_5_precision,threshold_0_5_recall,top20_recall,top20_precision
+rating_leakage_sensitivity_only,elastic_net_logistic,enterprise_aggregated_oof,15,True,0.9271255049,0.05982347497,0.2395613784,0.9510030864,0.1136148651,0.8888888889,0.875,1,0.7777777778,0.8518518519,0.92
+rating_leakage_sensitivity_only,hist_gradient_boosting,enterprise_aggregated_oof,15,True,0.9542106565,0.03087497767,0.150701765,0.974537037,0.07001215977,0.9444444444,0.9411764706,1,0.8888888889,0.8888888889,0.96

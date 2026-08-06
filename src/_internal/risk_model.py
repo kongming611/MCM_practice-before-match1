@@ -49,7 +49,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, RobustScaler
 from sklearn.utils.validation import check_is_fitted
 
-from q1_common import (
+from _internal.data_pipeline import (
+    OUTPUT_ROOT,
+    PAPER_ROOT,
+    PROCESSED_ROOT,
+    RUNTIME_ROOT,
     ROOT,
     config_hash,
     load_config,
@@ -1249,7 +1253,7 @@ def write_reports(
     """Write the program-result-only handoff reports."""
 
     formal = metric_summary.loc[metric_summary["scope"].eq("enterprise_aggregated_oof")]
-    zero_summary_path = ROOT / "results" / "feature_validation" / "zero_amount_invoice_business_summary.csv"
+    zero_summary_path = RUNTIME_ROOT / "feature_validation" / "zero_amount_invoice_business_summary.csv"
     zero_summary = pd.read_csv(zero_summary_path, encoding="utf-8-sig") if zero_summary_path.exists() else pd.DataFrame()
     zero_valid = zero_summary.loc[
         zero_summary["stage"].eq("atomic_invoice")
@@ -1323,7 +1327,7 @@ def write_reports(
     report_lines = [
         "# 第三批问题一风险模型训练报告",
         "",
-        "本报告只使用results/features/enterprise_features_123.csv中已经通过阶段A验收的企业级特征；没有调用根目录历史模型脚本，也没有从原始Excel重新构造特征。",
+        "本报告只使用data/processed/q1_enterprise_features.csv中已经通过阶段A验收的企业级特征；没有调用历史模型脚本，也没有从原始Excel重新构造特征。",
         "",
         "## 1. 样本、标签和输入契约",
         "",
@@ -1335,7 +1339,7 @@ def write_reports(
         "",
         "- 共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。",
         f"- 本轮主模型实际使用：{', '.join([str(item) for item in frame.attrs.get('primary_features', [])]) or '见model_training_config_snapshot.yaml'}。",
-        f"- zero_amount_invoice_rate的精确/容差核验与排除理由见docs/q1_zero_amount_invoice_rate_decision.md；{zero_fact_text}",
+        f"- zero_amount_invoice_rate的精确/容差核验与排除理由见outputs/q1/reports/q1_zero_amount_invoice_rate_decision.md；{zero_fact_text}",
         "",
         "## 3. 交叉验证与折内预处理",
         "",
@@ -1377,7 +1381,7 @@ def write_reports(
         "",
         "- 样本只有123家企业且违约标签不均衡；外层重复折彼此重叠，不能当成50组独立样本。",
         "- 没有违约发生日期和明确观察期，可能存在时间信息限制；评级是人工先验且附件2缺失，因此主模型不使用评级。",
-        "- 主要输出见results/model_training；图表见figures/q1_model；输入特征哈希、配置哈希、代码版本和环境见model_training_manifest.json、environment.txt。",
+        "- 主要输出运行文件见data/processed/_runtime/model_training；正式表格见outputs/q1/tables，图表见outputs/q1/figures/model；输入特征哈希、配置哈希、代码版本和环境见运行目录中的manifest和environment文件。",
         "",
     ]
     write_text("\n".join(report_lines), output_report)
@@ -1393,7 +1397,7 @@ def write_reports(
         "",
         "## 2. 最终使用的特征集",
         "",
-        "共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。主模型实际列表写入model_training_config_snapshot.yaml；zero_amount_invoice_rate的业务核验见docs/q1_zero_amount_invoice_rate_decision.md。",
+        "共构造21个企业级派生特征，其中15个进入主模型，5个用于特征集敏感性分析，zero_amount_invoice_rate仅作审计。主模型实际列表写入运行目录的model_training_config_snapshot.yaml；zero_amount_invoice_rate的业务核验见outputs/q1/reports/q1_zero_amount_invoice_rate_decision.md。",
         "",
         "## 3. 企业级重复分层交叉验证设计",
         "",
@@ -1437,11 +1441,11 @@ def write_reports(
         "",
         "## 12. 论文图表路径",
         "",
-        "可直接引用的图表位于figures/q1_model/pr_curve_oof.png、roc_curve_oof.png、calibration_curve_oof.png、model_metric_comparison.png、logistic_coefficient_stability.png、oof_probability_distribution.png和risk_rank_by_default.png。",
+        "可直接引用的图表位于outputs/q1/figures/model/pr_curve_oof.png、roc_curve_oof.png、calibration_curve_oof.png、model_metric_comparison.png、logistic_coefficient_stability.png、oof_probability_distribution.png和risk_rank_by_default.png。",
         "",
         "## 13. 后续信贷优化读取字段",
         "",
-        f"后续信贷优化应读取results/model_training/oof_predictions_by_enterprise.csv中的{'logistic_oof_mean' if selected_model == LOGISTIC_NAME else 'tree_oof_mean'}对应字段，或读取selected_model_risk_score；credit_rating只作展示，不能重新进入行为主模型。",
+        f"后续信贷优化应读取data/processed/q1_risk_scores.csv中的{'logistic_oof_mean' if selected_model == LOGISTIC_NAME else 'tree_oof_mean'}对应字段，或读取selected_model_risk_score；credit_rating只作展示，不能重新进入行为主模型。",
         "",
     ]
     write_text("\n".join(paper_lines), paper_report)
