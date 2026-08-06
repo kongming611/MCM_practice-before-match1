@@ -1,5 +1,0 @@
-﻿metric,logistic_value,tree_value,difference_tree_minus_logistic,tree_advantage_definition,tree_advantage_point,difference_ci_low,difference_ci_high,tree_advantage_ci_low,tree_advantage_ci_high,ci_low,ci_high,bootstrap_probability_tree_better,bootstrap_replicates_requested,bootstrap_replicates_valid,bootstrap_skipped_single_class,direction,enterprise_sample_size
-pr_auc,0.6814369279,0.6902783413,0.008841413439,tree-logistic,0.009544727216,-0.1438530296,0.1564447369,-0.1438530296,0.1564447369,-0.1438530296,0.1564447369,0.552,2000,2000,0,higher_is_better,123
-brier,0.1090988317,0.1044719467,-0.004626885004,logistic-tree,0.004469906173,-0.01776710333,0.008016175844,-0.008016175844,0.01776710333,-0.008016175844,0.01776710333,0.7505,2000,2000,0,lower_is_better,123
-log_loss,0.3604834303,0.3463078462,-0.01417558409,logistic-tree,0.01380816681,-0.04678643175,0.01968414006,-0.01968414006,0.04678643175,-0.01968414006,0.04678643175,0.804,2000,2000,0,lower_is_better,123
-top20_recall,0.7037037037,0.6296296296,-0.07407407407,tree-logistic,-0.02903390158,-0.16,0.1052631579,-0.16,0.1052631579,-0.16,0.1052631579,0.218,2000,2000,0,higher_is_better,123

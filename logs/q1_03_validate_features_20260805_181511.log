@@ -1,3 +1,0 @@
-2026-08-05 18:15:11,401 INFO log_file=logs\q1_03_validate_features_20260805_181511.log
-2026-08-05 18:15:31,956 INFO feature_rows=123 feature_columns=33 month_count=41
-2026-08-05 18:15:32,532 INFO VALIDATION_STATUS=FAIL blocking_failures=1 warnings=0

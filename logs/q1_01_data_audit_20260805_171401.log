@@ -1,4 +1,0 @@
-2026-08-05 17:14:01,524 INFO log_file=logs\q1_01_data_audit_20260805_171401.log
-2026-08-05 17:14:01,549 INFO input=data/附件1：123家有信贷记录企业的相关数据.xlsx sha256=450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600
-2026-08-05 17:14:01,549 INFO status_aliases={"valid": ["有效", "有效发票"], "void": ["作废", "作废发票"]} exact_duplicate_policy=keep_first invalid_date_policy=error amount_tolerance_yuan=0.01
-2026-08-05 17:14:23,505 INFO AUDIT_STATUS=WARN enterprise=123 input_rows=210947 output_rows=162484 warnings=4 errors=0

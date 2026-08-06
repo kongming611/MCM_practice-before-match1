@@ -1,5 +1,0 @@
-﻿workbook,sheet_name,direction,status_raw,status_canonical,record_count,positive_amount_count,negative_amount_count,zero_amount_count,missing_amount_count
-data/附件1：123家有信贷记录企业的相关数据.xlsx,进项发票信息,input,作废发票,作废,7608,7587,21,0,0
-data/附件1：123家有信贷记录企业的相关数据.xlsx,进项发票信息,input,有效发票,有效,203339,201479,1860,0,0
-data/附件1：123家有信贷记录企业的相关数据.xlsx,销项发票信息,output,作废发票,作废,11206,9395,132,1679,0
-data/附件1：123家有信贷记录企业的相关数据.xlsx,销项发票信息,output,有效发票,有效,151278,142854,8424,0,0
