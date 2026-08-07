@@ -1,4 +1,4 @@
-"""问题二数据层统一入口。
+"""问题二数据与模型统一入口。
 
 运行方式：
     python src/q2.py --stage all
@@ -6,9 +6,10 @@
     python src/q2.py --stage features
     python src/q2.py --stage eda
     python src/q2.py --stage validate
+    python src/q2.py --stage model
 
-本入口只完成数据审计、问题一同口径特征构建、分布比较、OOD诊断和自动验收，
-不训练违约模型、评级模型或任何信贷优化模型。
+本入口先完成数据审计、问题一同口径特征构建、分布比较和OOD诊断，再运行锁定的风险、
+评级和Label Spreading交叉检查模型。
 """
 
 from __future__ import annotations
@@ -17,13 +18,14 @@ import argparse
 from pathlib import Path
 
 from _internal.q2_data import run_q2
+from _internal.q2_models import run_q2_models
 
 
 def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="运行问题二数据层流程")
+    parser = argparse.ArgumentParser(description="运行问题二数据与模型流程")
     parser.add_argument(
         "--stage",
-        choices=["all", "audit", "features", "eda", "validate"],
+        choices=["all", "audit", "features", "eda", "validate", "model"],
         default="all",
     )
     parser.add_argument("--config", type=Path, default=None)
@@ -33,6 +35,9 @@ def _parse_args() -> argparse.Namespace:
 def main() -> int:
     args = _parse_args()
     try:
+        if args.stage in {"all", "model"}:
+            run_q2(args.config, "all")
+            return run_q2_models(args.config)
         return run_q2(args.config, args.stage)
     except Exception as exc:
         print(f"q2.py FAILED: {exc}")

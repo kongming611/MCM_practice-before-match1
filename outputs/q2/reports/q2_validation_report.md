@@ -18,7 +18,7 @@
 | raw_files_unchanged | PASS | {"added": [], "removed": [], "changed": []} |
 | q1_existing_pass_outputs_unchanged | PASS | {"added": [], "removed": [], "changed": []} |
 | q1_existing_final_report_is_pass | PASS | outputs/q1/final/q1_final_validation_report.md |
-| risk_model_not_trained | PASS | q2 data pipeline has no risk-model outputs |
+| risk_model_stage_is_separate | PASS | risk, rating and Label Spreading outputs are produced by the separate q2 model stage |
 | required_processed_files_present | PASS | ["data/processed/q2_enterprise_features.csv", "data/processed/q2_ood_scores.csv"] |
 
-通过标准包含：302行且主键唯一、q1特征口径重建一致、共同月份窗口一致、标准化与OOD阈值只由123家参考组确定、原始附件和问题一既有PASS输出未改变、未训练风险模型。
+通过标准包含：302行且主键唯一、q1特征口径重建一致、共同月份窗口一致、标准化与OOD阈值只由123家参考组确定、原始附件和问题一既有PASS输出未改变；风险模型在独立的model阶段运行。

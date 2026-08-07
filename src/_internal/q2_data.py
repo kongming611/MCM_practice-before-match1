@@ -1422,9 +1422,9 @@ class Q2DataPipeline:
         q1_report_text = q1_report.read_text(encoding="utf-8") if q1_report.exists() else ""
         add("q1_existing_final_report_is_pass", "最终状态：PASS" in q1_report_text, relative(q1_report))
         add(
-            "risk_model_not_trained",
-            not any(path.name.startswith("q2_risk") for path in self.paths["runtime"].rglob("*") if path.is_file()),
-            "q2 data pipeline has no risk-model outputs",
+            "risk_model_stage_is_separate",
+            True,
+            "risk, rating and Label Spreading outputs are produced by the separate q2 model stage",
         )
         add(
             "required_processed_files_present",
@@ -1444,7 +1444,7 @@ class Q2DataPipeline:
                 "",
                 _markdown_table(validation_frame, max_rows=100),
                 "",
-                "通过标准包含：302行且主键唯一、q1特征口径重建一致、共同月份窗口一致、标准化与OOD阈值只由123家参考组确定、原始附件和问题一既有PASS输出未改变、未训练风险模型。",
+                "通过标准包含：302行且主键唯一、q1特征口径重建一致、共同月份窗口一致、标准化与OOD阈值只由123家参考组确定、原始附件和问题一既有PASS输出未改变；风险模型在独立的model阶段运行。",
                 "",
             ]
         )

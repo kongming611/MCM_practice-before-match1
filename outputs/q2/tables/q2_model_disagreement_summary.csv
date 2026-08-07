@@ -1,0 +1,3 @@
+﻿scope,risk_rank_spearman,top20_count,top20_overlap_count,top20_overlap_fraction_of_risk_top20,mean_abs_risk_difference,median_abs_risk_difference,max_abs_risk_difference,high_disagreement_count_threshold_0_20,top20_overlap_fraction_of_main_top20,ood_count,high_uncertainty_count,rating_probability_failed_rows
+123_enterprise_aggregated_oof,0.6623931073,25,20,0.8,0.1245917945,0.08549875587,0.4823936031,23,,,,
+302_target_deployment_diagnostic,0.5697318252,61,38,,0.1534947377,0.1071373667,0.696539402,76,0.6229508197,50,257,0

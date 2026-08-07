@@ -1,0 +1,16 @@
+﻿training_scope,feature,coefficient_standardized,intercept,nonzero,sign,converged,n_iter,max_iter_used,convergence_warning
+full_123_final_risk_pipeline,sales_scale_10k,-1.064066064,-1.855458281,True,negative,True,372,5000,False
+full_123_final_risk_pipeline,purchase_scale_10k,0,-1.855458281,False,zero,True,372,5000,False
+full_123_final_risk_pipeline,operating_net_inflow_proxy_10k,-0.133041702,-1.855458281,True,negative,True,372,5000,False
+full_123_final_risk_pipeline,sales_growth_trend,0,-1.855458281,False,zero,True,372,5000,False
+full_123_final_risk_pipeline,sales_monthly_cv,0.6823888164,-1.855458281,True,positive,True,372,5000,False
+full_123_final_risk_pipeline,invoice_activity_per_month,0,-1.855458281,False,zero,True,372,5000,False
+full_123_final_risk_pipeline,sales_return_rate,0,-1.855458281,False,zero,True,372,5000,False
+full_123_final_risk_pipeline,purchase_return_rate,0.001449805583,-1.855458281,True,positive,True,372,5000,False
+full_123_final_risk_pipeline,void_invoice_rate,0.1218788562,-1.855458281,True,positive,True,372,5000,False
+full_123_final_risk_pipeline,customer_count,0,-1.855458281,False,zero,True,372,5000,False
+full_123_final_risk_pipeline,supplier_count,0,-1.855458281,False,zero,True,372,5000,False
+full_123_final_risk_pipeline,customer_hhi,0.1773098411,-1.855458281,True,positive,True,372,5000,False
+full_123_final_risk_pipeline,supplier_hhi,-0.1944525174,-1.855458281,True,negative,True,372,5000,False
+full_123_final_risk_pipeline,purchase_sales_ratio,0.1135584799,-1.855458281,True,positive,True,372,5000,False
+full_123_final_risk_pipeline,active_month_ratio,0,-1.855458281,False,zero,True,372,5000,False

@@ -1,0 +1,151 @@
+{
+  "comparison_bootstrap": {
+    "comparison": "label_spreading_minus_elastic_net_logistic",
+    "enterprise_level_paired": true,
+    "replicates_requested": 1000
+  },
+  "counts": {
+    "reference_defaults": 27,
+    "reference_enterprises": 123,
+    "target_enterprises": 302
+  },
+  "cv": {
+    "n_repeats": 10,
+    "n_splits": 5,
+    "split_count": 50,
+    "stratification_target": "default_label"
+  },
+  "generated_at": "2026-08-07T12:05:53",
+  "input_hashes": {
+    "data/processed/q2_enterprise_features.csv": "2ce61505265b2e94cd5b67029f1f73b2aa738354782f47b7df28fd89e659d385",
+    "data/processed/q2_ood_scores.csv": "09a8159ecdeda6ddc463802bbc804aba7fe94355946f69fb39de0252f0057896",
+    "data/raw/附件1：123家有信贷记录企业的相关数据.xlsx": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600",
+    "data/raw/附件2：302家无信贷记录企业的相关数据.xlsx": "1399075d2b39a05da6d7722af16cb96ed322cf13b96dd780d5d42a7686bc634b",
+    "src/_internal/q1_config.yaml": "b55393679bc91f1c2e8f4ea0cd77b361d47917a15666850769657c0ba657f2ff",
+    "src/_internal/q2_config.yaml": "c9facb2dc492c08252818283a5c56952f703ad363ac49e0dbe2b9db83b99d103"
+  },
+  "label_spreading": {
+    "not_averaged_into_main_risk": true,
+    "parameters": {
+      "alpha": 0.2,
+      "kernel": "knn",
+      "max_iter": 100,
+      "n_neighbors": 10,
+      "tolerance": 0.001
+    },
+    "purpose": "cross_check_only",
+    "target_nodes_unlabeled": true,
+    "test_labels_hidden": true
+  },
+  "numpy": "2.5.1",
+  "ordered_logistic": {
+    "features": [
+      "sales_scale_10k",
+      "purchase_scale_10k",
+      "operating_net_inflow_proxy_10k",
+      "sales_growth_trend",
+      "sales_monthly_cv",
+      "invoice_activity_per_month",
+      "sales_return_rate",
+      "purchase_return_rate",
+      "void_invoice_rate",
+      "customer_count",
+      "supplier_count",
+      "customer_hhi",
+      "supplier_hhi",
+      "purchase_sales_ratio",
+      "active_month_ratio"
+    ],
+    "model_type": "proportional_odds_cumulative_logistic",
+    "parameters": {
+      "implementation": "scipy_proportional_odds_cumulative_logistic",
+      "l2_penalty": 0.1,
+      "max_iter": 2000,
+      "tolerance": 1e-08
+    },
+    "rating_order": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ]
+  },
+  "output_hashes": {
+    "data/processed/_runtime/q2/model/q2_final_ordered_rating_pipeline.pkl": "c0f00b365e58ecf549e3c90b6c075990f10fe7011a56353b4beb10206988b8d2",
+    "data/processed/_runtime/q2/model/q2_final_risk_pipeline.pkl": "2b08222667cb1e0a31d8a9090c60bdf70af811baf6b1d88684d6a761c5b44065",
+    "data/processed/_runtime/q2/model/q2_label_spreading_oof_all.csv": "114f56a89c30d0c12023c84182ffd4440c622283e61f4f1ce277061103e40587",
+    "data/processed/_runtime/q2/model/q2_label_spreading_target_fold_predictions.csv": "47834926ad7175bb73c4b6f7004540e43596be3c1c9f8f37ddbd588bddcac823",
+    "data/processed/_runtime/q2/model/q2_model_fit_summary.json": "0ab7b59619a6c65255c0dea8901fbc962daf0f41ba85c11a03fe69810ad992af",
+    "data/processed/_runtime/q2/model/q2_rating_oof_all.csv": "e6697b92525ec9080e21d5c32d017e5772c512c9252e602a8a07084cf4ee7e6a",
+    "data/processed/_runtime/q2/model/q2_risk_oof_all.csv": "318256ffe1e947668675d837d10e5c49a5367884b7f9f4b6897487dfe1134896",
+    "data/processed/_runtime/q2/model/q2_risk_target_fold_predictions.csv": "9a3576158e362d1f6db563f50b5dcbfa265eec8259b0a6aa55f1eecb4c781102",
+    "data/processed/q2_risk_rating_scores.csv": "9e82224ec9c9884c18991c1638675e6338ade29ea0fe812f358da146c4378219",
+    "outputs/q2/figures/model/q2_rating_confusion_matrix_oof.png": "7f0eb7e55b2ad60f798a0e4c5ce711afaf661f70056a3054b27c7b571afcc322",
+    "outputs/q2/figures/model/q2_rating_probability_heatmap_302.png": "c53d21a62f62726930520a47a3fc1c1746dedd1cd84a0b4002ee313cb00b753b",
+    "outputs/q2/figures/model/q2_risk_model_instability_interval.png": "8a8371f9d453d95c96a6625f8604104dfc0bba442966ab9741cfc7eaee32b624",
+    "outputs/q2/figures/model/q2_risk_probability_calibration_oof.png": "74565857276bde5a5adfee5551c3c075c9a4c14e98b3d537eee3045cab9d9b9b",
+    "outputs/q2/figures/model/q2_risk_ranking_disagreement.png": "ee11d7ff03a7f253af1f87a7648418791fdb519fb8d37e19ca902644d4b42791",
+    "outputs/q2/reports/q2_model_report_for_paper.md": "bd8d45f1670659f8da7c729108cb38d23aea3c7a7cf60d850e08fe562e6c2e2b",
+    "outputs/q2/reports/q2_risk_rating_model_report.md": "bd8d45f1670659f8da7c729108cb38d23aea3c7a7cf60d850e08fe562e6c2e2b",
+    "outputs/q2/tables/q2_final_ordered_logistic_parameters.csv": "a62decdf6f3a134f2cff9bb5d5481d79c0bb71f46cc814abd40d56cdc785a8f7",
+    "outputs/q2/tables/q2_final_risk_coefficients.csv": "fa5e07e27f42e041551094adde78578840f205be32fc5411d40cb41d660fb461",
+    "outputs/q2/tables/q2_label_spreading_cv_fold_metrics.csv": "08056ac2832bc88dc076d7d7443dd4bf08bb6973e292242d3b5008e4f494a199",
+    "outputs/q2/tables/q2_label_spreading_fold_audit.csv": "28e2e1fc36024195e498b04f221464289f1777c574bacac7d5cef23059317b16",
+    "outputs/q2/tables/q2_label_spreading_oof_enterprise.csv": "dd0035773afa7de71d11e885b69d15c8c44aa308ffbe0630936c0a526b6bb066",
+    "outputs/q2/tables/q2_model_comparison_bootstrap.csv": "567f967d6d0a349f6d0d159b09da58dd462ecd3acb7902731324ae015483d21d",
+    "outputs/q2/tables/q2_model_disagreement_123.csv": "48d95f949924c8e9cad1bb70a272e1619ca7efbf8533c731776967f425109798",
+    "outputs/q2/tables/q2_model_disagreement_summary.csv": "ae634929b5c15d6ae8e36830c12b2f29ffd8cf0afed614f1230179a259a025ca",
+    "outputs/q2/tables/q2_model_metrics.csv": "7755da440ed9b2ba49f0271b0ceabd258e2d0d8440b75565aa6a0a422e214134",
+    "outputs/q2/tables/q2_rating_confusion_matrix.csv": "7f33364b781b554dc1826115bc56954a5ba25f6637d4adbc85d921bc2bba4980",
+    "outputs/q2/tables/q2_rating_cv_fold_metrics.csv": "9352e964ca19156feaebbf63ddbdd48eb71dd1175b45d7c80c37f873ad4aa144",
+    "outputs/q2/tables/q2_rating_fit_diagnostics.csv": "c05c7626d3c55f42938b96d35de074d1248a34651a17e3a0727be9327ecf1bb8",
+    "outputs/q2/tables/q2_rating_metrics.csv": "fccee00e7d3d803851f71b9abf11a9347811c51064231475bc9b86ec48c5dc31",
+    "outputs/q2/tables/q2_rating_oof_enterprise.csv": "9eb05177e47d143fc45c8db69d4b429688fb6ef7bb8191be73e887c448355a92",
+    "outputs/q2/tables/q2_risk_cv_fold_metrics.csv": "02be96f49150535a5ee49f344cd252e0efe38dda44de2a6eb816754b2a734fe6",
+    "outputs/q2/tables/q2_risk_fit_diagnostics.csv": "0634ea391f799c8989f5cf28cfc879954c8fd8012bd1341069afd3a84ac1024b",
+    "outputs/q2/tables/q2_risk_oof_enterprise.csv": "b7b86647c8d3205f3bac170c22cc54065359fc17fcebf1c006c5085423797d7e"
+  },
+  "pandas": "3.0.5",
+  "python": "3.12.10",
+  "q1_config_sha256": "e0e3705fc3104893d1a49439b6b0ea9aa924387e0134120caa9b38b6b573cca2",
+  "q2_config_sha256": "4c8f1aa8fa197d94c373c405ea5491bced7666b89f848190e42ab8e67b8deb19",
+  "random_seed": 20260805,
+  "requirements_changed": false,
+  "risk_interval": {
+    "definition": "repeated_fold_model_instability_interval",
+    "external_confidence_interval": false,
+    "lower_quantile": 0.05,
+    "upper_quantile": 0.95
+  },
+  "risk_model": {
+    "features": [
+      "sales_scale_10k",
+      "purchase_scale_10k",
+      "operating_net_inflow_proxy_10k",
+      "sales_growth_trend",
+      "sales_monthly_cv",
+      "invoice_activity_per_month",
+      "sales_return_rate",
+      "purchase_return_rate",
+      "void_invoice_rate",
+      "customer_count",
+      "supplier_count",
+      "customer_hhi",
+      "supplier_hhi",
+      "purchase_sales_ratio",
+      "active_month_ratio"
+    ],
+    "final_fit_scope": "all_123_reference_enterprises",
+    "name": "elastic_net_logistic",
+    "q1_locked_parameters": {
+      "C": 0.2,
+      "l1_ratio": 0.8,
+      "max_iter": 5000,
+      "penalty": "elasticnet",
+      "solver": "saga"
+    }
+  },
+  "scikit_learn": "1.9.0",
+  "scipy": "1.18.0",
+  "target_accuracy_reported": false
+}

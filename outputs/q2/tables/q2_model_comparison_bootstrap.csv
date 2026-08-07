@@ -1,0 +1,10 @@
+﻿comparison,metric,elastic_net_logistic_value,label_spreading_value,difference_point,difference_ci_low,difference_ci_high,label_spreading_better_probability,direction,bootstrap_replicates_requested,bootstrap_replicates_valid,bootstrap_skipped_single_class,enterprise_sample_size
+label_spreading_minus_elastic_net_logistic,pr_auc,0.6814369279,0.5535603208,-0.1278766071,-0.2691638638,0.0255907879,0.06,higher_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,brier,0.1090988317,0.1326458819,0.02354705025,-0.002726289045,0.05074411304,0.047,lower_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,log_loss,0.3604834303,0.5531354903,0.1926520601,0.03359601829,0.3749975248,0.009,lower_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,roc_auc,0.8645833333,0.7781635802,-0.08641975309,-0.1748111916,-0.006483777044,0.014,higher_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,calibration_error_5bin,0.08490481566,0.08442665646,-0.0004781592075,-0.05898250113,0.08638570542,0.414,lower_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,balanced_accuracy,0.6828703704,0.7650462963,0.08217592593,0.005784406566,0.1666741674,0.982,higher_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,f1,0.5238095238,0.6530612245,0.1292517007,-0.01097758006,0.2863486092,0.96,higher_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,top20_recall,0.7037037037,0.6296296296,-0.07407407407,-0.2188368056,0.05006578947,0.075,higher_is_better,1000,1000,0,123
+label_spreading_minus_elastic_net_logistic,top20_precision,0.76,0.68,-0.08,-0.24,0.04,0.075,higher_is_better,1000,1000,0,123
