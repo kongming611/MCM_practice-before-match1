@@ -1,0 +1,16 @@
+﻿feature,reference_q_low,reference_q_high,reference_tail_interval,scale,threshold_source
+sales_scale_10k,5.8429932,187760.0892,"[0.01,0.99]",187754.2462,attachment1_123_only
+purchase_scale_10k,0.05996,30974.54967,"[0.01,0.99]",30974.48971,attachment1_123_only
+operating_net_inflow_proxy_10k,-2731.617055,59057.74485,"[0.01,0.99]",61789.3619,attachment1_123_only
+sales_growth_trend,-0.0810025545,0.1965877387,"[0.01,0.99]",0.2775902932,attachment1_123_only
+sales_monthly_cv,0.4431762335,4.202548347,"[0.01,0.99]",3.759372114,attachment1_123_only
+invoice_activity_per_month,0.536097561,723.8580488,"[0.01,0.99]",723.3219512,attachment1_123_only
+sales_return_rate,0,0.3910558121,"[0.01,0.99]",0.3910558121,attachment1_123_only
+purchase_return_rate,0,0.2036086543,"[0.01,0.99]",0.2036086543,attachment1_123_only
+void_invoice_rate,0.006686902866,0.3885759494,"[0.01,0.99]",0.3818890465,attachment1_123_only
+customer_count,2,3069.58,"[0.01,0.99]",3067.58,attachment1_123_only
+supplier_count,1,2371.28,"[0.01,0.99]",2370.28,attachment1_123_only
+customer_hhi,0.005317249141,0.9924253777,"[0.01,0.99]",0.9871081286,attachment1_123_only
+supplier_hhi,0.01918523387,1,"[0.01,0.99]",0.9808147661,attachment1_123_only
+purchase_sales_ratio,0.0004475535618,10.18612029,"[0.01,0.99]",10.18567274,attachment1_123_only
+active_month_ratio,0.243902439,0.9268292683,"[0.01,0.99]",0.6829268293,attachment1_123_only

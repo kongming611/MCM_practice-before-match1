@@ -1,0 +1,5 @@
+﻿dataset,sheet,direction,raw_rows,missing_amount_yuan,missing_tax_yuan,missing_total_yuan,arithmetic_error_rows,positive_total_rows,negative_total_rows,zero_total_rows,min_total_yuan,max_total_yuan,q01_total_yuan,q99_total_yuan,configured_lower_quantile,configured_upper_quantile
+training,进项发票信息,input,210947,0,0,0,2,209066,1881,0,-11100000,11699934,1,344930.54,0.01,0.99
+training,销项发票信息,output,162484,0,0,0,1,152249,8556,1679,-1169732.68,4615590,-100000,1157520,0.01,0.99
+target,进项发票信息,input,395175,0,0,0,2,391545,3630,0,-1022995,8868000,1,307950.568,0.01,0.99
+target,销项发票信息,output,330835,0,0,0,0,322798,5697,2340,-1101380,1167257,-10000,1000000,0.01,0.99

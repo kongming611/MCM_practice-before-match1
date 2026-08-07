@@ -1,0 +1,2 @@
+﻿target_enterprise_count,ood_enterprise_count,ood_enterprise_rate,target_with_missing_primary_count,max_abs_smd,mean_abs_smd,min_quantile_coverage,mean_quantile_coverage,ood_threshold_source
+302,50,0.1655629139,0,0.5946190867,0.1213908015,0.9503311258,0.9849889625,attachment1_123_only

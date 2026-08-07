@@ -1,0 +1,157 @@
+random_seed: 20260805
+
+q2:
+  reference_config: src/_internal/q1_config.yaml
+  training_attachment: data/raw/附件1：123家有信贷记录企业的相关数据.xlsx
+  target_attachment: data/raw/附件2：302家无信贷记录企业的相关数据.xlsx
+  target_enterprise_count: 302
+  training_enterprise_count: 123
+  feature_fit_source: attachment1_only
+  pooled_preprocessing_forbidden: true
+  target_label_columns_forbidden:
+    - credit_rating
+    - default_label
+
+input:
+  attachment1: data/raw/附件1：123家有信贷记录企业的相关数据.xlsx
+  attachment2: data/raw/附件2：302家无信贷记录企业的相关数据.xlsx
+  expected_sheets:
+    enterprise: 企业信息
+    input_invoice: 进项发票信息
+    output_invoice: 销项发票信息
+  required_columns:
+    enterprise:
+      - 企业代号
+      - 企业名称
+      - 信誉评级
+      - 是否违约
+    target_enterprise:
+      - 企业代号
+      - 企业名称
+    invoice:
+      - 企业代号
+      - 发票号码
+      - 开票日期
+      - 金额
+      - 税额
+      - 价税合计
+      - 发票状态
+
+processing:
+  amount_column: 价税合计
+  amount_unit_divisor: 10000
+  amount_tolerance_yuan: 0.01
+  zero_amount_tolerance_yuan: 0.01
+  status_aliases:
+    valid:
+      - 有效
+      - 有效发票
+    void:
+      - 作废
+      - 作废发票
+  unknown_status_policy: error
+  invalid_date_policy: error
+  exact_duplicate_policy: keep_first
+  analysis_start: null
+  analysis_end: null
+  boundary_month_policy: include
+  missing_counterparty_policy: exclude_from_concentration
+  denominator_policy: zero_denominator_to_na
+  outlier_quantiles:
+    lower: 0.01
+    upper: 0.99
+
+features:
+  names:
+    - business_scale_10k
+    - sales_scale_10k
+    - purchase_scale_10k
+    - net_sales_10k
+    - operating_net_inflow_proxy_10k
+    - sales_growth_trend
+    - sales_monthly_cv
+    - invoice_activity_per_month
+    - sales_return_rate
+    - purchase_return_rate
+    - void_invoice_rate
+    - zero_amount_invoice_rate
+    - customer_count
+    - supplier_count
+    - customer_hhi
+    - supplier_hhi
+    - max_customer_share
+    - max_supplier_share
+    - purchase_sales_ratio
+    - active_month_ratio
+    - longest_active_streak_ratio
+  bounded_01:
+    - void_invoice_rate
+    - zero_amount_invoice_rate
+    - customer_hhi
+    - supplier_hhi
+    - max_customer_share
+    - max_supplier_share
+    - active_month_ratio
+    - longest_active_streak_ratio
+  primary_model_features:
+    - sales_scale_10k
+    - purchase_scale_10k
+    - operating_net_inflow_proxy_10k
+    - sales_growth_trend
+    - sales_monthly_cv
+    - invoice_activity_per_month
+    - sales_return_rate
+    - purchase_return_rate
+    - void_invoice_rate
+    - customer_count
+    - supplier_count
+    - customer_hhi
+    - supplier_hhi
+    - purchase_sales_ratio
+    - active_month_ratio
+  sensitivity_model_features:
+    - business_scale_10k
+    - sales_scale_10k
+    - purchase_scale_10k
+    - net_sales_10k
+    - operating_net_inflow_proxy_10k
+    - sales_growth_trend
+    - sales_monthly_cv
+    - invoice_activity_per_month
+    - sales_return_rate
+    - purchase_return_rate
+    - void_invoice_rate
+    - customer_count
+    - supplier_count
+    - customer_hhi
+    - supplier_hhi
+    - max_customer_share
+    - max_supplier_share
+    - purchase_sales_ratio
+    - active_month_ratio
+    - longest_active_streak_ratio
+  excluded_from_model:
+    zero_amount_invoice_rate:
+      reason: constant_valid_zero_rate_and_void_only_raw_zero_records
+      role: audit_only
+
+eda:
+  standardization: reference_mean_std_only
+  distribution_tests:
+    - standardized_mean_difference
+    - kolmogorov_smirnov
+    - wasserstein
+  train_range: min_max
+  ood_quantile_lower: 0.01
+  ood_quantile_upper: 0.99
+  ood_flag_rule: any_primary_feature_outside_reference_quantile_interval
+  ood_threshold_source: attachment1_123_only
+  missing_values_are_separate_from_ood: true
+
+outputs:
+  runtime_dir: data/processed/_runtime/q2
+  reports_dir: outputs/q2/reports
+  figures_dir: outputs/q2/figures/eda
+  processed_feature_file: data/processed/q2_enterprise_features.csv
+  processed_ood_file: data/processed/q2_ood_scores.csv
+  manifest: outputs/q2/reports/q2_run_manifest.json

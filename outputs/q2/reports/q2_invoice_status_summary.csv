@@ -1,0 +1,9 @@
+﻿dataset,sheet,direction,status_raw,status_canonical,row_count
+training,进项发票信息,input,作废发票,作废,7608
+training,进项发票信息,input,有效发票,有效,203339
+training,销项发票信息,output,作废发票,作废,11206
+training,销项发票信息,output,有效发票,有效,151278
+target,进项发票信息,input,作废发票,作废,17236
+target,进项发票信息,input,有效发票,有效,377939
+target,销项发票信息,output,作废发票,作废,27555
+target,销项发票信息,output,有效发票,有效,303280

@@ -1,0 +1,5 @@
+﻿dataset,sheet,direction,invalid_date_count,min_date,max_date
+training,进项发票信息,input,0,2016-10-04,2020-02-21
+training,销项发票信息,output,0,2016-10-07,2020-02-21
+target,进项发票信息,input,0,2016-10-08,2020-02-21
+target,销项发票信息,output,0,2016-10-08,2020-02-21

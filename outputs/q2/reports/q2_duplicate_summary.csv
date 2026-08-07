@@ -1,0 +1,5 @@
+﻿dataset,sheet,direction,raw_exact_duplicate_rows,normalized_exact_duplicate_extra_rows,business_key_duplicate_extra_rows,conflicting_invoice_number_groups
+training,进项发票信息,input,803,803,803,15
+training,销项发票信息,output,4436,4436,4436,1
+target,进项发票信息,input,4681,4681,4681,37
+target,销项发票信息,output,1745,1745,1745,2048
