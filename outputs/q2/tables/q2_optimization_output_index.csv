@@ -1,0 +1,11 @@
+﻿role,path
+302-enterprise primary strategy,data/processed/q2_credit_strategy.csv
+302-enterprise strategy table copy,outputs/q2/tables/q2_credit_strategy.csv
+primary candidate economics at observed rates,outputs/q2/tables/q2_primary_candidate_economics.csv
+portfolio summary and one-factor sensitivity,outputs/q2/tables/q2_portfolio_summary.csv
+budget identity and budget-口径 diagnostics,outputs/q2/tables/q2_budget_identity.csv
+solver diagnostics,outputs/q2/tables/q2_solver_diagnostics.csv
+constraint validation,outputs/q2/tables/q2_strategy_validation.csv
+risk-allocation figure,outputs/q2/figures/credit/q2_credit_allocation_risk.png
+sensitivity figure,outputs/q2/figures/credit/q2_credit_sensitivity_net_return.png
+model report,outputs/q2/reports/q2_credit_optimization_report.md

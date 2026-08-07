@@ -146,6 +146,8 @@
 
 本轮实现和结果见 [问题二入口](../src/q2.py)、[风险评级模型报告](../outputs/q2/reports/q2_risk_rating_model_report.md)、[风险评级逐企业结果](../data/processed/q2_risk_rating_scores.csv) 和 [模型指标表](../outputs/q2/tables/q2_model_metrics.csv)。302家没有真实违约标签，程序不报告其预测准确率；风险值只解释为历史发票行为对应的相对违约倾向。
 
+1亿元概率评级组合优化已由独立适配层重新求解：完整策略见 [q2_credit_strategy.csv](../data/processed/q2_credit_strategy.csv)，组合、预算恒等式、敏感性和求解器诊断见 [q2_credit_optimization_report.md](../outputs/q2/reports/q2_credit_optimization_report.md) 及 [q2_portfolio_summary.csv](../outputs/q2/tables/q2_portfolio_summary.csv)。主场景采用严格名义额度等式，若等式预算不可行则保留不可行状态，不静默改为上限；客户流失率仍只表示附件3客户行为关系，不解释为违约率。
+
 ### 问题三
 
 方案A：行业情景压力测试 + 区间鲁棒MILP

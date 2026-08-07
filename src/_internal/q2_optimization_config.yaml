@@ -1,0 +1,58 @@
+random_seed: 20260805
+
+# This file is deliberately separate from q1_config.yaml and q2_config.yaml.
+# It registers the question-two probability-to-credit adaptation policy without
+# changing either question-one's deterministic-rating implementation or the
+# already accepted question-two risk/rating model configuration.
+inputs:
+  risk_rating_scores: data/processed/q2_risk_rating_scores.csv
+  q2_model_config: src/_internal/q2_config.yaml
+  q1_final_manifest: outputs/q1/final/q1_final_manifest.json
+  q1_final_validation_report: outputs/q1/final/q1_final_validation_report.md
+  q1_accepted_churn: outputs/q1/tables/churn_curve_fitted.csv
+
+portfolio:
+  budget_10k: 10000.0
+  min_loan_10k: 10.0
+  max_loan_10k: 100.0
+  rate_source: q1_accepted_attachment3_observed_rate_points
+  amount_unit: 10000_CNY
+
+primary:
+  risk_variant: mean
+  lgd: 0.50
+  funding_cost_rate: 0.03
+  budget_definition: nominal_equality
+  d_probability_threshold: 0.80
+  d_rule: pD_ge_threshold_reject_and_no_D_churn_curve
+  uncertainty:
+    cap_10k: 50.0
+    ood_novelty_threshold: 1.0
+    interval_width_threshold: 0.20
+    use_q2_ood_flag: true
+    risk_disagreement_threshold: 0.20
+    rating_entropy_threshold: 0.75
+    rule: uncertainty_flag_caps_max_loan; D_rule_rejects
+
+sensitivity:
+  risk_variants: [mean, p90]
+  lgd_values: [0.30, 0.50, 0.70]
+  funding_cost_rates: [0.02, 0.03, 0.04]
+  d_probability_thresholds: [0.70, 0.80, 0.90]
+  uncertainty_caps_10k: [30.0, 50.0, 70.0]
+  ood_novelty_thresholds: [0.5, 1.0, 1.5]
+  interval_width_thresholds: [0.15, 0.20, 0.25]
+  budget_definitions: [nominal_equality, nominal_cap, expected_disbursement_cap]
+
+solver:
+  name: scipy_milp_highs
+  time_limit_seconds: 120
+  mip_rel_gap: 0.000001
+  feasibility_tolerance: 0.000001
+
+outputs:
+  strategy_file: data/processed/q2_credit_strategy.csv
+  tables_dir: outputs/q2/tables
+  figures_dir: outputs/q2/figures/credit
+  report: outputs/q2/reports/q2_credit_optimization_report.md
+  manifest: outputs/q2/reports/q2_credit_optimization_manifest.json
