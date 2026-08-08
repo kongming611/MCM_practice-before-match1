@@ -969,7 +969,7 @@ def _write_figures(strategy: pd.DataFrame, summaries: pd.DataFrame, figures_dir:
     plt.legend()
     plt.tight_layout()
     allocation_path = figures_dir / "q2_credit_allocation_risk.png"
-    plt.savefig(allocation_path, dpi=180)
+    plt.savefig(allocation_path, dpi=300)
     plt.close()
     paths.append(allocation_path)
 
@@ -1024,7 +1024,7 @@ def _write_figures(strategy: pd.DataFrame, summaries: pd.DataFrame, figures_dir:
     fig.suptitle("问题二单因素敏感性：预期净收益")
     fig.tight_layout()
     sensitivity_path = figures_dir / "q2_credit_sensitivity_net_return.png"
-    fig.savefig(sensitivity_path, dpi=180)
+    fig.savefig(sensitivity_path, dpi=300)
     plt.close(fig)
     paths.append(sensitivity_path)
     return paths

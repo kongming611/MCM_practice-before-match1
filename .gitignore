@@ -2,6 +2,10 @@
 # Python bytecode
 __pycache__/
 *.py[cod]
+/.venv-*/
+/.conda-*/
+/.matplotlib/
+/.tmp_*/
 
 # Runtime logs and temporary pipeline state
 logs/

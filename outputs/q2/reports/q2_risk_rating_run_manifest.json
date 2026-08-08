@@ -15,14 +15,14 @@
     "split_count": 50,
     "stratification_target": "default_label"
   },
-  "generated_at": "2026-08-07T12:05:53",
+  "generated_at": "2026-08-08T13:41:21",
   "input_hashes": {
     "data/processed/q2_enterprise_features.csv": "2ce61505265b2e94cd5b67029f1f73b2aa738354782f47b7df28fd89e659d385",
     "data/processed/q2_ood_scores.csv": "09a8159ecdeda6ddc463802bbc804aba7fe94355946f69fb39de0252f0057896",
     "data/raw/附件1：123家有信贷记录企业的相关数据.xlsx": "450df5f7184aa43b3b1cddaa4387cceb91d4881a666e667b7c84c480a8b2b600",
     "data/raw/附件2：302家无信贷记录企业的相关数据.xlsx": "1399075d2b39a05da6d7722af16cb96ed322cf13b96dd780d5d42a7686bc634b",
-    "src/_internal/q1_config.yaml": "b55393679bc91f1c2e8f4ea0cd77b361d47917a15666850769657c0ba657f2ff",
-    "src/_internal/q2_config.yaml": "c9facb2dc492c08252818283a5c56952f703ad363ac49e0dbe2b9db83b99d103"
+    "src/_internal/q1_config.yaml": "018ad0b3b5fce991b276e7a846e6827f6e17ddc8767a1269c6d231fd360b4c8b",
+    "src/_internal/q2_config.yaml": "550a7025cb6ffcbd4ca511098e127225fdd3aa6d464c40d579d1391c4bba07ae"
   },
   "label_spreading": {
     "not_averaged_into_main_risk": true,
@@ -87,6 +87,8 @@
     "outputs/q2/figures/model/q2_risk_ranking_disagreement.png": "ee11d7ff03a7f253af1f87a7648418791fdb519fb8d37e19ca902644d4b42791",
     "outputs/q2/reports/q2_model_report_for_paper.md": "bd8d45f1670659f8da7c729108cb38d23aea3c7a7cf60d850e08fe562e6c2e2b",
     "outputs/q2/reports/q2_risk_rating_model_report.md": "bd8d45f1670659f8da7c729108cb38d23aea3c7a7cf60d850e08fe562e6c2e2b",
+    "outputs/q2/tables/q2_budget_identity.csv": "dc09e48e7433a2aa4a995168568f3f04841310ee66cfa7dc39789a478afa46ed",
+    "outputs/q2/tables/q2_credit_strategy.csv": "e3c122d73e4f2e2e121a4be615c93a77e327c02a50f7f364f48f5ce6b97cbdd3",
     "outputs/q2/tables/q2_final_ordered_logistic_parameters.csv": "a62decdf6f3a134f2cff9bb5d5481d79c0bb71f46cc814abd40d56cdc785a8f7",
     "outputs/q2/tables/q2_final_risk_coefficients.csv": "fa5e07e27f42e041551094adde78578840f205be32fc5411d40cb41d660fb461",
     "outputs/q2/tables/q2_label_spreading_cv_fold_metrics.csv": "08056ac2832bc88dc076d7d7443dd4bf08bb6973e292242d3b5008e4f494a199",
@@ -96,6 +98,10 @@
     "outputs/q2/tables/q2_model_disagreement_123.csv": "48d95f949924c8e9cad1bb70a272e1619ca7efbf8533c731776967f425109798",
     "outputs/q2/tables/q2_model_disagreement_summary.csv": "ae634929b5c15d6ae8e36830c12b2f29ffd8cf0afed614f1230179a259a025ca",
     "outputs/q2/tables/q2_model_metrics.csv": "7755da440ed9b2ba49f0271b0ceabd258e2d0d8440b75565aa6a0a422e214134",
+    "outputs/q2/tables/q2_optimization_output_index.csv": "2f44d4b40dd50882125a5f4c3c0b66116418af6f25109d6a81b7792fb276a9d5",
+    "outputs/q2/tables/q2_optimization_sensitivity.csv": "76f51fd85f198093532be0827c3e7fa0fc07507ff625c729e5d4b0e73f719a1b",
+    "outputs/q2/tables/q2_portfolio_summary.csv": "76f51fd85f198093532be0827c3e7fa0fc07507ff625c729e5d4b0e73f719a1b",
+    "outputs/q2/tables/q2_primary_candidate_economics.csv": "c2ffcf67e60b1aa2b7d0341d5f8cb06fadf6c34c7fafde18587ad3ccb3ba916b",
     "outputs/q2/tables/q2_rating_confusion_matrix.csv": "7f33364b781b554dc1826115bc56954a5ba25f6637d4adbc85d921bc2bba4980",
     "outputs/q2/tables/q2_rating_cv_fold_metrics.csv": "9352e964ca19156feaebbf63ddbdd48eb71dd1175b45d7c80c37f873ad4aa144",
     "outputs/q2/tables/q2_rating_fit_diagnostics.csv": "c05c7626d3c55f42938b96d35de074d1248a34651a17e3a0727be9327ecf1bb8",
@@ -103,10 +109,12 @@
     "outputs/q2/tables/q2_rating_oof_enterprise.csv": "9eb05177e47d143fc45c8db69d4b429688fb6ef7bb8191be73e887c448355a92",
     "outputs/q2/tables/q2_risk_cv_fold_metrics.csv": "02be96f49150535a5ee49f344cd252e0efe38dda44de2a6eb816754b2a734fe6",
     "outputs/q2/tables/q2_risk_fit_diagnostics.csv": "0634ea391f799c8989f5cf28cfc879954c8fd8012bd1341069afd3a84ac1024b",
-    "outputs/q2/tables/q2_risk_oof_enterprise.csv": "b7b86647c8d3205f3bac170c22cc54065359fc17fcebf1c006c5085423797d7e"
+    "outputs/q2/tables/q2_risk_oof_enterprise.csv": "b7b86647c8d3205f3bac170c22cc54065359fc17fcebf1c006c5085423797d7e",
+    "outputs/q2/tables/q2_solver_diagnostics.csv": "6d0b23aff6b6a65274959946cb92c67d7e011ee1a610fc75f7550b63e66849be",
+    "outputs/q2/tables/q2_strategy_validation.csv": "8523fbbd586c17ac82865bfc3e2c042c83dedb10e26c592a3b8084655ff39334"
   },
   "pandas": "3.0.5",
-  "python": "3.12.10",
+  "python": "3.12.13",
   "q1_config_sha256": "e0e3705fc3104893d1a49439b6b0ea9aa924387e0134120caa9b38b6b573cca2",
   "q2_config_sha256": "4c8f1aa8fa197d94c373c405ea5491bced7666b89f848190e42ab8e67b8deb19",
   "random_seed": 20260805,

@@ -9,8 +9,8 @@
 | item | value |
 | --- | --- |
 | q1 churn source | outputs/q1/tables/churn_curve_fitted.csv |
-| q1 churn SHA256 | 6e0f767efd6eee863e0ff70b66af7f3851ea1ace854c42feedc842981ba74313 |
-| q1 churn byte hash matches manifest | False |
+| q1 churn SHA256 | fd39a7cafff1420586fcbc0cf55ca58f1b4b890aad5b73354f4bb2ab0296d415 |
+| q1 churn byte hash matches manifest | True |
 | q1 churn semantic match final workbook | True |
 | q1 final validation | PASS |
 | curve method | isotonic_regression_increasing |
@@ -19,7 +19,7 @@
 | q2 threshold config | src/_internal/q2_config.yaml |
 | OOD reference source | attachment1_123_only |
 | OOD reference quantiles | 0.01 / 0.99 |
-| q1 credit_strategy code hash | ad7b7a85e73cb84ad6a1ef74cb29ed59240c7c44508b2ea547f371188da44474 |
+| q1 credit_strategy code hash | 3b91411cd8304bd8a786584965337773c087e7f8bdaf3d8c3388cbae03143e20 |
 
 ## 2. 概率评级经济学与目标
 
@@ -78,7 +78,7 @@
 | variable_count | 16820 |
 | integer_variable_count | 8410 |
 | constraint_count | 17111 |
-| solve_time_seconds | 0.354972 |
+| solve_time_seconds | 0.455642 |
 | capacity_max_10k | 16700 |
 | budget_projection_adjustment_10k | 0 |
 

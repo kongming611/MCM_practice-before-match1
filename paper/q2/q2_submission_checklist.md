@@ -1,75 +1,137 @@
-# 问题二论文手交付检查清单
+# 问题二提交与技术核对表
 
-本清单以当前分支 `outputs/q2`、`data/processed/q2_*`、运行清单和验收表为准；不使用未在当前分支重建的历史结果。
+本表区分“程序已验证”和“仍需团队人工复核”。自动检查通过不等于另一位建模同学已签字；未实际完成的人工项不得预先勾选。
 
-## 1. 数据和特征
+## 1. 自动复现状态
 
-- [x] 参考组123家、目标组302家；目标表不含评级和违约标签。
-- [x] 共同月份窗口为2016-10至2020-02，共41个月；金额单位从元除以10000转换为万元。
-- [x] 共构造21项特征，正式风险/评级模型使用同口径15项共同发票特征。
-- [x] `same_q1_processing_and_feature_contract=PASS`，问题一参考特征重建验收为`all_feature_values_equal=true`。
-- [x] 标准化和OOD阈值只由123家参考组确定；未使用302家目标分布拟合预处理器。
-- [x] 已交付123/302分布差异、SMD、训练支持覆盖率和50家OOD企业结果。
-- [x] 原始数据审计`WARN`已在假设与局限中披露；错误数为0，警告不被写成“数据完全无异常”。
+| 项目 | 状态 | 证据 |
+|---|---|---|
+| Python版本 | 已验证 Python 3.12.13 | Q2三个manifest的runtime字段 |
+| 直接依赖 | 已按 `requirements.txt` 精确安装 | 正式重跑环境 |
+| 完整运行 | 已执行 `python src/q2.py --stage all` | 控制台四阶段PASS/optimal输出 |
+| 数据层 | `PASS`，审计 `WARN` 已披露 | `outputs/q2/reports/q2_validation_report.md` |
+| 模型层 | `PASS` | `outputs/q2/reports/q2_model_report_for_paper.md` |
+| 优化层 | `optimal / PASS` | `outputs/q2/reports/q2_credit_optimization_report.md` |
+| 最终材料层 | 以最近一次 `--stage deliver` 报告为准 | `outputs/q2/final/q2_delivery_validation_report.md` |
 
-证据：`outputs/q2/reports/q2_validation_report.md`、`data/processed/_runtime/q2/validation/q2_acceptance_checks.csv`、`outputs/q2/reports/q2_feature_distribution_comparison.csv`、`outputs/q2/reports/q2_ood_scores.csv`。
+## 2. 根README交付要求
 
-## 2. 风险、评级和交叉检查模型
+### V1问题分析
 
-- [x] 风险主模型为问题一锁定的弹性网Logistic，未把评级或目标标签加入风险输入。
-- [x] 采用5折×10次企业级重复分层OOF；报告PR-AUC、Brier、LogLoss、ROC-AUC、校准误差和Top20指标。
-- [x] 302家风险值仅解释为历史发票行为的相对违约倾向；未报告302家外部准确率或真实PD。
-- [x] 有序评级概率模型明确使用A<B<C<D和四级概率 \(\pi_A,\pi_B,\pi_C,\pi_D\)。
-- [x] 302家评级概率非负、逐行和为1；概率核验失败行数为0，阈值严格有序。
-- [x] Label Spreading固定遮蔽测试标签，只作排序分歧、支持范围和不确定性诊断，未替换或平均主风险。
-- [x] 已报告123家OOF和302家部署的Label Spreading交叉检查及分歧数量。
-- [x] 已明确区分历史违约倾向、评级概率、客户流失率、贷款接受概率和真实违约概率。
+- [x] 明确问题二要求量化302家风险并给出1亿元策略。
+- [x] 列出附件1/2/3的样本、字段和作用。
+- [x] 列出输入、输出、额度/利率/预算/D规则约束。
+- [x] 说明与问题一可复用和不可照搬的内容。
+- [x] 比较监督迁移与Label Spreading两条候选路线。
+- [x] 用真实代理验证指标说明最终选择。
+- [x] 给出完整Mermaid流程图。
+- [x] 披露无目标标签、分布迁移、情景参数和数据警告。
 
-证据：`outputs/q2/reports/q2_model_report_for_paper.md`、`outputs/q2/reports/q2_risk_rating_run_manifest.json`、`outputs/q2/tables/q2_model_metrics.csv`、`outputs/q2/tables/q2_rating_metrics.csv`、`outputs/q2/tables/q2_model_disagreement_summary.csv`、`outputs/q2/tables/q2_label_spreading_oof_enterprise.csv`、`data/processed/q2_risk_rating_scores.csv`。
+证据：`q2_v1_problem_analysis.md`。
 
-## 3. 流失率、接受率和MILP
+### V2数据处理与模型
 
-- [x] 使用当前q1最终交付中的附件3 A/B/C递增保序流失曲线；每个评级29个观测利率点，D级不拟合、不外推。
-- [x] 接受概率按 \(A_i(r)=\sum_{g=A,B,C}\pi_{ig}[1-L_g(r)]\) 计算，D级概率质量没有重新归一化到A/B/C。
-- [x] 主场景参数已登记：LGD=0.50、资金成本率=0.03、D概率阈值=0.80、不确定性上限50万元、名义预算等式10000万元。
-- [x] 主场景求解状态为`optimal`，优化验收为`PASS`，无fallback。
-- [x] 名义授信总额为10000万元=1亿元，预算差额为0；不得把预期实际发放额2122.868113万元写成1亿元。
-- [x] 利息、信用损失、资金成本和净收益分解恒等式通过，目标函数重算差额为0。
-- [x] D概率规则拒贷12家，额度上限标记246家，获贷164家；主场景所有选定利率均为附件3实际观测点。
-- [x] 24个主/敏感性情景均为`optimal`且`validation_status=PASS`；预算口径没有混合解释。
+- [x] 说明原始字段、单位和用途。
+- [x] 说明缺失、异常、重复、作废、负数和零金额发票处理。
+- [x] 给出21项特征、经济含义、公式、单位和模型角色。
+- [x] 给出模型假设和完整符号表。
+- [x] 给出弹性网、有序Logistic、Label Spreading、保序流失率、接受概率和MILP公式。
+- [x] 给出目标函数、约束、参数来源、求解器和算法流程。
+- [x] 报告当前阶段真实运行结果。
+- [x] 说明为何采用监督迁移主方案。
 
-证据：`outputs/q2/reports/q2_credit_optimization_report.md`、`outputs/q2/reports/q2_credit_optimization_manifest.json`、`outputs/q2/tables/q2_primary_candidate_economics.csv`、`outputs/q2/tables/q2_portfolio_summary.csv`、`outputs/q2/tables/q2_optimization_sensitivity.csv`、`outputs/q2/tables/q2_budget_identity.csv`、`outputs/q2/tables/q2_solver_diagnostics.csv`、`outputs/q2/tables/q2_strategy_validation.csv`。
+证据：`q2_v2_data_and_model_report.md`、`q2_model_spec.md`。
 
-## 4. 论文正文、附录和图表
+### V3结果与检验
 
-- [x] 正文只保留主场景汇总、敏感性汇总和E217/E126/E127/E154/E400代表性企业。
-- [x] 302家完整策略作为附录A引用：`outputs/q2/tables/q2_credit_strategy.csv`；工作流副本为`data/processed/q2_credit_strategy.csv`。
-- [x] 302家逐企业概率、风险、OOD和不确定性清单引用：`data/processed/q2_risk_rating_scores.csv`。
-- [x] 四份论文手交付文件已规划为：
-  - `paper/q2/q2_model_results_for_paper.md`
-  - `paper/q2/q2_final_results_for_paper.md`
-  - `paper/q2/q2_assumptions_and_limitations.md`
-  - `paper/q2/q2_submission_checklist.md`
-- [x] 已列出EDA、模型和信贷图表路径；正文图表只引用当前`outputs/q2/figures`文件。
-- [x] 已说明模型报告和策略表的正式来源，不引用`project_plan.md`中的历史指标。
+- [x] 完整结果表以CSV交付，不只发截图。
+- [x] 302家风险、概率、排序、分类和不确定性齐全。
+- [x] 302家贷/不贷、额度、利率和原因齐全。
+- [x] 11张高清PNG存在且非空。
+- [x] 每张图均映射到源CSV/特征表。
+- [x] 每张图有标题、横纵坐标、单位和含义。
+- [x] 给出直接回答题目的策略结论。
+- [x] 给出概率误差、类别不平衡和评级误差分析。
+- [x] 给出预算、概率、D规则、额度、利率和收益恒等式合理性检查。
+- [x] 给出24个单因素敏感性情景和稳健性边界。
+- [x] 给出局限、改进和摘要关键数字。
 
-图表索引：
+证据：`q2_v3_results_and_validation_report.md`、`outputs/q2/tables/`、`outputs/q2/figures/`。
 
-- [x] `outputs/q2/figures/eda/standardized_mean_difference.png`
-- [x] `outputs/q2/figures/eda/training_quantile_coverage.png`
-- [x] `outputs/q2/figures/eda/ood_novelty_score_distribution.png`
-- [x] `outputs/q2/figures/eda/standardized_feature_distributions.png`
-- [x] `outputs/q2/figures/model/q2_risk_probability_calibration_oof.png`
-- [x] `outputs/q2/figures/model/q2_risk_ranking_disagreement.png`
-- [x] `outputs/q2/figures/model/q2_risk_model_instability_interval.png`
-- [x] `outputs/q2/figures/model/q2_rating_confusion_matrix_oof.png`
-- [x] `outputs/q2/figures/model/q2_rating_probability_heatmap_302.png`
-- [x] `outputs/q2/figures/credit/q2_credit_allocation_risk.png`
-- [x] `outputs/q2/figures/credit/q2_credit_sensitivity_net_return.png`
+### 最终论文材料包
 
-## 5. 交付前必须保留的复核备注
+- [x] 模型选择说明和数据处理段落骨架。
+- [x] 所有核心公式为可编辑LaTeX。
+- [x] 符号说明表和模型求解步骤。
+- [x] 最终结果表、建议图注和分析文字。
+- [x] 模型检验、优缺点和改进方向。
+- [x] 真实使用的题目、数据、原论文和官方软件来源。
+- [x] 所有关键数字对应结果文件及代码位置。
+- [x] 复现命令、环境、随机种子和最终哈希索引。
 
-- [x] q2数据层验收报告为`PASS`，q1既有最终验收报告为`PASS`，原始附件和q1保护输出未被本轮q2数据流程改写。
-- [x] q2优化manifest记录的q1流失曲线源文件与旧q1 manifest字节哈希匹配为`False`，但与q1最终交付工作簿语义匹配为`True`；交付文档已如实保留该差异，不写成“字节哈希完全一致”。
-- [x] 所有预期损失、预期发放、预期净收益、客户流失率和贷款接受概率都标注为模型/参数情景结果。
-- [x] 未将任何未重建的第二问历史数字、302家真实准确率、真实评级分布或真实违约概率写入论文手材料。
+证据：`q2_final_paper_materials.md`、本目录 `README.md`、`outputs/q2/final/`。
+
+## 3. 程序技术核对
+
+- [x] 302家特征、风险和策略表均为302行且企业代号唯一。
+- [x] 风险模型只使用15项共同发票特征，未使用信誉评级。
+- [x] 5折×10次按企业切分，每家附件1企业有10次OOF测试预测。
+- [x] 1000次bootstrap按123家企业配对抽样，不把50个折当独立样本。
+- [x] 302家四级评级概率非负且逐行和为1。
+- [x] Label Spreading测试标签固定遮蔽，只作交叉检查。
+- [x] OOD阈值只由附件1参考分布拟合。
+- [x] 主场景优化风险为 `main_risk_score/risk_mean`；高不确定性只触发额度上限，p90只作敏感性。
+- [x] 接受概率只混合A/B/C流失率，D概率质量未重新归一化。
+- [x] D概率规则拒贷12家且额度全为0。
+- [x] 获贷额度全部在10～100万元且不确定性企业不超过50万元。
+- [x] 所选利率均来自附件3实际点并在4%～15%。
+- [x] 主场景名义额度严格为10000万元，预算差额0。
+- [x] 利息、信用损失、资金成本和净收益分解差额0。
+- [x] 24个情景全部 `optimal/PASS`，无fallback。
+- [x] 当前q1流失曲线源文件与q1最终manifest字节哈希匹配为`True`，语义匹配也为`True`。
+
+## 4. 论文手逐项核对
+
+下列项目必须由论文手在整篇论文中人工确认：
+
+- [ ] 公式中的主场景风险写成 `risk_mean/main_risk_score`，没有把高不确定性自动写成p90。
+- [ ] “风险值”“评级概率”“客户流失率”“接受概率”“真实违约概率”没有混用。
+- [ ] 10000万元写成名义授信额，2122.868113万元写成情景预期实际发放额。
+- [ ] 103.824198万元写成给定参数下的情景预期净收益，不写成已实现利润。
+- [ ] 代理验证指标明确属于附件1的123家，不冒充302家外部验证。
+- [ ] 50家OOD、257家模型阶段高不确定性、246家优化额度上限三个计数没有混用。
+- [ ] 正文表格与附录CSV的企业代号、额度、利率和单位一致。
+- [ ] 图题、坐标、单位和正文解释与 `q2_v3_results_and_validation_report.md` 一致。
+- [ ] 问题一与问题二对发票、风险和流失率的定义前后一致。
+- [ ] 参考文献编号已并入全篇统一编号，未新增未使用或虚构来源。
+
+## 5. 另一位建模同学复核与签字
+
+以下签字项当前均为待完成：
+
+- [ ] 公式与实际代码一致。
+- [ ] 参数与YAML配置一致。
+- [ ] 表格数字与正式CSV一致。
+- [ ] 企业编号、评级概率、额度和利率没有错位。
+- [ ] 金额、利率和概率单位统一。
+- [ ] 11张图片与正文描述一致，且源数据可找到。
+- [ ] Q1→Q2模型逻辑一致。
+- [ ] 在另一台/独立环境按README完整重跑成功。
+
+复核人：____________________
+
+复核时间：__________________
+
+复核结论（通过/退回修改）：__________________
+
+发现的问题及修订提交：__________________________________________________
+
+## 6. 负责人接收确认
+
+负责人只在人工复核完成后确认材料完整性，不代替建模复核。
+
+负责人：____________________
+
+接收时间：__________________
+
+接收结论：__________________

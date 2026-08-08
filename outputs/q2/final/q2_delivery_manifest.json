@@ -1,0 +1,33 @@
+{
+  "check_count": 19,
+  "fail_count": 0,
+  "files": {
+    "outputs/q2/final/q2_delivery_checks.csv": "e6964668992c7193b9e1669011c6dc013c599bed7c78d1203c5a30e636fb2083",
+    "outputs/q2/final/q2_delivery_output_index.csv": "003da951a53de3d1edea17db94f2898027e0b7b8a0455f80c3173d67210dab3f",
+    "outputs/q2/final/q2_delivery_validation_report.md": "06154e84cbbbe826f6bca838cb903469e126c882b607f6a466c9bc677712d8e8"
+  },
+  "generated_at": "2026-08-08T13:57:45+08:00",
+  "paper_files": {
+    "paper/q2/README.md": "8bb5bd85ba472b029974a9bd0127ba4a947f6e1e748d678df8bc2a08cb63063e",
+    "paper/q2/q2_assumptions_and_limitations.md": "93f7d3c239f860b1ebcbcc415ee872f18c2f5be2b8ffcf6469d183599add6129",
+    "paper/q2/q2_final_paper_materials.md": "28db1bde32e2f9ab306ec6f843b341d6d40df9e556c8db574fd4efc08ad5415c",
+    "paper/q2/q2_submission_checklist.md": "c51ba417cdb8627e7c5b113bebf7809f8ed89451349d2d2870a548ca00318972",
+    "paper/q2/q2_v1_problem_analysis.md": "619e92bf4ef122faed2a224e552d13ce52bac5db19d66cbce713220054c7328e",
+    "paper/q2/q2_v2_data_and_model_report.md": "fb8425309529d058d7ade52555ab500b2c84ef909f97c4b380961048b2f09b67",
+    "paper/q2/q2_v3_results_and_validation_report.md": "2dd67509779df778af9f3449ed466d869dbed1b2301e16676192603d2983d7ba"
+  },
+  "pass_count": 19,
+  "primary_summary": {
+    "expected_disbursed_amount_10k": 2122.868113,
+    "expected_net_return_10k": 103.8241975,
+    "nominal_offered_amount_10k": 10000.0,
+    "selected_enterprise_count": 164,
+    "validation_status": "PASS"
+  },
+  "runtime": {
+    "platform": "Windows-11-10.0.22631-SP0",
+    "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:26:47) [MSC v.1942 64 bit (AMD64)]"
+  },
+  "status": "PASS",
+  "workflow": "question_two_final_paper_handoff_validation"
+}

@@ -23,6 +23,14 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+plt.rcParams.update(
+    {
+        "font.sans-serif": ["Microsoft YaHei", "Noto Sans SC", "SimHei", "DejaVu Sans"],
+        "axes.unicode_minus": False,
+    }
+)
+
 import numpy as np
 import pandas as pd
 from scipy.stats import ks_2samp, wasserstein_distance
@@ -1030,6 +1038,24 @@ class Q2DataPipeline:
         assert self.target_features is not None
         figures: list[str] = []
         primary = list(self.config["features"]["primary_model_features"])
+        feature_labels = {
+            "sales_scale_10k": "销售规模（万元）",
+            "purchase_scale_10k": "采购规模（万元）",
+            "operating_net_inflow_proxy_10k": "经营净流入代理（万元）",
+            "sales_growth_trend": "销售增长趋势",
+            "sales_monthly_cv": "销售月度变异系数",
+            "invoice_activity_per_month": "月均发票活跃度",
+            "sales_return_rate": "销售退货率",
+            "purchase_return_rate": "采购退货率",
+            "void_invoice_rate": "发票作废率",
+            "customer_count": "客户数量",
+            "supplier_count": "供应商数量",
+            "customer_hhi": "客户集中度指数",
+            "supplier_hhi": "供应商集中度指数",
+            "purchase_sales_ratio": "进销比",
+            "active_month_ratio": "活跃月份占比",
+        }
+        primary_labels = [feature_labels.get(feature, feature) for feature in primary]
 
         fig, ax = plt.subplots(figsize=(14, 7))
         positions = np.arange(len(primary))
@@ -1039,12 +1065,12 @@ class Q2DataPipeline:
         ax.axhline(0, color="black", linewidth=0.8)
         ax.axhline(0.5, color="grey", linestyle="--", linewidth=0.7)
         ax.axhline(-0.5, color="grey", linestyle="--", linewidth=0.7)
-        ax.set_xticks(positions, primary, rotation=65, ha="right")
-        ax.set_ylabel("standardized mean difference")
-        ax.set_title("Attachment 1 reference versus Attachment 2 target")
+        ax.set_xticks(positions, primary_labels, rotation=65, ha="right")
+        ax.set_ylabel("标准化均值差")
+        ax.set_title("附件1参考组与附件2目标组")
         fig.tight_layout()
         path = self.paths["figures"] / "standardized_mean_difference.png"
-        fig.savefig(path, dpi=160)
+        fig.savefig(path, dpi=300)
         plt.close(fig)
         figures.append(relative(path))
 
@@ -1052,24 +1078,24 @@ class Q2DataPipeline:
         coverage = comparison["train_q01_q99_coverage"].to_numpy(dtype=float)
         ax.bar(positions, coverage, color="#4daf4a")
         ax.set_ylim(0, 1.05)
-        ax.set_xticks(positions, primary, rotation=65, ha="right")
-        ax.set_ylabel("target share within reference 1%-99% interval")
-        ax.set_title("Target feature coverage of reference quantile ranges")
+        ax.set_xticks(positions, primary_labels, rotation=65, ha="right")
+        ax.set_ylabel("落在参考组1%—99%区间的目标企业比例")
+        ax.set_title("目标特征落在参考组分位区间内的比例")
         fig.tight_layout()
         path = self.paths["figures"] / "training_quantile_coverage.png"
-        fig.savefig(path, dpi=160)
+        fig.savefig(path, dpi=300)
         plt.close(fig)
         figures.append(relative(path))
 
         fig, ax = plt.subplots(figsize=(10, 6))
         finite_scores = ood["novelty_score_max_tail_distance"].replace([np.inf, -np.inf], np.nan).dropna()
         ax.hist(finite_scores.to_numpy(dtype=float), bins=30, color="#984ea3", alpha=0.85)
-        ax.set_xlabel("maximum tail distance from reference 1%-99% interval")
-        ax.set_ylabel("target enterprise count")
-        ax.set_title("Target novelty score distribution")
+        ax.set_xlabel("相对于参考组1%—99%区间的最大尾部距离")
+        ax.set_ylabel("目标企业数量")
+        ax.set_title("目标企业新颖度分数分布")
         fig.tight_layout()
         path = self.paths["figures"] / "ood_novelty_score_distribution.png"
-        fig.savefig(path, dpi=160)
+        fig.savefig(path, dpi=300)
         plt.close(fig)
         figures.append(relative(path))
 
@@ -1087,13 +1113,13 @@ class Q2DataPipeline:
                 tick_labels=["123", "302"],
                 showfliers=False,
             )
-            axes[index].set_title(feature, fontsize=8)
+            axes[index].set_title(feature_labels.get(feature, feature), fontsize=8)
             axes[index].axhline(0, color="grey", linewidth=0.5)
             axes[index].tick_params(labelsize=7)
-        fig.suptitle("Feature distributions standardized by Attachment 1 only")
+        fig.suptitle("仅按附件1标准化的特征分布")
         fig.tight_layout()
         path = self.paths["figures"] / "standardized_feature_distributions.png"
-        fig.savefig(path, dpi=160)
+        fig.savefig(path, dpi=300)
         plt.close(fig)
         figures.append(relative(path))
         return figures

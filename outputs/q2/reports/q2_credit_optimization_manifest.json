@@ -5,15 +5,15 @@
   "inputs": {
     "q1_accepted_churn": {
       "path": "outputs/q1/tables/churn_curve_fitted.csv",
-      "sha256": "6e0f767efd6eee863e0ff70b66af7f3851ea1ace854c42feedc842981ba74313"
+      "sha256": "fd39a7cafff1420586fcbc0cf55ca58f1b4b890aad5b73354f4bb2ab0296d415"
     },
     "q1_final_manifest": {
       "path": "outputs/q1/final/q1_final_manifest.json",
-      "sha256": "382e692f9c06454902cc84b1d217b8d2f8e202394305914977abe1ed90a7b888"
+      "sha256": "7accc22c051cbd127f05f6efb7e00da7a77651052041289de01e13f467a04b55"
     },
     "q1_final_validation_report": {
       "path": "outputs/q1/final/q1_final_validation_report.md",
-      "sha256": "cf59d69a84c3a5fe77560e36f33ddf33ad6e5aacee8687d383b1667d97851fc6"
+      "sha256": "c90bd81c0caad66ac9cc9a755d54e14c5792b492d4c1a4b21a449473214aaeeb"
     },
     "q2_risk_rating_scores": {
       "path": "data/processed/q2_risk_rating_scores.csv",
@@ -23,16 +23,16 @@
   "model_type": "MILP with binary rate choice and continuous loan amount",
   "outputs": {
     "data/processed/q2_credit_strategy.csv": "e3c122d73e4f2e2e121a4be615c93a77e327c02a50f7f364f48f5ce6b97cbdd3",
-    "outputs/q2/figures/credit/q2_credit_allocation_risk.png": "821833786d87faf229a63e29438e40a955541ebc7583513c55a609bb268dc288",
-    "outputs/q2/figures/credit/q2_credit_sensitivity_net_return.png": "a83283a909f6be2e267df63b43101daa9ff2bcac5a07d759b2b1d4773543c99f",
-    "outputs/q2/reports/q2_credit_optimization_report.md": "4082b52c45d6f75c24b5c071e4de9d34548e7a538ef7aa2de24a4df15222633f",
+    "outputs/q2/figures/credit/q2_credit_allocation_risk.png": "5894ebe160b3ce241210c515c10e3d785000eaace667918946404f269e2d5614",
+    "outputs/q2/figures/credit/q2_credit_sensitivity_net_return.png": "6967038392a48dfb6500a1124b69b43fe2a430c58c851103bb2ed60415107b50",
+    "outputs/q2/reports/q2_credit_optimization_report.md": "591c18f6378904f7e32d53c5e5c1c8c65e9654a1a1530d15f97ad31fe8b8e130",
     "outputs/q2/tables/q2_budget_identity.csv": "dc09e48e7433a2aa4a995168568f3f04841310ee66cfa7dc39789a478afa46ed",
     "outputs/q2/tables/q2_credit_strategy.csv": "e3c122d73e4f2e2e121a4be615c93a77e327c02a50f7f364f48f5ce6b97cbdd3",
     "outputs/q2/tables/q2_optimization_output_index.csv": "2f44d4b40dd50882125a5f4c3c0b66116418af6f25109d6a81b7792fb276a9d5",
     "outputs/q2/tables/q2_optimization_sensitivity.csv": "76f51fd85f198093532be0827c3e7fa0fc07507ff625c729e5d4b0e73f719a1b",
     "outputs/q2/tables/q2_portfolio_summary.csv": "76f51fd85f198093532be0827c3e7fa0fc07507ff625c729e5d4b0e73f719a1b",
     "outputs/q2/tables/q2_primary_candidate_economics.csv": "c2ffcf67e60b1aa2b7d0341d5f8cb06fadf6c34c7fafde18587ad3ccb3ba916b",
-    "outputs/q2/tables/q2_solver_diagnostics.csv": "fc244aa49175873400a9a37f11921a61f4ed94d4be8d77d1b9dce86907afb94c",
+    "outputs/q2/tables/q2_solver_diagnostics.csv": "873cba407fb585c62844bb436bf6374eb9ea30304935310c6390c6af4b1d32f2",
     "outputs/q2/tables/q2_strategy_validation.csv": "8523fbbd586c17ac82865bfc3e2c042c83dedb10e26c592a3b8084655ff39334"
   },
   "primary_scenario": {
@@ -119,14 +119,14 @@
     "ood_reference_rule": "any_primary_feature_outside_reference_quantile_interval",
     "ood_reference_source": "attachment1_123_only",
     "ood_reference_upper_quantile": 0.99,
-    "q1_credit_strategy_code_sha256": "ad7b7a85e73cb84ad6a1ef74cb29ed59240c7c44508b2ea547f371188da44474",
+    "q1_credit_strategy_code_sha256": "3b91411cd8304bd8a786584965337773c087e7f8bdaf3d8c3388cbae03143e20",
     "q1_expected_churn_sha256": "fd39a7cafff1420586fcbc0cf55ca58f1b4b890aad5b73354f4bb2ab0296d415",
     "q1_final_delivery_workbook": "outputs/q1/final/q1_final_delivery.xlsx",
     "q1_final_validation_status": "PASS",
     "q1_manifest": "outputs/q1/final/q1_final_manifest.json",
     "q1_validation_report": "outputs/q1/final/q1_final_validation_report.md",
     "q2_model_config": "src/_internal/q2_config.yaml",
-    "q2_model_config_sha256": "c9facb2dc492c08252818283a5c56952f703ad363ac49e0dbe2b9db83b99d103",
+    "q2_model_config_sha256": "550a7025cb6ffcbd4ca511098e127225fdd3aa6d464c40d579d1391c4bba07ae",
     "rate_point_count": 29,
     "rating_entropy_threshold_source": "q2_config.modeling.instability.rating_entropy_threshold",
     "ratings": [
@@ -136,16 +136,16 @@
     ],
     "risk_disagreement_threshold_source": "q2_config.modeling.instability.risk_disagreement_threshold",
     "semantic_match_q1_final_delivery_workbook": true,
-    "source_byte_hash_matches_q1_manifest": false,
+    "source_byte_hash_matches_q1_manifest": true,
     "source_file": "outputs/q1/tables/churn_curve_fitted.csv",
-    "source_sha256": "6e0f767efd6eee863e0ff70b66af7f3851ea1ace854c42feedc842981ba74313"
+    "source_sha256": "fd39a7cafff1420586fcbc0cf55ca58f1b4b890aad5b73354f4bb2ab0296d415"
   },
   "random_seed": 20260805,
   "risk_interpretation": "historical invoice behavior relative default tendency; not a verified probability of default",
   "risk_model_inherited": "question_one locked elastic_net_logistic risk score; no random forest or composite score",
   "runtime": {
-    "platform": "Windows-11-10.0.26200-SP0",
-    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.22631-SP0",
+    "python": "3.12.13 | packaged by Anaconda, Inc. | (main, Jul  9 2026, 14:26:47) [MSC v.1942 64 bit (AMD64)]",
     "scipy": "1.18.0"
   },
   "sensitivity_axes": [
@@ -171,7 +171,7 @@
     "ood_reference_source": "attachment1_123_only",
     "ood_reference_upper_quantile": 0.99,
     "q2_model_config": "src/_internal/q2_config.yaml",
-    "q2_model_config_sha256": "c9facb2dc492c08252818283a5c56952f703ad363ac49e0dbe2b9db83b99d103",
+    "q2_model_config_sha256": "550a7025cb6ffcbd4ca511098e127225fdd3aa6d464c40d579d1391c4bba07ae",
     "rating_entropy_threshold_source": "q2_config.modeling.instability.rating_entropy_threshold",
     "risk_disagreement_threshold_source": "q2_config.modeling.instability.risk_disagreement_threshold"
   },

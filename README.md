@@ -1,6 +1,6 @@
 # 中小微企业信贷决策项目
 
-本分支按“原始数据—企业特征—OOF风险—流失率情景—信贷优化—验收”整理问题一正式流程。当前只交付问题一；问题二、问题三保留入口占位，不把历史程序或历史验证结果混入新结构。
+本分支按“原始数据—企业特征—企业级OOF风险—流失率情景—信贷优化—验收”整理问题一、问题二正式流程。问题二已在问题一口径上完成302家无标签企业的特征迁移、风险与评级概率、半监督交叉检查、1亿元信贷优化和论文材料包；问题三仍为明确占位。
 
 ## 目录
 
@@ -12,9 +12,9 @@ data/
     └── q1_risk_scores.csv
 src/
 ├── q1.py                        # 问题一统一入口
-├── q2.py                        # 尚未实现占位
+├── q2.py                        # 问题二统一入口
 ├── q3.py                        # 尚未实现占位
-└── _internal/                   # 问题一内部实现与配置
+└── _internal/                   # 问题一、问题二内部实现与配置
 outputs/q1/
 ├── final/                       # 最终Excel、清单、验收报告
 ├── tables/                      # 正式策略、模型和敏感性表
@@ -24,14 +24,15 @@ paper/
 ├── project_plan.md
 ├── diagrams/
 ├── guidelines/
-└── q1/
+├── q1/
+└── q2/                          # Q2四阶段报告、最终论文材料和技术核对表
 ```
 
 `data/processed/_runtime/` 只保存可重建的审计、月度表、逐折预测和临时日志，已加入忽略规则；原始文件不会被流程覆盖。
 
 ## 环境
 
-建议使用 Python 3.12 或兼容版本，并安装锁定依赖：
+必须使用 Python 3.12 或更高兼容版本；当前锁定的 `numpy==2.5.1` 不支持 Python 3.11。安装锁定依赖：
 
 ```text
 python -m pip install -r requirements.txt
@@ -67,10 +68,18 @@ python src/q1.py --stage validate
 python src/q1.py --stage all --config src/_internal/q1_config.yaml
 ```
 
-问题二、问题三目前会明确提示尚未实现并返回非零状态：
+问题二从原始附件完整重建并生成最终论文材料验收：
 
 ```text
-python src/q2.py
+python src/q2.py --stage all
+python src/q2.py --stage deliver
+```
+
+`all` 依次执行数据审计、同口径特征、分布迁移/OOD、风险与评级模型、Label Spreading交叉检查、1亿元MILP、24个主/敏感性情景和最终论文材料验收。已有正式结果、只需检查论文材料包时使用 `deliver`，成功时返回0并生成 `outputs/q2/final/q2_delivery_validation_report.md`。
+
+问题三仍会明确提示尚未实现并返回非零状态：
+
+```text
 python src/q3.py
 ```
 
@@ -103,6 +112,26 @@ python src/q3.py
 - `outputs/q1/reports/`：数据质量、特征验收、模型训练、附件3审计和基准策略报告。
 - `paper/q1/`：特征字典、模型规格、模型结果、最终结果、假设局限和提交清单。
 
+## 问题二正式口径
+
+- 附件2的302家企业没有真实违约标签或真实评级，不能报告其准确率、PR-AUC、Brier或真实收益；附件1的123家企业只用于标签遮蔽式代理验证。
+- 两份附件先按企业聚合，再做5折×10次重复分层验证；随机种子为 `20260805`，每家附件1企业恰好测试10次。
+- 主风险模型为不使用信誉评级的弹性网Logistic；有序Logistic输出A/B/C/D评级概率；KNN Label Spreading只作交叉检查，不替换或平均主风险。
+- 主场景把风险区间、OOD、模型分歧和评级熵作为额度上限诊断；实际优化风险使用 `risk_mean`，高不确定性企业最高50万元，不自动改用p90。
+- 客户接受概率为A/B/C评级概率与附件3保序流失率的混合，D级概率质量不重新归一化，也不拟合D级流失曲线。
+- 1亿元按10000万元名义授信严格等式解释；普通获贷企业额度10～100万元，利率只取附件3的29个4%～15%观测点。
+- LGD=0.50、资金成本率=0.03、D概率阈值=0.80等是主场景参数，不是题目观测真值；24个情景均需 `optimal/PASS`。
+
+问题二核心交付：
+
+- `data/processed/q2_enterprise_features.csv`：302家同口径企业级特征。
+- `data/processed/q2_risk_rating_scores.csv`：302家风险、评级概率、OOD和不确定性诊断。
+- `data/processed/q2_credit_strategy.csv`：302家最终贷款决策、额度、利率与情景收益分解。
+- `outputs/q2/tables/`：代理验证、模型比较、评级、完整策略、预算、敏感性和求解器诊断表。
+- `outputs/q2/figures/`：4张EDA、5张模型、2张信贷优化高清PNG。
+- `outputs/q2/final/`：最终交付索引、哈希清单和自动验收报告。
+- `paper/q2/README.md`：论文手唯一总入口，按V1、V2、V3和最终材料包顺序组织。
+
 最终Excel工作表为：`README`、`RiskScores`、`ChurnRaw`、`ChurnFitted`、`BaselineStrategy`、`BaselinePortfolio`、`BudgetSensitivity`、`ParameterSensitivity`、`StrategyStability`、`ModelMetrics`、`Assumptions`、`Validation`。
 
 ## 验收重点
@@ -118,7 +147,7 @@ python src/q3.py
 
 ## 论文材料
 
-总方案见 `paper/project_plan.md`，框架图见 `paper/diagrams/`，编程和建模交付要求见 `paper/guidelines/`，问题一可直接用于论文的材料见 `paper/q1/`。问题二历史验证结果已删除，未来实现必须在新接口和新输出契约下重新生成。
+总方案见 `paper/project_plan.md`，框架图见 `paper/diagrams/`，编程和建模交付要求见 `paper/guidelines/`。问题一材料见 `paper/q1/`；问题二只从 `paper/q2/README.md` 进入，关键数字以本分支 `outputs/q2` 和最终验收清单为准，不以 `project_plan.md` 中的历史草案数值为准。
 
 
 # 材料提交标准

@@ -85,9 +85,9 @@ u_{ik}=A_i(r_k)[(1-p_i)r_k-c_f-p_i\ell].
 
 LGD、资金成本、D概率阈值、不确定性上限、预算定义和风险变体都会改变策略。求解器给出的`optimal`表示在给定模型系数和约束下达到MILP最优，不表示真实世界利润或损失必然达到该数值。预期发放额、信用损失、资金成本和净收益都应写作“情景预期”或“模型隐含”，不能写作已实现结果。
 
-### 6.7 q1流失曲线复用证据的哈希差异
+### 6.7 q1流失曲线复用证据
 
-q2优化manifest记录：使用文件为 `outputs/q1/tables/churn_curve_fitted.csv`，其当前源文件SHA-256为 `6e0f767efd6eee863e0ff70b66af7f3851ea1ace854c42feedc842981ba74313`；与q1旧manifest的字节哈希匹配项为`False`，但与q1最终交付工作簿语义匹配项为`True`，且q1最终验收报告为`PASS`。本轮不把它写成“字节哈希完全一致”，只写成“当前q1最终交付语义匹配并通过q1最终验收”；如需对外发布，应保留该复核备注或重新固定q1 manifest。
+锁定依赖环境重跑后，q2优化manifest记录的使用文件为 `outputs/q1/tables/churn_curve_fitted.csv`，当前SHA-256为 `fd39a7cafff1420586fcbc0cf55ca58f1b4b890aad5b73354f4bb2ab0296d415`；与q1最终manifest的字节哈希匹配项为`True`，与q1最终交付工作簿的语义匹配项也为`True`，且q1最终验收报告为`PASS`。论文可写“复用问题一已验收的A/B/C保序流失率曲线”，但仍不得把该曲线解释为D级流失率或违约率。
 
 ## 7. 不应编造或越界的内容
 
