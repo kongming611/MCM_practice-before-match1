@@ -1,0 +1,309 @@
+# Stage-one Q3 settings.  Q2 outcome values are read from the manifests at run time.
+paths:
+  q2_optimization_manifest: outputs/q2/reports/q2_credit_optimization_manifest.json
+  q2_risk_manifest: outputs/q2/reports/q2_risk_rating_run_manifest.json
+  q2_model_config: src/_internal/q2_config.yaml
+  baseline_contract_output: outputs/q3/reports/q3_q2_baseline_contract.json
+
+checks:
+  numeric_tolerance: 0.000001
+
+# Stage-two deterministic industry mapping.  Only high-specificity keywords
+# may produce a direct industry code; low-specificity hits are retained for
+# audit and remain unknown.  The categories follow the Q3 NBS-2020Q1 coarse
+# industry contract, not a claim about a firm's legally registered industry.
+industry_mapping:
+  input: data/processed/q2_risk_rating_scores.csv
+  output: data/processed/q3_enterprise_industry_mapping.csv
+  review_evidence_output: outputs/q3/tables/q3_industry_mapping_review_evidence.csv
+  validation_output: outputs/q3/reports/q3_industry_mapping_validation.json
+  report_output: outputs/q3/reports/q3_industry_mapping_validation.md
+  generic_name_regex: '^个体经营E[0-9]+$'
+  generic_expected_count: 56
+  allowed_codes:
+    - agriculture
+    - manufacturing_industry
+    - construction
+    - wholesale_retail
+    - transport_storage_post
+    - accommodation_catering
+    - finance
+    - real_estate
+    - information_software_it
+    - leasing_business_services
+    - other_services
+    - unknown
+  labels:
+    agriculture: 农业
+    manufacturing_industry: 制造业
+    construction: 建筑业
+    wholesale_retail: 批发和零售业
+    transport_storage_post: 交通运输、仓储和邮政业
+    accommodation_catering: 住宿和餐饮业
+    finance: 金融业
+    real_estate: 房地产业
+    information_software_it: 信息传输、软件和信息技术服务业
+    leasing_business_services: 租赁和商务服务业
+    other_services: 其他服务业
+    unknown: 未知行业
+
+  # A keyword is high-specific only when it is meaningful evidence for one
+  # coarse industry.  A name hitting more than one code is deliberately
+  # ambiguous and is kept unknown.
+  high_specific_keywords:
+    agriculture:
+      - 猕猴桃
+      - 大闸蟹
+      - 农副产品经营
+      - 农业
+      - 种植
+      - 养殖
+      - 果园
+      - 园艺场
+      - 专业合作社
+    manufacturing_industry:
+      - 机械铸造
+      - 机械厂
+      - 塑料厂
+      - 设备制造
+      - 电器设备制造
+      - 消防设备制造
+      - 印务
+      - 制造
+    construction:
+      - 建筑工程
+      - 建筑装饰
+      - 建筑劳务
+      - 建设工程
+      - 装饰工程
+      - 钢结构工程
+      - 基础建设工程
+      - 勘察设计工程
+      - 路桥工程
+      - 电力工程
+      - 设备安装工程
+      - 门窗安装
+      - 体育设施工程
+      - 环境设备工程
+      - 净化工程
+      - 园林景观工程
+      - 装饰设计工程
+    wholesale_retail:
+      - 商贸
+      - 贸易
+      - 汽贸
+      - 汽车贸易
+      - 汽车销售
+      - 童装店
+      - 药房
+      - 五金店
+      - 五金工具经营
+      - 五金经营部
+      - 办公用品经营
+      - 厨房用品经营
+      - 家居经营
+      - 建材经营
+      - 建材装饰部
+      - 地毯经营
+      - 农副产品经营
+      - 大闸蟹经营
+      - 电器经营
+      - 通讯器材经营
+      - 电子商务
+    transport_storage_post:
+      - 国际货运
+      - 物流
+      - 货运
+      - 运输
+      - 仓储
+      - 快递
+      - 运业
+      - 供应链
+      - 邮政
+    accommodation_catering:
+      - 餐饮
+      - 酒店
+      - 宾馆
+      - 旅馆
+      - 饭店
+      - 住宿
+      - 咖啡
+      - 茶馆
+    finance:
+      - 银行
+      - 证券
+      - 保险
+      - 信托
+      - 基金
+      - 典当
+      - 融资担保
+      - 融资租赁
+      - 保理
+      - 金融
+    real_estate:
+      - 房地产
+      - 房产
+      - 置业
+      - 不动产
+      - 物业服务
+      - 物业管理
+    information_software_it:
+      - 信息技术
+      - 网络科技
+      - 网络技术
+      - 网络信息安全
+      - 网络工程
+      - 软件
+      - 互联网
+      - 通信科技
+    leasing_business_services:
+      - 租赁
+      - 广告
+      - 营销策划
+      - 企业管理咨询
+      - 管理咨询
+      - 招投标代理
+      - 清洁服务
+      - 税务师事务
+      - 律师事务所
+      - 代理
+    other_services:
+      - 文化传播
+      - 文化传媒
+      - 影城
+      - 教育
+      - 汽车维修
+      - 医院
+      - 诊所
+      - 门诊
+      - 卫生院
+      - 社区卫生服务
+      - 工程咨询
+      - 工程技术
+      - 测绘服务
+      - 质量检验测试
+      - 检测
+      - 检验
+      - 节能服务
+      - 设计服务
+      - 职业技能服务
+      - 电器维护服务
+
+  # These tokens are evidence worth retaining in matched_keyword/notes but
+  # are intentionally insufficient for a direct classification.
+  low_specific_keywords:
+    unknown:
+      - 科技
+      - 技术
+      - 服务
+      - 工程
+      - 设计
+      - 劳务
+      - 服务部
+      - 经营部
+      - 经营
+      - 材料
+      - 设备
+      - 机械
+      - 纺织品
+      - 鞋材
+      - 包装材料
+      - 环保包装
+      - 硬质合金
+      - 不锈钢材料
+      - 塑胶
+      - 石材工艺品
+      - 纸业
+      - 工艺品
+      - 生态魔芋
+      - 数码科技
+      - 电子科技
+      - 智能科技
+      - 自动化科技
+      - 建材
+      - 文化
+      - 文化发展
+      - 体育文化
+      - 演艺
+      - 管理
+      - 咨询
+      - 有限公司
+
+# Stage-three deterministic external-stress overlay.  The source values and
+# interpretation are fixed by the Q0 contract; c_pp/rho/lambda/eps are team
+# modeling assumptions, not official estimates.
+stress_scenarios:
+  input: data/processed/q2_risk_rating_scores.csv
+  industry_mapping_input: data/processed/q3_enterprise_industry_mapping.csv
+  risk_output: data/processed/q3_scenario_risk_scores.csv
+  industry_output: outputs/q3/tables/q3_industry_shock_params.csv
+  validation_output: outputs/q3/reports/q3_stress_validation.json
+  report_output: outputs/q3/reports/q3_stress_validation.md
+  c_pp: 40.0
+  rho: 0.25
+  eps: 0.000001
+  lambdas:
+    identity: 0.0
+    light: 0.5
+    medium: 1.0
+    severe: 1.5
+  unknown_policy: max_known_S
+
+# Stage-four Q3 adapter.  It reuses the accepted Q2 optimizer and changes
+# only main_risk_score; no Q2 source, configuration, or artifacts are written.
+robust_optimization:
+  risk_input: data/processed/q3_scenario_risk_scores.csv
+  q2_strategy_input: data/processed/q2_credit_strategy.csv
+  q2_optimization_config: src/_internal/q2_optimization_config.yaml
+  scenarios: [identity, light, medium, severe, robust]
+  robust_strategy_output: data/processed/q3_robust_credit_strategy.csv
+  scenario_strategy_output: outputs/q3/tables/q3_scenario_credit_strategies.csv
+  portfolio_summary_output: outputs/q3/tables/q3_portfolio_scenario_summary.csv
+  adjustments_output: outputs/q3/tables/q3_strategy_adjustments.csv
+  industry_output: outputs/q3/tables/q3_industry_exposure_comparison.csv
+  fixed_q2_output: outputs/q3/tables/q3_fixed_q2_strategy_under_robust_risk.csv
+  validation_output: outputs/q3/reports/q3_robust_optimization_validation.json
+  report_output: outputs/q3/reports/q3_robust_optimization_validation.md
+  numeric_tolerance: 0.000001
+
+# Stage-five deterministic sensitivity analysis.  The centre values are the
+# accepted stage-three/four robust-risk and stage-four Q2 optimizer settings;
+# all non-official values below are modeling assumptions, not calibrations.
+sensitivity_analysis:
+  risk_input: data/processed/q3_scenario_risk_scores.csv
+  mapping_input: data/processed/q3_enterprise_industry_mapping.csv
+  q2_strategy_input: data/processed/q2_credit_strategy.csv
+  q3_robust_strategy_input: data/processed/q3_robust_credit_strategy.csv
+  q2_optimization_config: src/_internal/q2_optimization_config.yaml
+  summary_output: outputs/q3/tables/q3_sensitivity_summary.csv
+  stability_output: outputs/q3/tables/q3_enterprise_strategy_stability.csv
+  long_output: outputs/q3/tables/q3_sensitivity_enterprise_strategies.csv
+  industry_output: outputs/q3/tables/q3_sensitivity_industry_shocks.csv
+  validation_output: outputs/q3/reports/q3_sensitivity_validation.json
+  report_output: outputs/q3/reports/q3_sensitivity_validation.md
+  full_validation_output: outputs/q3/reports/q3_full_validation.json
+  full_report_output: outputs/q3/reports/q3_full_validation.md
+  run_manifest_output: outputs/q3/reports/q3_run_manifest.json
+  center:
+    c_pp: 40.0
+    rho: 0.25
+    lambda_severe: 1.5
+    unknown_policy: max_known_S
+    lgd: 0.5
+    funding_cost_rate: 0.03
+  rho_values: [0.10, 0.25, 0.50]
+  c_pp_values: [20.0, 40.0, 60.0]
+  lambda_severe_values: [1.125, 1.5, 1.875]
+  unknown_policies: [p50_known_S, max_known_S]
+  lgd_values: [0.30, 0.50, 0.70]
+  funding_cost_rates: [0.02, 0.03, 0.04]
+  stability_frequency_threshold: 0.80
+  risk_eps: 0.000001
+
+# Stage-five plotting contract.  Python is persisted as the exclusive
+# backend by the nature-figure routing gate.
+figures:
+  output_dir: outputs/q3/figures
+  qa_output: outputs/q3/reports/q3_figure_qa.json
+  qa_report_output: outputs/q3/reports/q3_figure_qa.md
+  backend: python
