@@ -1,0 +1,201 @@
+{
+  "assumptions": {
+    "all_assumption_fields_marked_modeling_assumption": true,
+    "c_pp": 40.0,
+    "eps": 1e-06,
+    "lambdas": {
+      "identity": 0.0,
+      "light": 0.5,
+      "medium": 1.0,
+      "severe": 1.5
+    },
+    "rho": 0.25,
+    "unknown_policy": "max_known_S"
+  },
+  "checks": {
+    "deterministic_rows": true,
+    "exact_id_name_join": true,
+    "finite_values": true,
+    "identity_exact_q2": true,
+    "multipliers_ge_one": true,
+    "official_growth_values_match": true,
+    "output_columns_complete": true,
+    "output_ids_unique": true,
+    "parameter_columns_complete": true,
+    "positive_growth_neutral": true,
+    "q2_ids_unique": true,
+    "risk_override_only": true,
+    "risk_values_legal": true,
+    "robust_is_exact_max": true,
+    "row_count_302": true,
+    "scenario_order_monotone": true,
+    "source_metadata_complete": true,
+    "unknown_count_145_max_known_policy": true
+  },
+  "config_path": "src/_internal/q3_config.yaml",
+  "config_sha256": "377751ea17f800a20a0e7b088947affedd9ed99c4a42124dbbf0cdd92398aafb",
+  "contract_version": "q3_stress_scenarios_v1",
+  "counts": {
+    "industry_code": {
+      "accommodation_catering": 3,
+      "agriculture": 2,
+      "construction": 53,
+      "information_software_it": 8,
+      "leasing_business_services": 16,
+      "manufacturing_industry": 7,
+      "other_services": 20,
+      "real_estate": 3,
+      "transport_storage_post": 11,
+      "unknown": 145,
+      "wholesale_retail": 34
+    },
+    "mapping_rows": 302,
+    "output_rows": 302,
+    "q2_rows": 302,
+    "unknown_rows": 145
+  },
+  "inputs": {
+    "industry_mapping": "data/processed/q3_enterprise_industry_mapping.csv",
+    "q2_risk_table": "data/processed/q2_risk_rating_scores.csv"
+  },
+  "mapping_status": "PASS",
+  "max_known_S": 0.8825,
+  "outputs": {
+    "industry_parameters": {
+      "path": "outputs/q3/tables/q3_industry_shock_params.csv",
+      "row_count": 12,
+      "sha256": "9a90e818b084f7332d927b6ce9f8c76f57c48cb337c009c4a2858c3ef0a7ea3b"
+    },
+    "risk_scores": {
+      "path": "data/processed/q3_scenario_risk_scores.csv",
+      "row_count": 302,
+      "sha256": "b27bcd8a299bd39e87ae2df431057ff9c35a8f0c26f7d7fad23c79448d04ab5c"
+    }
+  },
+  "preflight_status": "PASS",
+  "risk_change_summary": {
+    "by_industry": {
+      "accommodation_catering": {
+        "count": 3,
+        "max_robust_change_from_q2": 0.032007927275000014,
+        "q2_mean_risk": 0.10557875244666666,
+        "robust_mean_risk": 0.13197344055833335,
+        "severe_mean_risk": 0.13197344055833335
+      },
+      "agriculture": {
+        "count": 2,
+        "max_robust_change_from_q2": 0.010971725656500064,
+        "q2_mean_risk": 0.2836601615,
+        "robust_mean_risk": 0.2911062407393751,
+        "severe_mean_risk": 0.2911062407393751
+      },
+      "construction": {
+        "count": 53,
+        "max_robust_change_from_q2": 0.1257352767890625,
+        "q2_mean_risk": 0.18902759072849054,
+        "robust_mean_risk": 0.22003992983238355,
+        "severe_mean_risk": 0.22003992983238355
+      },
+      "information_software_it": {
+        "count": 8,
+        "max_robust_change_from_q2": 0.0,
+        "q2_mean_risk": 0.30724054417125,
+        "robust_mean_risk": 0.30724054417125,
+        "severe_mean_risk": 0.30724054417125
+      },
+      "leasing_business_services": {
+        "count": 16,
+        "max_robust_change_from_q2": 0.05679011254312505,
+        "q2_mean_risk": 0.26129473924187496,
+        "robust_mean_risk": 0.28432133813756527,
+        "severe_mean_risk": 0.28432133813756527
+      },
+      "manufacturing_industry": {
+        "count": 7,
+        "max_robust_change_from_q2": 0.01896336384806252,
+        "q2_mean_risk": 0.11232623400714285,
+        "robust_mean_risk": 0.12306743013407591,
+        "severe_mean_risk": 0.12306743013407591
+      },
+      "other_services": {
+        "count": 20,
+        "max_robust_change_from_q2": 0.010821774867187495,
+        "q2_mean_risk": 0.16317312269849998,
+        "robust_mean_risk": 0.16592666914403717,
+        "severe_mean_risk": 0.16592666914403717
+      },
+      "real_estate": {
+        "count": 3,
+        "max_robust_change_from_q2": 0.011433445943812487,
+        "q2_mean_risk": 0.09918260018666665,
+        "robust_mean_risk": 0.10485460513484167,
+        "severe_mean_risk": 0.10485460513484167
+      },
+      "transport_storage_post": {
+        "count": 11,
+        "max_robust_change_from_q2": 0.08587701710437501,
+        "q2_mean_risk": 0.13126619810727272,
+        "robust_mean_risk": 0.14849488660885227,
+        "severe_mean_risk": 0.14849488660885227
+      },
+      "unknown": {
+        "count": 145,
+        "max_robust_change_from_q2": 0.18966613717500003,
+        "q2_mean_risk": 0.1833231013026206,
+        "robust_mean_risk": 0.22767396561103442,
+        "severe_mean_risk": 0.22767396561103442
+      },
+      "wholesale_retail": {
+        "count": 34,
+        "max_robust_change_from_q2": 0.1355800546,
+        "q2_mean_risk": 0.24330578192470592,
+        "robust_mean_risk": 0.2833517146604831,
+        "severe_mean_risk": 0.2833517146604831
+      }
+    },
+    "parameter_rows": 12,
+    "scenario": {
+      "identity": {
+        "clipped_at_upper_bound_count": 0,
+        "max_change_from_q2": 0.0,
+        "max_risk": 0.9142122803,
+        "mean_change_from_q2": 0.0,
+        "mean_risk": 0.1926709517095034,
+        "min_risk": 0.02157733009
+      },
+      "light": {
+        "clipped_at_upper_bound_count": 1,
+        "max_change_from_q2": 0.09458809268378132,
+        "max_risk": 0.999999,
+        "mean_change_from_q2": 0.013908148568253861,
+        "mean_risk": 0.20657910027775717,
+        "min_risk": 0.023957579315553125
+      },
+      "medium": {
+        "clipped_at_upper_bound_count": 2,
+        "max_change_from_q2": 0.1673803660569375,
+        "max_risk": 0.999999,
+        "mean_change_from_q2": 0.02737782129952904,
+        "mean_risk": 0.22004877300903236,
+        "min_risk": 0.02633782854110625
+      },
+      "severe": {
+        "clipped_at_upper_bound_count": 4,
+        "max_change_from_q2": 0.18966613717500003,
+        "max_risk": 0.999999,
+        "mean_change_from_q2": 0.033891999024995755,
+        "mean_risk": 0.22656295073449914,
+        "min_risk": 0.0269716626125
+      }
+    }
+  },
+  "source": {
+    "interpretation": "retrospective_external_stress_marker; includes 2020-03; after Q2 invoice window; not Q2 training input or ex_ante validation",
+    "period": "2020Q1",
+    "release_date": "2020-04-18",
+    "standard": "GB/T4754-2017",
+    "status": "official_primary_preliminary",
+    "url": "https://www.stats.gov.cn/sj/zxfb/202302/t20230203_1900688.html"
+  },
+  "status": "PASS"
+}

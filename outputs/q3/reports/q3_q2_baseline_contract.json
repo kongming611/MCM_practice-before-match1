@@ -1,0 +1,241 @@
+{
+  "artifact_hashes": {
+    "q2_credit_strategy": {
+      "actual_sha256": "0da2b58eb4d07cd7c908983c79f241981473fb8f9a6e3525ef3f85cc0f68fc47",
+      "exists": true,
+      "expected_semantic_config_sha256": null,
+      "expected_sha256": "e3c122d73e4f2e2e121a4be615c93a77e327c02a50f7f364f48f5ce6b97cbdd3",
+      "hash_kind": "file_bytes",
+      "hash_status": "PASS_LINE_ENDING_NORMALIZED",
+      "line_ending_normalized_sha256": "e3c122d73e4f2e2e121a4be615c93a77e327c02a50f7f364f48f5ce6b97cbdd3",
+      "path": "data/processed/q2_credit_strategy.csv",
+      "semantic_config_sha256": null,
+      "semantic_hash_status": null
+    },
+    "q2_model_config": {
+      "actual_sha256": "550a7025cb6ffcbd4ca511098e127225fdd3aa6d464c40d579d1391c4bba07ae",
+      "exists": true,
+      "expected_semantic_config_sha256": "4c8f1aa8fa197d94c373c405ea5491bced7666b89f848190e42ab8e67b8deb19",
+      "expected_sha256": "c9facb2dc492c08252818283a5c56952f703ad363ac49e0dbe2b9db83b99d103",
+      "hash_kind": "file_bytes",
+      "hash_status": "PASS_LINE_ENDING_NORMALIZED",
+      "line_ending_normalized_sha256": "c9facb2dc492c08252818283a5c56952f703ad363ac49e0dbe2b9db83b99d103",
+      "path": "src/_internal/q2_config.yaml",
+      "semantic_config_sha256": "4c8f1aa8fa197d94c373c405ea5491bced7666b89f848190e42ab8e67b8deb19",
+      "semantic_hash_status": "PASS_SEMANTIC_CONFIG"
+    },
+    "q2_optimization_config": {
+      "actual_sha256": "fa49a1b01a6907a2c017615afd1ef514a29239ff2b0c95576d6b8c0ad47735d8",
+      "exists": true,
+      "expected_semantic_config_sha256": null,
+      "expected_sha256": "70dc2a386fc80768274096c657374734f8a6e89026651b7ec6f7c3271c9512a4",
+      "hash_kind": "semantic_config",
+      "hash_status": "PASS_SEMANTIC_CONFIG",
+      "line_ending_normalized_sha256": "382542239c3b3cacec1c1f3c899c61ee1bdb92af9c14dd2ebb29e22533244a3f",
+      "path": "src/_internal/q2_optimization_config.yaml",
+      "semantic_config_sha256": "70dc2a386fc80768274096c657374734f8a6e89026651b7ec6f7c3271c9512a4",
+      "semantic_hash_status": null
+    },
+    "q2_portfolio_summary": {
+      "actual_sha256": "73be6f2d820252a4a20601c2428f8c5e364a5e80501a573621891f5152169a59",
+      "exists": true,
+      "expected_semantic_config_sha256": null,
+      "expected_sha256": "76f51fd85f198093532be0827c3e7fa0fc07507ff625c729e5d4b0e73f719a1b",
+      "hash_kind": "file_bytes",
+      "hash_status": "PASS_LINE_ENDING_NORMALIZED",
+      "line_ending_normalized_sha256": "76f51fd85f198093532be0827c3e7fa0fc07507ff625c729e5d4b0e73f719a1b",
+      "path": "outputs/q2/tables/q2_portfolio_summary.csv",
+      "semantic_config_sha256": null,
+      "semantic_hash_status": null
+    },
+    "q2_risk_rating_scores": {
+      "actual_sha256": "798ba162525373f73ba2f5a9d4516497512e640031e9c14e1f94906f5075cd3c",
+      "exists": true,
+      "expected_semantic_config_sha256": null,
+      "expected_sha256": "9e82224ec9c9884c18991c1638675e6338ade29ea0fe812f358da146c4378219",
+      "hash_kind": "file_bytes",
+      "hash_status": "PASS_LINE_ENDING_NORMALIZED",
+      "line_ending_normalized_sha256": "9e82224ec9c9884c18991c1638675e6338ade29ea0fe812f358da146c4378219",
+      "path": "data/processed/q2_risk_rating_scores.csv",
+      "semantic_config_sha256": null,
+      "semantic_hash_status": null
+    },
+    "q2_strategy_validation": {
+      "actual_sha256": "bef73945044bb745abd012489b2dc1004cdaad07b7e287806449fa2d6178bc4b",
+      "exists": true,
+      "expected_semantic_config_sha256": null,
+      "expected_sha256": "8523fbbd586c17ac82865bfc3e2c042c83dedb10e26c592a3b8084655ff39334",
+      "hash_kind": "file_bytes",
+      "hash_status": "PASS_LINE_ENDING_NORMALIZED",
+      "line_ending_normalized_sha256": "8523fbbd586c17ac82865bfc3e2c042c83dedb10e26c592a3b8084655ff39334",
+      "path": "outputs/q2/tables/q2_strategy_validation.csv",
+      "semantic_config_sha256": null,
+      "semantic_hash_status": null
+    }
+  },
+  "authoritative_manifest": {
+    "exists": true,
+    "line_ending_normalized_sha256": "1d10ae8ded75de5fcaf89ee01891607401de7aa1a0a65edb54d1684203145324",
+    "parse_status": "PASS",
+    "path": "outputs/q2/reports/q2_credit_optimization_manifest.json",
+    "sha256": "fe8dfefb57a686387bbdee5e475797f4ba1b4ff28d371b57616e0de5bae8f83d"
+  },
+  "baseline_parameters": {
+    "budget_10k": 10000.0,
+    "budget_definition": "nominal_equality",
+    "budget_difference_10k": 0.0,
+    "d_probability_threshold": 0.8,
+    "enterprise_count_total": 302,
+    "funding_cost_rate": 0.03,
+    "lgd": 0.5,
+    "nominal_offered_amount_10k": 10000.0,
+    "risk_variant": "mean",
+    "selected_enterprise_count": 164,
+    "target_enterprise_count": 302,
+    "uncertainty_cap_10k": 50.0
+  },
+  "config": {
+    "path": "src/_internal/q3_config.yaml",
+    "sha256": "377751ea17f800a20a0e7b088947affedd9ed99c4a42124dbbf0cdd92398aafb"
+  },
+  "contract_version": "q3_q2_baseline_contract_v1",
+  "evidence": {
+    "probability_tolerance_source": "src/_internal/q2_config.yaml",
+    "q2_optimization_manifest_path": "outputs/q2/reports/q2_credit_optimization_manifest.json",
+    "q2_risk_manifest_path": "outputs/q2/reports/q2_risk_rating_run_manifest.json",
+    "values_are_read_from_q2_manifest": true
+  },
+  "risk_manifest": {
+    "exists": true,
+    "line_ending_normalized_sha256": "519c0e57f2f81384d97f730cdee50811f6eff80ed9dde29d33dc2ec40107a8b0",
+    "parse_status": "PASS",
+    "path": "outputs/q2/reports/q2_risk_rating_run_manifest.json",
+    "semantic_checks": {
+      "risk_output_hash_declared_once": true,
+      "risk_output_hash_matches_optimization_manifest": true,
+      "target_accuracy_reported_false": true,
+      "target_enterprise_count_matches": true,
+      "target_enterprise_count_present": true
+    },
+    "sha256": "c99f78ba855f29c8e00c316c89a319de243225ea0f37b263aeda1096ade04996"
+  },
+  "semantic_checks": {
+    "artifact_hashes_pass": true,
+    "primary_scenario": {
+      "budget_definition_nominal_equality": true,
+      "budget_difference_zero": true,
+      "budget_equality_required": true,
+      "budget_matches_nominal_offered": true,
+      "fallback_unused": true,
+      "manifest_validation_D_rule_not_violated": true,
+      "manifest_validation_acceptance_values_legal": true,
+      "manifest_validation_at_most_one_rate_per_enterprise": true,
+      "manifest_validation_budget_constraint": true,
+      "manifest_validation_enterprise_count_302": true,
+      "manifest_validation_enterprise_id_unique": true,
+      "manifest_validation_no_D_churn_curve": true,
+      "manifest_validation_numeric_decomposition": true,
+      "manifest_validation_rating_probability_nonnegative": true,
+      "manifest_validation_rating_probability_sum_one": true,
+      "manifest_validation_risk_values_legal": true,
+      "manifest_validation_selected_amounts_10_to_100": true,
+      "manifest_validation_selected_rate_is_observed": true,
+      "manifest_validation_unselected_amounts_zero": true,
+      "scenario_id": "primary",
+      "solve_status_optimal": true,
+      "validation_status_pass": true
+    },
+    "primary_summary_pass": true,
+    "risk_manifest_pass": true,
+    "tables_pass": true
+  },
+  "status": "PASS",
+  "table_checks": {
+    "credit_strategy": {
+      "enterprise_id_unique": true,
+      "required_columns_present": true,
+      "row_count": 302,
+      "row_count_target": true,
+      "target_row_count": 302
+    },
+    "portfolio_summary": {
+      "budget_definition_matches": true,
+      "budget_difference_matches_manifest": true,
+      "budget_matches_manifest": true,
+      "fallback_unused": true,
+      "is_optimal": true,
+      "offered_amount_matches_manifest": true,
+      "primary_row_count": 1,
+      "primary_row_present_once": true,
+      "solve_status_optimal": true,
+      "validation_status_pass": true
+    },
+    "risk_scores": {
+      "enterprise_id_unique": true,
+      "rating_probability_nonnegative_and_bounded": true,
+      "rating_probability_sum_one": true,
+      "required_columns_present": true,
+      "risk_values_legal": true,
+      "row_count": 302,
+      "row_count_target": true,
+      "target_row_count": 302
+    },
+    "strategy_validation": {
+      "expected_boolean_fields": [
+        "D_rule_not_violated",
+        "acceptance_values_legal",
+        "at_most_one_rate_per_enterprise",
+        "budget_constraint",
+        "enterprise_count_302",
+        "enterprise_id_unique",
+        "no_D_churn_curve",
+        "numeric_decomposition",
+        "rating_probability_nonnegative",
+        "rating_probability_sum_one",
+        "risk_values_legal",
+        "selected_amounts_10_to_100",
+        "selected_rate_is_observed",
+        "unselected_amounts_zero"
+      ],
+      "manifest_boolean_checks": {
+        "D_rule_not_violated": true,
+        "acceptance_values_legal": true,
+        "at_most_one_rate_per_enterprise": true,
+        "budget_constraint": true,
+        "enterprise_count_302": true,
+        "enterprise_id_unique": true,
+        "no_D_churn_curve": true,
+        "numeric_decomposition": true,
+        "rating_probability_nonnegative": true,
+        "rating_probability_sum_one": true,
+        "risk_values_legal": true,
+        "selected_amounts_10_to_100": true,
+        "selected_rate_is_observed": true,
+        "unselected_amounts_zero": true
+      },
+      "manifest_required_booleans_true": true,
+      "numeric_fields_match_manifest": true,
+      "primary_row_count": 1,
+      "primary_row_present_once": true,
+      "primary_status_pass": true,
+      "row_boolean_checks": {
+        "D_rule_not_violated": true,
+        "acceptance_values_legal": true,
+        "at_most_one_rate_per_enterprise": true,
+        "budget_constraint": true,
+        "enterprise_count_302": true,
+        "enterprise_id_unique": true,
+        "no_D_churn_curve": true,
+        "numeric_decomposition": true,
+        "rating_probability_nonnegative": true,
+        "rating_probability_sum_one": true,
+        "risk_values_legal": true,
+        "selected_amounts_10_to_100": true,
+        "selected_rate_is_observed": true,
+        "unselected_amounts_zero": true
+      },
+      "row_count": 24,
+      "row_required_booleans_true": true
+    }
+  }
+}

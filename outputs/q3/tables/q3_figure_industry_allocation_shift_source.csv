@@ -1,0 +1,13 @@
+﻿industry_code,identity,robust,delta_robust_minus_identity,identity_hhi,robust_hhi
+agriculture,0.0,0.0,0.0,0.3568,0.3419
+manufacturing_industry,300.0,300.0,0.0,0.3568,0.3419
+construction,1750.0,1750.0,0.0,0.3568,0.3419
+wholesale_retail,650.0,700.0,50.0,0.3568,0.3419
+transport_storage_post,450.0,450.0,0.0,0.3568,0.3419
+accommodation_catering,100.0,100.0,0.0,0.3568,0.3419
+finance,0.0,0.0,0.0,0.3568,0.3419
+real_estate,100.0,100.0,0.0,0.3568,0.3419
+information_software_it,100.0,100.0,0.0,0.3568,0.3419
+leasing_business_services,300.0,350.0,50.0,0.3568,0.3419
+other_services,650.0,700.0,50.0,0.3568,0.3419
+unknown,5600.0,5450.0,-150.0,0.3568,0.3419

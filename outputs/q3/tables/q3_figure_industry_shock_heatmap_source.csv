@@ -1,0 +1,13 @@
+﻿industry_code,growth_yoy_pct,S_h,D_light,D_medium,D_severe,light_multiplier,medium_multiplier,severe_multiplier,unknown_policy,source_status
+agriculture,-2.8,0.0699999999999999,0.0349999999999999,0.0699999999999999,0.1049999999999999,1.00875,1.0175,1.02625,max_known_S,official_primary_preliminary
+manufacturing_industry,-10.2,0.255,0.1275,0.255,0.3825,1.031875,1.06375,1.095625,max_known_S,official_primary_preliminary
+construction,-17.5,0.4375,0.21875,0.4375,0.65625,1.0546875,1.109375,1.1640625,max_known_S,official_primary_preliminary
+wholesale_retail,-17.8,0.445,0.2225,0.445,0.6675,1.055625,1.11125,1.166875,max_known_S,official_primary_preliminary
+transport_storage_post,-14.0,0.35,0.175,0.35,0.5249999999999999,1.04375,1.0875,1.13125,max_known_S,official_primary_preliminary
+accommodation_catering,-35.3,0.8825,0.44125,0.8825,1.0,1.1103125,1.220625,1.25,max_known_S,official_primary_preliminary
+finance,6.0,0.0,0.0,0.0,0.0,1.0,1.0,1.0,max_known_S,official_primary_preliminary
+real_estate,-6.1,0.1525,0.07625,0.1525,0.22875,1.0190625,1.038125,1.0571875,max_known_S,official_primary_preliminary
+information_software_it,13.2,0.0,0.0,0.0,0.0,1.0,1.0,1.0,max_known_S,official_primary_preliminary
+leasing_business_services,-9.4,0.235,0.1175,0.235,0.3525,1.029375,1.05875,1.088125,max_known_S,official_primary_preliminary
+other_services,-1.8,0.045,0.0225,0.045,0.0675,1.005625,1.01125,1.016875,max_known_S,official_primary_preliminary
+unknown,,0.8825,0.44125,0.8825,1.0,1.1103125,1.220625,1.25,max_known_S,derived_policy_max_known_S

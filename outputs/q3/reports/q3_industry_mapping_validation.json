@@ -1,0 +1,81 @@
+{
+  "checks": {
+    "allowed_industry_codes": true,
+    "generic_all_unknown": true,
+    "generic_count_56": true,
+    "mapped_ids_unique": true,
+    "no_enterprise_omitted": true,
+    "output_columns_complete": true,
+    "q2_id_name_set_match": true,
+    "q2_ids_unique": true,
+    "review_evidence_columns_complete": true,
+    "review_evidence_ids_exact": true,
+    "review_evidence_prioritized": true,
+    "review_evidence_rows_equal_unknown": true,
+    "row_count_302": true,
+    "rule_deterministic": true
+  },
+  "config_path": "src/_internal/q3_config.yaml",
+  "config_sha256": "377751ea17f800a20a0e7b088947affedd9ed99c4a42124dbbf0cdd92398aafb",
+  "contract_version": "q3_industry_mapping_v1",
+  "counts": {
+    "confidence": {
+      "0.0": 145,
+      "1.0": 157
+    },
+    "generic_count": 56,
+    "industry_code": {
+      "accommodation_catering": 3,
+      "agriculture": 2,
+      "construction": 53,
+      "information_software_it": 8,
+      "leasing_business_services": 16,
+      "manufacturing_industry": 7,
+      "other_services": 20,
+      "real_estate": 3,
+      "transport_storage_post": 11,
+      "unknown": 145,
+      "wholesale_retail": 34
+    },
+    "mapping_status": {
+      "ambiguous_unknown": 5,
+      "generic_unknown": 56,
+      "high_specific_rule": 157,
+      "low_specific_or_unmatched_unknown": 84
+    },
+    "unknown_count": 145
+  },
+  "input": {
+    "path": "data/processed/q2_risk_rating_scores.csv",
+    "row_count": 302,
+    "sha256": "798ba162525373f73ba2f5a9d4516497512e640031e9c14e1f94906f5075cd3c"
+  },
+  "manual_review_risk": {
+    "reason": "名称掩码、低特异关键词或多行业命中不能支持可靠的行业判断",
+    "unknown_is_intentional": true,
+    "unknown_rows_require_review": 145
+  },
+  "output": {
+    "path": "data/processed/q3_enterprise_industry_mapping.csv",
+    "row_count": 302,
+    "sha256": "722fc3843c2489232ec38d0007b9a61be43573e52122e12644b4ecf3a9205478"
+  },
+  "preflight_status": "PASS",
+  "review_evidence": {
+    "path": "outputs/q3/tables/q3_industry_mapping_review_evidence.csv",
+    "priority_counts": {
+      "1": 5,
+      "2": 84,
+      "3": 56
+    },
+    "row_count": 145,
+    "sha256": "b4314733f4305a60697416e3811890b05ba44cb8640ab2625435fceaa235fd84"
+  },
+  "rule_set": {
+    "enterprise_id_used_as_signal": false,
+    "generic_regex": "^个体经营E[0-9]+$",
+    "llm_used": false,
+    "mapping_source": "q3_name_keyword_rules_v1"
+  },
+  "status": "PASS"
+}

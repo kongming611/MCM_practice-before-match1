@@ -1,0 +1,579 @@
+{
+  "backend": "python",
+  "failures": [],
+  "figure_count": 3,
+  "figures": {
+    "q3_industry_allocation_shift": {
+      "automated_qa": {
+        "fail_count": 0,
+        "pdf_command_returncode": 0,
+        "pdf_text_audit": {
+          "auditable": true,
+          "below_minimum": [],
+          "below_minimum_count": 0,
+          "minimum_found_pt": 5.5,
+          "minimum_required_pt": 5.0,
+          "pdf": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_allocation_shift.pdf",
+          "text_run_count": 39,
+          "warnings": []
+        },
+        "source_command_returncode": 0,
+        "source_validation": {
+          "backend": "python",
+          "findings": [
+            {
+              "check_id": "SOURCE-SYNTAX",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Python source parses successfully"
+            },
+            {
+              "check_id": "FONT-FAMILY",
+              "evidence": [
+                "Arial",
+                "Helvetica",
+                "sans-serif"
+              ],
+              "level": "PASS",
+              "message": "A publication-safe sans-serif family is configured"
+            },
+            {
+              "check_id": "FONT-SIZE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "All detected text sizes are at least 5 pt (minimum 5.2 pt)"
+            },
+            {
+              "check_id": "FONT-GLYPH-FLOOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No mathtext superscript/subscript expression detected"
+            },
+            {
+              "check_id": "LEGEND-LABEL-CASE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No auditable literal legend labels detected"
+            },
+            {
+              "check_id": "COLOR-MAP",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No rainbow/jet/hsv color mapping detected"
+            },
+            {
+              "check_id": "EDITABLE-TEXT",
+              "evidence": [],
+              "level": "PASS",
+              "message": "SVG and PDF editable-text settings are configured"
+            },
+            {
+              "check_id": "EXPORT-VECTOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Both SVG and PDF exports are present"
+            },
+            {
+              "check_id": "EXPORT-RASTER",
+              "evidence": [],
+              "level": "PASS",
+              "message": "TIFF raster export is present"
+            },
+            {
+              "check_id": "RASTER-DPI",
+              "evidence": [
+                "600"
+              ],
+              "level": "PASS",
+              "message": "A raster export of at least 600 dpi is configured"
+            },
+            {
+              "check_id": "FINAL-WIDTH",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Detected width 183.0 mm matches a common journal column width"
+            },
+            {
+              "check_id": "DATA-SAMPLING",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-confidence row-sampling operation detected"
+            },
+            {
+              "check_id": "DATA-EXCLUSION",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-confidence missing-data exclusion detected"
+            },
+            {
+              "check_id": "DEMO-DATA",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No obvious simulated-data generator detected"
+            },
+            {
+              "check_id": "LOG-GUARD",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No logarithmic transform or axis detected"
+            },
+            {
+              "check_id": "INTERP-MONOTONIC",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No NumPy interpolation requiring an increasing x-grid detected"
+            },
+            {
+              "check_id": "UNCERTAINTY-ENCODING",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No stochastic aggregate requiring a variability audit was inferred"
+            },
+            {
+              "check_id": "ROTATION-ANCHOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No rotated Matplotlib text detected"
+            },
+            {
+              "check_id": "ANNOTATION-WORKAROUND",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-risk hard-coded label height or opaque white text mask detected"
+            },
+            {
+              "check_id": "BACKEND-EXCLUSIVE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No obvious cross-backend plotting reference found for python"
+            }
+          ],
+          "source": "D:\\project\\MCM_practice-before-match1\\src\\_internal\\q3_figures.py",
+          "summary": {
+            "counts": {
+              "FAIL": 0,
+              "PASS": 20,
+              "WARN": 0
+            },
+            "ready": true,
+            "strict": false
+          }
+        },
+        "warnings_note": "Any validator warnings are retained here; FAIL is the blocking condition."
+      },
+      "backend": "python",
+      "contract": {
+        "archetype": "asymmetric mixed-modality figure",
+        "core_conclusion": "Re-optimizing under robust risk moves nominal allocation across industries under the strict 10000 ten-thousand-CNY budget and changes concentration (HHI).",
+        "evidence_hierarchy": {
+          "controls": "unknown shown separately; no industry cap is inferred",
+          "hero": "signed allocation shift bars",
+          "validation": "identity and robust rows from the same Q2 MILP adapter"
+        },
+        "panel_map": {
+          "a": "robust minus identity nominal allocation by industry",
+          "b": "identity versus robust industry HHI"
+        },
+        "reviewer_risk": "Amounts are nominal offered amounts in ten-thousand CNY; HHI is a concentration summary and not an industry limit.",
+        "source_data": "outputs/q3/tables/q3_industry_exposure_comparison.csv"
+      },
+      "data_rows": 12,
+      "final_width_mm": 183.0,
+      "outputs": {
+        "pdf": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_allocation_shift.pdf",
+        "png": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_allocation_shift.png",
+        "svg": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_allocation_shift.svg",
+        "tiff": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_allocation_shift.tiff"
+      },
+      "source_data": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\tables\\q3_figure_industry_allocation_shift_source.csv",
+      "visual_qa": {
+        "conclusion": "Two panels inspected at final size: signed bars and HHI labels clear; unknown is a separate row; no crop or collision.",
+        "manual_required": true,
+        "status": "PASS"
+      }
+    },
+    "q3_industry_shock_heatmap": {
+      "automated_qa": {
+        "fail_count": 0,
+        "pdf_command_returncode": 0,
+        "pdf_text_audit": {
+          "auditable": true,
+          "below_minimum": [],
+          "below_minimum_count": 0,
+          "minimum_found_pt": 5.5,
+          "minimum_required_pt": 5.0,
+          "pdf": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_shock_heatmap.pdf",
+          "text_run_count": 62,
+          "warnings": []
+        },
+        "source_command_returncode": 0,
+        "source_validation": {
+          "backend": "python",
+          "findings": [
+            {
+              "check_id": "SOURCE-SYNTAX",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Python source parses successfully"
+            },
+            {
+              "check_id": "FONT-FAMILY",
+              "evidence": [
+                "Arial",
+                "Helvetica",
+                "sans-serif"
+              ],
+              "level": "PASS",
+              "message": "A publication-safe sans-serif family is configured"
+            },
+            {
+              "check_id": "FONT-SIZE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "All detected text sizes are at least 5 pt (minimum 5.2 pt)"
+            },
+            {
+              "check_id": "FONT-GLYPH-FLOOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No mathtext superscript/subscript expression detected"
+            },
+            {
+              "check_id": "LEGEND-LABEL-CASE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No auditable literal legend labels detected"
+            },
+            {
+              "check_id": "COLOR-MAP",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No rainbow/jet/hsv color mapping detected"
+            },
+            {
+              "check_id": "EDITABLE-TEXT",
+              "evidence": [],
+              "level": "PASS",
+              "message": "SVG and PDF editable-text settings are configured"
+            },
+            {
+              "check_id": "EXPORT-VECTOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Both SVG and PDF exports are present"
+            },
+            {
+              "check_id": "EXPORT-RASTER",
+              "evidence": [],
+              "level": "PASS",
+              "message": "TIFF raster export is present"
+            },
+            {
+              "check_id": "RASTER-DPI",
+              "evidence": [
+                "600"
+              ],
+              "level": "PASS",
+              "message": "A raster export of at least 600 dpi is configured"
+            },
+            {
+              "check_id": "FINAL-WIDTH",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Detected width 183.0 mm matches a common journal column width"
+            },
+            {
+              "check_id": "DATA-SAMPLING",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-confidence row-sampling operation detected"
+            },
+            {
+              "check_id": "DATA-EXCLUSION",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-confidence missing-data exclusion detected"
+            },
+            {
+              "check_id": "DEMO-DATA",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No obvious simulated-data generator detected"
+            },
+            {
+              "check_id": "LOG-GUARD",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No logarithmic transform or axis detected"
+            },
+            {
+              "check_id": "INTERP-MONOTONIC",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No NumPy interpolation requiring an increasing x-grid detected"
+            },
+            {
+              "check_id": "UNCERTAINTY-ENCODING",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No stochastic aggregate requiring a variability audit was inferred"
+            },
+            {
+              "check_id": "ROTATION-ANCHOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No rotated Matplotlib text detected"
+            },
+            {
+              "check_id": "ANNOTATION-WORKAROUND",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-risk hard-coded label height or opaque white text mask detected"
+            },
+            {
+              "check_id": "BACKEND-EXCLUSIVE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No obvious cross-backend plotting reference found for python"
+            }
+          ],
+          "source": "D:\\project\\MCM_practice-before-match1\\src\\_internal\\q3_figures.py",
+          "summary": {
+            "counts": {
+              "FAIL": 0,
+              "PASS": 20,
+              "WARN": 0
+            },
+            "ready": true,
+            "strict": false
+          }
+        },
+        "warnings_note": "Any validator warnings are retained here; FAIL is the blocking condition."
+      },
+      "backend": "python",
+      "contract": {
+        "archetype": "quantitative grid",
+        "core_conclusion": "The retrospective Q1 external pressure marker is materially heterogeneous across industries; accommodation/catering and the conservative unknown policy are highest, while positive-growth industries receive no risk reward.",
+        "evidence_hierarchy": {
+          "controls": "positive-growth finance and information/IT rows at zero",
+          "hero": "three scenario columns and the accommodation/unknown rows",
+          "validation": "official growth source plus derived unknown-policy row"
+        },
+        "panel_map": {
+          "a": "light/medium/severe modeled stress intensity D_hs by industry"
+        },
+        "reviewer_risk": "D and multiplier are modeled stress quantities, not observed PD; unknown is a derived policy row.",
+        "source_data": "outputs/q3/tables/q3_sensitivity_industry_shocks.csv"
+      },
+      "data_rows": 12,
+      "final_width_mm": 183.0,
+      "outputs": {
+        "pdf": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_shock_heatmap.pdf",
+        "png": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_shock_heatmap.png",
+        "svg": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_shock_heatmap.svg",
+        "tiff": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_industry_shock_heatmap.tiff"
+      },
+      "source_data": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\tables\\q3_figure_industry_shock_heatmap_source.csv",
+      "visual_qa": {
+        "conclusion": "Single heatmap inspected at final size: labels fit, cells are legible, no clipping or overlap.",
+        "manual_required": true,
+        "status": "PASS"
+      }
+    },
+    "q3_sensitivity_results": {
+      "automated_qa": {
+        "fail_count": 0,
+        "pdf_command_returncode": 0,
+        "pdf_text_audit": {
+          "auditable": true,
+          "below_minimum": [],
+          "below_minimum_count": 0,
+          "minimum_found_pt": 5.2,
+          "minimum_required_pt": 5.0,
+          "pdf": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_sensitivity_results.pdf",
+          "text_run_count": 49,
+          "warnings": []
+        },
+        "source_command_returncode": 0,
+        "source_validation": {
+          "backend": "python",
+          "findings": [
+            {
+              "check_id": "SOURCE-SYNTAX",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Python source parses successfully"
+            },
+            {
+              "check_id": "FONT-FAMILY",
+              "evidence": [
+                "Arial",
+                "Helvetica",
+                "sans-serif"
+              ],
+              "level": "PASS",
+              "message": "A publication-safe sans-serif family is configured"
+            },
+            {
+              "check_id": "FONT-SIZE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "All detected text sizes are at least 5 pt (minimum 5.2 pt)"
+            },
+            {
+              "check_id": "FONT-GLYPH-FLOOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No mathtext superscript/subscript expression detected"
+            },
+            {
+              "check_id": "LEGEND-LABEL-CASE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No auditable literal legend labels detected"
+            },
+            {
+              "check_id": "COLOR-MAP",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No rainbow/jet/hsv color mapping detected"
+            },
+            {
+              "check_id": "EDITABLE-TEXT",
+              "evidence": [],
+              "level": "PASS",
+              "message": "SVG and PDF editable-text settings are configured"
+            },
+            {
+              "check_id": "EXPORT-VECTOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Both SVG and PDF exports are present"
+            },
+            {
+              "check_id": "EXPORT-RASTER",
+              "evidence": [],
+              "level": "PASS",
+              "message": "TIFF raster export is present"
+            },
+            {
+              "check_id": "RASTER-DPI",
+              "evidence": [
+                "600"
+              ],
+              "level": "PASS",
+              "message": "A raster export of at least 600 dpi is configured"
+            },
+            {
+              "check_id": "FINAL-WIDTH",
+              "evidence": [],
+              "level": "PASS",
+              "message": "Detected width 183.0 mm matches a common journal column width"
+            },
+            {
+              "check_id": "DATA-SAMPLING",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-confidence row-sampling operation detected"
+            },
+            {
+              "check_id": "DATA-EXCLUSION",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-confidence missing-data exclusion detected"
+            },
+            {
+              "check_id": "DEMO-DATA",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No obvious simulated-data generator detected"
+            },
+            {
+              "check_id": "LOG-GUARD",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No logarithmic transform or axis detected"
+            },
+            {
+              "check_id": "INTERP-MONOTONIC",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No NumPy interpolation requiring an increasing x-grid detected"
+            },
+            {
+              "check_id": "UNCERTAINTY-ENCODING",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No stochastic aggregate requiring a variability audit was inferred"
+            },
+            {
+              "check_id": "ROTATION-ANCHOR",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No rotated Matplotlib text detected"
+            },
+            {
+              "check_id": "ANNOTATION-WORKAROUND",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No high-risk hard-coded label height or opaque white text mask detected"
+            },
+            {
+              "check_id": "BACKEND-EXCLUSIVE",
+              "evidence": [],
+              "level": "PASS",
+              "message": "No obvious cross-backend plotting reference found for python"
+            }
+          ],
+          "source": "D:\\project\\MCM_practice-before-match1\\src\\_internal\\q3_figures.py",
+          "summary": {
+            "counts": {
+              "FAIL": 0,
+              "PASS": 20,
+              "WARN": 0
+            },
+            "ready": true,
+            "strict": false
+          }
+        },
+        "warnings_note": "Any validator warnings are retained here; FAIL is the blocking condition."
+      },
+      "backend": "python",
+      "contract": {
+        "archetype": "quantitative grid",
+        "core_conclusion": "Observed net return, model-implied credit loss, and strategy overlap vary by declared one-factor perturbation; points are categorical deterministic solves rather than continuous calibrated curves.",
+        "evidence_hierarchy": {
+          "controls": "formal centre marker and no error bars because no stochastic replicates exist",
+          "hero": "net return and loss facets",
+          "validation": "all 13 optimal Q2 solves"
+        },
+        "panel_map": {
+          "a": "net return",
+          "b": "model-implied credit loss",
+          "c": "Jaccard overlap with formal robust strategy"
+        },
+        "reviewer_risk": "Spread across deterministic scenarios is not statistical uncertainty; duration and recovery calibration remain unconfirmed.",
+        "source_data": "outputs/q3/tables/q3_sensitivity_summary.csv"
+      },
+      "data_rows": 13,
+      "final_width_mm": 183.0,
+      "outputs": {
+        "pdf": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_sensitivity_results.pdf",
+        "png": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_sensitivity_results.png",
+        "svg": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_sensitivity_results.svg",
+        "tiff": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\figures\\q3_sensitivity_results.tiff"
+      },
+      "source_data": "D:\\project\\MCM_practice-before-match1\\outputs\\q3\\tables\\q3_figure_sensitivity_results_source.csv",
+      "visual_qa": {
+        "conclusion": "Three panels inspected at final size: explicit human-readable parameter labels, no overlapping error bars, no clipping; each panel has its own scale.",
+        "manual_required": true,
+        "status": "PASS"
+      }
+    }
+  },
+  "qa_policy": "validate_figure.py and audit_pdf_text.py must have zero FAIL; visual panel inspection is recorded as a manual PASS note.",
+  "stage": "q3_figure_qa",
+  "status": "PASS",
+  "target_width_mm": 183.0,
+  "text_floor_pt": 5.0
+}
